@@ -1,23 +1,20 @@
 package frc.robot.Turret;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-
-import frc.robot.Map;
 import frc.robot.Vision.LimeLight;
 
 /**
  * Targeting
  */
 public class Targeting {
-    public static boolean track = false; // tracks target as long as true
+    private static boolean track = false; // tracks target as long as true
     private static double slopePoint = 0.1; // Point at which turret uses slope formula to turn
     private static double trackingerror = 0.001; // X axis distange from 0 error range
     private static boolean targetZeroedIn = false; // true if target is within trackingerror 
 
-    public static double launchingSpeed = 0;
-    private static boolean maintainLaunchingSpeed = false;
-    private static double maxLaunchingSpeedError = 20;
-    private static boolean launcherUpToSpeed = false;
+    public static double launchingSpeedAddition = 0; // additional power added to launching function
+    private static boolean maintainLaunchingSpeed = false; // keeps launcher loop up to speed as long as true
+    private static double maxLaunchingSpeedError = 20; // maximum velocity error for launcher
+    private static boolean launcherUpToSpeed = false; // nofifies if launcher is at wanted velocity
     private static double baseLaunchSpeed = 0.5; // init speed (so that its close to target launch speed)
     private static boolean maintainBaseLaunchSpeed = false;
     /* 
@@ -35,7 +32,6 @@ public class Targeting {
         // Gets turret into position to launch
         Thread followingThread = new Thread(){
             public void run() {
-                findTarget();
                 trackTarget();
             }
         };
@@ -51,20 +47,20 @@ public class Targeting {
     }
     public static void setBaseLaunchingSpeed(){
         while(maintainBaseLaunchSpeed){
-            setLauncherSpeed(baseLaunchSpeed);
+            TurretMotion.Launcher.setVelocity(baseLaunchSpeed);
         }
     }
     private static void findTarget() {
         // Finds target
         if(!LimeLight.isTarget()){
             while(!LimeLight.isTarget()){
-                if(Turret.getDegrees()>=90){
-                    while(Turret.getDegrees()<180||(!LimeLight.isTarget())){
-                        Turret.turn(1);
+                if(TurretMotion.Rotation.getDegrees()>=90){
+                    while(TurretMotion.Rotation.getDegrees()<180||(!LimeLight.isTarget())){
+                        TurretMotion.Rotation.turn(1);
                     }
                 }else{
-                    while(Turret.getDegrees()>0||(!LimeLight.isTarget())){
-                        Turret.turn(-1);
+                    while(TurretMotion.Rotation.getDegrees()>0||(!LimeLight.isTarget())){
+                        TurretMotion.Rotation.turn(-1);
                     }
                 }
             }
@@ -87,25 +83,17 @@ public class Targeting {
             targetSpeed = calculateLaunchSpeed();
             abserror = Math.abs(targetSpeed-motorSpeed);
             if(abserror>maxLaunchingSpeedError){
-                setLauncherSpeed(
-                    velocityToMotorSpeed(targetSpeed+error));// might be minus error (too tired to think rn)
+                TurretMotion.Launcher.setVelocity(targetSpeed+error);// might be minus error (too tired to think rn)
             }else{
                 launcherUpToSpeed = true;
                 //launch
             }
         }
     }
-    private static double velocityToMotorSpeed(double velocity){
-        //translates velocity to a value between -1 and 1
-        return 0;
-    }
-    private static void setLauncherSpeed(double speed){
-        Map.Turret.launcher.set(ControlMode.PercentOutput,speed);
-    }
     private static double calculateLaunchSpeed(){
         // Finds the speed of the flywheen needed to hit the target
         double y = LimeLight.getY();
-        double output = (y)+launchingSpeed; // replace 'y' with custom function
+        double output = (y)+launchingSpeedAddition; // replace 'y' with custom function
         return output;
     }
     private static void trackTarget(){
@@ -114,36 +102,27 @@ public class Targeting {
         double error = Math.abs(position);
         track = true;
         while(track){
-            position = LimeLight.getX();
-            error = Math.abs(position);
-            while(error>trackingerror&&track){
+            if(LimeLight.isTarget()&&track){
                 position = LimeLight.getX();
                 error = Math.abs(position);
-                if(error>slopePoint){
-                     if(position>0){
-                        Turret.turn(-1);
-                     }else{
-                        Turret.turn(1);
+                while(error>trackingerror&&track){
+                    position = LimeLight.getX();
+                    error = Math.abs(position);
+                    if(error>slopePoint){
+                        if(position>0){
+                            TurretMotion.Rotation.turn(-1);
+                        }else{
+                            TurretMotion.Rotation.turn(1);
+                        }
+                    }else{
+                        TurretMotion.Rotation.turn(0-(position/slopePoint));
                     }
-                }else{
-                    Turret.turn(0-(position/slopePoint));
-                 }
+                }
+                targetZeroedIn = true;
+                TurretMotion.Rotation.turn(0);
+            }else{
+                findTarget();
             }
-            targetZeroedIn = true;
-            Turret.turn(0);
-        }
-    }
-    public static class Turret{
-        private static double getPosition(){
-            // Gets current position in motor ticks
-            return 0;
-        }
-        public static double getDegrees(){
-            // Gets current position in Degrees
-            return 0;
-        }
-        public static void turn(double pwr){
-            // Turns turret using pwr as input (-1 to 1)
         }
     }
 }
