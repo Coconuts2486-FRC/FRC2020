@@ -49,4 +49,10 @@ public class Map {
         // Cartridge / Loading-Arm motors (and pneumatics)
 
     }
+
+    public static class PIDcontrol{
+        double kP = 0;
+        double kI = 0;
+        double kD = 0;
+    }
 }
