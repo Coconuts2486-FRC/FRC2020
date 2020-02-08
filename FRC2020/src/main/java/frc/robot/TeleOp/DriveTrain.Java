@@ -28,9 +28,9 @@ public class DriveTrain {
         final double rr = rightY - rightX;
         // returns the final movement variables
     
-        lf.set(lf);
-        lr.set(lr);
-        rf.set(rf);
-        rr.set(rr);
+        Map.driveTrain.lf.set(lf);
+        Map.driveTrain.lr.set(lr);
+        Map.driveTrain.rf.set(rf);
+        Map.driveTrain.rr.set(rr);
     }
 }
