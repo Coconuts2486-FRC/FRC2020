@@ -9,11 +9,12 @@ public class Targeting {
     public static boolean track = false; // tracks target as long as true
     private static double slopePoint = 0.1; // Point at which turret uses slope formula to turn
     private static double trackingerror = 0.001; // X axis distange from 0 error range
+    private static boolean targetZeroedIn = false; // true if target is within trackingerror 
 
     public static double launchingSpeed = 0;
     private static boolean maintainLaunchingSpeed = false;
     private static double maxLaunchingSpeedError = 20;
-    private static boolean readyToLaunch = false;
+    private static boolean launcherUpToSpeed = false;
     private static double baseLaunchSpeed = 0.5; // init speed (so that its close to target launch speed)
     private static boolean maintainBaseLaunchSpeed = false;
     /* 
@@ -67,12 +68,13 @@ public class Targeting {
         }
     }
     private static void launch(){
-        if(readyToLaunch){
+        if(launcherUpToSpeed&&targetZeroedIn){
             // load ball into chamber (Owens code)
         }
     }
     private static void initLauncher(){
         //maintains a launch speed (will need to be in a thread)
+        maintainBaseLaunchSpeed = false; //overrides base launch code
         double motorSpeed = 0; // changed to get data from 'Map.Turret' class
         double targetSpeed = calculateLaunchSpeed();
         double abserror = Math.abs(targetSpeed-motorSpeed);
@@ -85,7 +87,7 @@ public class Targeting {
                 setLauncherSpeed(
                     velocityToMotorSpeed(targetSpeed+error));// might be minus error (too tired to think rn)
             }else{
-                readyToLaunch = true;
+                launcherUpToSpeed = true;
                 //launch
             }
         }
@@ -115,15 +117,16 @@ public class Targeting {
                 position = LimeLight.getX();
                 error = Math.abs(position);
                 if(error>slopePoint){
-                if(position>0){
-                    Turret.turn(-1);
-                }else{
-                    Turret.turn(1);
-                }
+                     if(position>0){
+                        Turret.turn(-1);
+                     }else{
+                        Turret.turn(1);
+                    }
                 }else{
                     Turret.turn(0-(position/slopePoint));
                  }
             }
+            targetZeroedIn = true;
             Turret.turn(0);
         }
     }
