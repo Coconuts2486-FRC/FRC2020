@@ -1,17 +1,26 @@
 package frc.robot.TeleOp;
 
-public static class DriveTrain{
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Map;
+
+/**
+ * DriveTrain
+ */
+public class DriveTrain {
+
+    public static double ticksToFeet = 6 * Math.PI / 84;
+
     public static void drive(){
-        SmartDashboard.putNumber("Encoder Position fr", -rfEncoder.getPosition() * ticksToFeet);
-        SmartDashboard.putNumber("Encoder Position fl", -lfEncoder.getPosition() * ticksToFeet);
-        SmartDashboard.putNumber("Encoder Position br", -rrEncoder.getPosition() * ticksToFeet);
-        SmartDashboard.putNumber("Encoder Position bl", -lrEncoder.getPosition() * ticksToFeet);
+        SmartDashboard.putNumber("Encoder Position fr", -Map.driveTrain.rfEncoder.getPosition() * ticksToFeet);
+        SmartDashboard.putNumber("Encoder Position fl", -Map.driveTrain.lfEncoder.getPosition() * ticksToFeet);
+        SmartDashboard.putNumber("Encoder Position br", -Map.driveTrain.rrEncoder.getPosition() * ticksToFeet);
+        SmartDashboard.putNumber("Encoder Position bl", -Map.driveTrain.lrEncoder.getPosition() * ticksToFeet);
 
         // stores current joystick location in a variable
-        final double leftX = driverLeft.getX();
-        final double rightX = driverRight.getX();
-        final double leftY = driverLeft.getY();
-        final double rightY = driverRight.getY();
+        final double leftX = Map.Controllers.driverLeft.getX();
+        final double rightX = Map.Controllers.driverRight.getX();
+        final double leftY = Map.Controllers.driverLeft.getY();
+        final double rightY = Map.Controllers.driverRight.getY();
         // creates final movement variable for meccanum drive
         final double lf = leftY - leftX;
         final double rf = rightY + rightX;
@@ -25,7 +34,3 @@ public static class DriveTrain{
         rr.set(rr);
     }
 }
-
-    
-
-   
