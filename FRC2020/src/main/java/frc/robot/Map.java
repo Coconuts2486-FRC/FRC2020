@@ -47,7 +47,7 @@ public class Map {
             //Buttons and axis used for the Turret (for simplicity later in code)
         }
     }
-    public static class Cartridge{
+        public static class Cartridge{
         // Cartridge / Loading-Arm motors (and pneumatics)
         public static Solenoid RightPiston = new Solenoid (1,1);
         public static Solenoid LeftPiston = new Solenoid (2,2);
@@ -55,5 +55,14 @@ public class Map {
         public static class Sensors{
             public static DigitalInput fullSensor = new DigitalInput(0);
         }
+
+        public static class PIDcontrol{
+            //PID variables
+            double kP = 0;
+            double kI = 0;
+            double kD = 0;
+        }
+
+
     }
 }
