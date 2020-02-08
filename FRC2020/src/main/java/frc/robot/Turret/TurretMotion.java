@@ -2,6 +2,7 @@ package frc.robot.Turret;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Map;
 
 /**

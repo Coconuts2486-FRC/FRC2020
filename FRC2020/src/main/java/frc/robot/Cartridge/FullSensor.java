@@ -1,8 +1,9 @@
 package frc.robot.Cartridge;
 
+import frc.robot.Map;
+
 public class FullSensor {
-    public static boolean getsensor() {
-        // return rio.getport(1);
-        return false;
+    public static boolean getSensorValue() {
+        return Map.Cartridge.Sensors.fullSensor.get();
     }   
 }

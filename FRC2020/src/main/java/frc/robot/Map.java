@@ -5,6 +5,7 @@ import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Solenoid;
 
@@ -51,6 +52,8 @@ public class Map {
         public static Solenoid RightPiston = new Solenoid (1,1);
         public static Solenoid LeftPiston = new Solenoid (2,2);
         public static TalonSRX ArmRoller = new TalonSRX(5);
-
+        public static class Sensors{
+            public static DigitalInput fullSensor = new DigitalInput(0);
+        }
     }
 }
