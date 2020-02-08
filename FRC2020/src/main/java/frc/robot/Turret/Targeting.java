@@ -1,5 +1,8 @@
 package frc.robot.Turret;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
+import frc.robot.Map;
 import frc.robot.Vision.LimeLight;
 
 /**
@@ -67,7 +70,7 @@ public class Targeting {
             }
         }
     }
-    private static void launch(){
+    public static void launch(){
         if(launcherUpToSpeed&&targetZeroedIn){
             // load ball into chamber (Owens code)
         }
@@ -97,7 +100,7 @@ public class Targeting {
         return 0;
     }
     private static void setLauncherSpeed(double speed){
-        // Give speed to launching motors
+        Map.Turret.launcher.set(ControlMode.PercentOutput,speed);
     }
     private static double calculateLaunchSpeed(){
         // Finds the speed of the flywheen needed to hit the target
