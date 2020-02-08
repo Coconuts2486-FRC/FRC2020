@@ -6,17 +6,22 @@ import frc.robot.Vision.LimeLight;
  * Targeting
  */
 public class Targeting {
-    private static boolean track = false; // tracks target as long as true
-    private static double slopePoint = 0.1; // Point at which turret uses slope formula to turn
-    private static double trackingerror = 0.001; // X axis distange from 0 error range
-    private static boolean targetZeroedIn = false; // true if target is within trackingerror 
+    // Customizable Settings
+        // Turret Rotation Settings
+            private static double slopePoint = 0.1; // Point at which turret uses slope formula to turn
+            private static double trackingerror = 0.001; // X axis distange from 0 error range
+        // Launching Settings
+            public static double launchingSpeedAddition = 0; // additional power added to launching function
+            private static double maxLaunchingSpeedError = 20; // maximum velocity error for launcher
+            private static double baseLaunchSpeed = 0.5; // init speed (so that its close to target launch speed)
 
-    public static double launchingSpeedAddition = 0; // additional power added to launching function
-    private static boolean maintainLaunchingSpeed = false; // keeps launcher loop up to speed as long as true
-    private static double maxLaunchingSpeedError = 20; // maximum velocity error for launcher
-    private static boolean launcherUpToSpeed = false; // nofifies if launcher is at wanted velocity
-    private static double baseLaunchSpeed = 0.5; // init speed (so that its close to target launch speed)
-    private static boolean maintainBaseLaunchSpeed = false;
+    // Method Settings
+        private static boolean track = false; // tracks target as long as true
+        private static boolean targetZeroedIn = false; // true if target is within trackingerror 
+        private static boolean maintainLaunchingSpeed = false; // keeps launcher loop up to speed as long as true
+        private static boolean launcherUpToSpeed = false; // nofifies if launcher is at wanted velocity
+        private static boolean maintainBaseLaunchSpeed = false; // maintains a basic launching velocity while true
+    
     /* 
     Example data:
     180 Degrees of rotation
