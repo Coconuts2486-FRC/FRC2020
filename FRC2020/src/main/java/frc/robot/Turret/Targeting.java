@@ -1,5 +1,7 @@
 package frc.robot.Turret;
 
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import frc.robot.Map;
 import frc.robot.Vision.LimeLight;
 
 /**
@@ -27,6 +29,7 @@ public class Targeting {
     y and x (on LimeLight) range from -1 to 1
     */
     public static void initilize(){
+        //Map.Controllers.x.setRumble(RumbleType.kRightRumble, 1);
         // Sets launching motors at base speed
         Thread setBaseLaunchingSpeed = new Thread(){
             public void run(){
@@ -49,7 +52,17 @@ public class Targeting {
         followingThread.start();
         firingThread.start();
     }
-    public static void setBaseLaunchingSpeed(){
+    public static boolean readyToFire(){
+        if(launcherUpToSpeed&&targetZeroedIn){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    public static void stop(){
+        //stops targeting
+    }
+    private static void setBaseLaunchingSpeed(){
         while(maintainBaseLaunchSpeed){
             TurretMotion.Launcher.setVelocity(baseLaunchSpeed);
         }

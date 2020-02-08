@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.XboxController;
 
 /**
  * Map
@@ -32,7 +33,7 @@ public class Map {
         // Controllers
         public static Joystick driverLeft = new Joystick(0);
         public static Joystick driverRight = new Joystick(1);
-        public static Joystick xbox = new Joystick(2);
+        public static XboxController xbox = new XboxController(2); // this is experimental
     }
     public static class Turret{
         // Turret Motors
@@ -42,13 +43,6 @@ public class Map {
             // Launching Motors
             public static TalonSRX launcher = new TalonSRX(1);
             public static TalonSRX follower = new TalonSRX(1);
-        }
-        public static class encoders{
-            
-        }
-
-        public static class Controllers{
-            //Buttons and axis used for the Turret (for simplicity later in code)
         }
     }
         public static class Cartridge{
