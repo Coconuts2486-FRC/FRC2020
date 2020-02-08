@@ -1,4 +1,4 @@
-import frc.robot.Map;
+package frc.robot.Cartridge;
 
 public class FullSensor {
     public static boolean getsensor() {
