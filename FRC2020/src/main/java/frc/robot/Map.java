@@ -36,12 +36,16 @@ public class Map {
     }
     public static class Turret{
         // Turret Motors
-        // Rotation motors
-        public static TalonSRX rotation = new TalonSRX(1);
-
-        // Launching Motors
-        public static TalonSRX launcher = new TalonSRX(1);
-        public static TalonSRX follower = new TalonSRX(1);
+        public static class motors{
+            // Rotation motors
+            public static TalonSRX rotation = new TalonSRX(1);
+            // Launching Motors
+            public static TalonSRX launcher = new TalonSRX(1);
+            public static TalonSRX follower = new TalonSRX(1);
+        }
+        public static class encoders{
+            
+        }
 
         public static class Controllers{
             //Buttons and axis used for the Turret (for simplicity later in code)

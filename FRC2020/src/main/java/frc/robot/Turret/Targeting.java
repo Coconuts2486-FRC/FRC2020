@@ -21,7 +21,6 @@ public class Targeting {
         private static boolean maintainLaunchingSpeed = false; // keeps launcher loop up to speed as long as true
         private static boolean launcherUpToSpeed = false; // nofifies if launcher is at wanted velocity
         private static boolean maintainBaseLaunchSpeed = false; // maintains a basic launching velocity while true
-    
     /* 
     Example data:
     180 Degrees of rotation
@@ -106,6 +105,7 @@ public class Targeting {
         double position = LimeLight.getX();
         double error = Math.abs(position);
         track = true;
+        LimeLight.LED.on();
         while(track){
             if(LimeLight.isTarget()&&track){
                 position = LimeLight.getX();
@@ -129,5 +129,6 @@ public class Targeting {
                 findTarget();
             }
         }
+        LimeLight.LED.off();
     }
 }

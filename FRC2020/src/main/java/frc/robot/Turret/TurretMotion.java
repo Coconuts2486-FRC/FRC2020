@@ -11,13 +11,13 @@ import frc.robot.Map;
 public class TurretMotion {
     public static class Launcher{
         public static void init(){
-            Map.Turret.follower.follow(Map.Turret.launcher);
+            Map.Turret.motors.follower.follow(Map.Turret.motors.launcher);
         }
         public static void setPercentSpeed(double speed){
-            Map.Turret.launcher.set(ControlMode.PercentOutput, speed);
+            Map.Turret.motors.launcher.set(ControlMode.PercentOutput, speed);
         }
         public static void setVelocity(double speed){
-            Map.Turret.launcher.set(ControlMode.Velocity, speed);
+            Map.Turret.motors.launcher.set(ControlMode.Velocity, speed);
         }
         public static double getVelocity(){
             return 0;
