@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Solenoid;
 
 /**
  * Map
@@ -47,12 +48,9 @@ public class Map {
     }
     public static class Cartridge{
         // Cartridge / Loading-Arm motors (and pneumatics)
+        public static Solenoid RightPiston = new Solenoid (1,1);
+        public static Solenoid LeftPiston = new Solenoid (2,2);
+        public static TalonSRX ArmRoller = new TalonSRX(5);
 
-    }
-
-    public static class PIDcontrol{
-        double kP = 0;
-        double kI = 0;
-        double kD = 0;
     }
 }
