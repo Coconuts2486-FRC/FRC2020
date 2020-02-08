@@ -17,6 +17,13 @@ public class Map {
         public static CANSparkMax lr = new CANSparkMax(1, MotorType.kBrushless);
         public static CANSparkMax rf = new CANSparkMax(2, MotorType.kBrushless);
         public static CANSparkMax rr = new CANSparkMax(3, MotorType.kBrushless);
+
+        //Drive Train Encoders
+        private final CANEncoder lfEncoder = lf.getEncoder();
+        private final CANEncoder lrEncoder = lr.getEncoder();
+        private final CANEncoder rfEncoder = rf.getEncoder();
+        private final CANEncoder rrEncoder = rr.getEncoder();        
+
     }
     public static class Controllers{
         // Controllers
