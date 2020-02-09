@@ -1,7 +1,5 @@
 package frc.robot.Turret;
 
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-import frc.robot.Map;
 import frc.robot.Vision.LimeLight;
 
 /**
@@ -29,7 +27,8 @@ public class Targeting {
     y and x (on LimeLight) range from -1 to 1
     */
     public static void initilize(){
-        //Map.Controllers.x.setRumble(RumbleType.kRightRumble, 1);
+        // Starts tracking process
+        LimeLight.LED.on();
         // Sets launching motors at base speed
         Thread setBaseLaunchingSpeed = new Thread(){
             public void run(){
@@ -61,6 +60,12 @@ public class Targeting {
     }
     public static void stop(){
         //stops targeting
+        track = false;
+        targetZeroedIn = false;
+        maintainLaunchingSpeed = false;
+        launcherUpToSpeed = false;
+        maintainBaseLaunchSpeed = false;
+        LimeLight.LED.off();
     }
     private static void setBaseLaunchingSpeed(){
         while(maintainBaseLaunchSpeed){
@@ -91,19 +96,19 @@ public class Targeting {
     private static void initLauncher(){
         //maintains a launch speed (will need to be in a thread)
         maintainBaseLaunchSpeed = false; //overrides base launch code
-        double motorSpeed = 0; // changed to get data from 'Map.Turret' class
+        double motorSpeed = TurretMotion.Launcher.getVelocity();
         double targetSpeed = calculateLaunchSpeed();
         double abserror = Math.abs(targetSpeed-motorSpeed);
         double error = targetSpeed-motorSpeed;
         while(maintainLaunchingSpeed){
-            motorSpeed = 0; // changed to get data from 'Map.Turret' class
+            motorSpeed = TurretMotion.Launcher.getVelocity();
             targetSpeed = calculateLaunchSpeed();
             abserror = Math.abs(targetSpeed-motorSpeed);
             if(abserror>maxLaunchingSpeedError){
-                TurretMotion.Launcher.setVelocity(targetSpeed+error);// might be minus error (too tired to think rn)
+                launcherUpToSpeed = false;
+                TurretMotion.Launcher.setVelocity(targetSpeed-error);// might be minus error (too tired to think rn)
             }else{
                 launcherUpToSpeed = true;
-                //launch
             }
         }
     }
@@ -118,12 +123,12 @@ public class Targeting {
         double position = LimeLight.getX();
         double error = Math.abs(position);
         track = true;
-        LimeLight.LED.on();
         while(track){
             if(LimeLight.isTarget()&&track){
                 position = LimeLight.getX();
                 error = Math.abs(position);
                 while(error>trackingerror&&track){
+                    targetZeroedIn = false;
                     position = LimeLight.getX();
                     error = Math.abs(position);
                     if(error>slopePoint){
@@ -142,6 +147,5 @@ public class Targeting {
                 findTarget();
             }
         }
-        LimeLight.LED.off();
     }
 }

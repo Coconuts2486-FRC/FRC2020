@@ -10,6 +10,7 @@ import frc.robot.Map;
 public class TurretControl {
     private static XboxController xbox = Map.Controllers.xbox;
     private static boolean turretInitiated = false;
+    private static boolean warningIsRunning = false;
 
     public static void run() {
         if (Targeting.readyToFire()) {
@@ -37,14 +38,18 @@ public class TurretControl {
     private static void warningVibration() {
         Thread vibe = new Thread() {
             public void run() {
-                for (int i = 0; i < 5; i++) {
-                    xbox.setRumble(RumbleType.kLeftRumble, 0.5);
-                    xbox.setRumble(RumbleType.kRightRumble, 0.5);
-                    try {
-                        Thread.sleep(200);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                if(!warningIsRunning){
+                    warningIsRunning = true;
+                    for (int i = 0; i < 5; i++) {
+                        xbox.setRumble(RumbleType.kLeftRumble, 0.5);
+                        xbox.setRumble(RumbleType.kRightRumble, 0.5);
+                        try {
+                            Thread.sleep(200);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
+                    warningIsRunning = false;
                 }
             }
         };
