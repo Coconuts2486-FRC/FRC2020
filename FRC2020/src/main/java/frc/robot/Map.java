@@ -39,20 +39,20 @@ public class Map {
         // Turret Motors
         public static class motors{
             // Rotation motors
-            public static TalonSRX rotation = new TalonSRX(1);
+            public static TalonSRX rotation = new TalonSRX(4);
             // Launching Motors
-            public static TalonSRX launcher = new TalonSRX(1);
-            public static TalonSRX follower = new TalonSRX(1);
+            public static TalonSRX launcher = new TalonSRX(5);
+            public static TalonSRX follower = new TalonSRX(6);
         }
     }
         public static class Cartridge{
         // Cartridge / Loading-Arm motors (and pneumatics)
         public static Solenoid RightPiston = new Solenoid (1,1);
         public static Solenoid LeftPiston = new Solenoid (2,2);
-        public static TalonSRX ArmRoller = new TalonSRX(5);
-        public static TalonSRX Conveyor1 = new TalonSRX(6);
-        public static TalonSRX Conveyor2 = new TalonSRX(7);
-        public static TalonSRX Conveyor3 = new TalonSRX(8);
+        public static TalonSRX ArmRoller = new TalonSRX(7);
+        public static TalonSRX Conveyor1 = new TalonSRX(8);
+        public static TalonSRX Conveyor2 = new TalonSRX(9);
+        public static TalonSRX Conveyor3 = new TalonSRX(10);
         public static class Sensors{
             public static DigitalInput fullSensor = new DigitalInput(0);
         }

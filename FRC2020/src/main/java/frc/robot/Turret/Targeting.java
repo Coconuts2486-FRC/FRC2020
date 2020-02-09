@@ -8,12 +8,12 @@ import frc.robot.Vision.LimeLight;
 public class Targeting {
     // Customizable Settings
         // Turret Rotation Settings
-            private static double slopePoint = 0.1; // Point at which turret uses slope formula to turn
-            private static double trackingerror = 0.001; // X axis distange from 0 error range
+            private static double slopePoint = 1/27; // Point at which turret uses slope formula to turn
+            private static double trackingerror = 1/27; // X axis distange from 0 error range
         // Launching Settings
-            public static double launchingSpeedAddition = 0; // additional power added to launching function
+            public static double launchingSpeedAddition = 50; // additional power added to launching function
             private static double maxLaunchingSpeedError = 20; // maximum velocity error for launcher
-            private static double baseLaunchSpeed = 0.5; // init speed (so that its close to target launch speed)
+            private static double baseLaunchSpeed = 200; // init speed (so that its close to target launch speed)
 
     // Method Settings
         private static boolean track = false; // tracks target as long as true
