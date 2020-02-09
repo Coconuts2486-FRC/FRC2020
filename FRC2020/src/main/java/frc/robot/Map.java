@@ -44,6 +44,10 @@ public class Map {
             public static TalonSRX launcher = new TalonSRX(5);
             public static TalonSRX follower = new TalonSRX(6);
         }
+        public static class controllers{
+            public static int initiation = 0; // Raw button number for launching initiation
+            public static int launch = 1; // Raw button number for launching ball
+        }
     }
         public static class Cartridge{
         // Cartridge / Loading-Arm motors (and pneumatics)

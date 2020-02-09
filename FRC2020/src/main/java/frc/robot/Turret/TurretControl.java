@@ -17,7 +17,7 @@ public class TurretControl {
             xbox.setRumble(RumbleType.kLeftRumble, 1);
             xbox.setRumble(RumbleType.kRightRumble, 1);
         }
-        if (xbox.getRawButtonPressed(1)) {
+        if (xbox.getRawButtonPressed(Map.Turret.controllers.initiation)) {
             if (!turretInitiated) {
                 turretInitiated = true;
                 Targeting.initilize();
@@ -26,7 +26,7 @@ public class TurretControl {
                 turretInitiated = false;
             }
         }
-        if (xbox.getRawButton(0)) {
+        if (xbox.getRawButton(Map.Turret.controllers.launch)) {
             if (Targeting.readyToFire()) {
                 Targeting.launch();
             } else {
