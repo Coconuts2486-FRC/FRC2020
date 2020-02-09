@@ -9,7 +9,7 @@ import frc.robot.Map;
 public class DriveTrain {
 
     public static double ticksToFeet = 6 * Math.PI / 84;
-
+    
     public static void drive(){
         SmartDashboard.putNumber("Encoder Position fr", -Map.driveTrain.rfEncoder.getPosition() * ticksToFeet);
         SmartDashboard.putNumber("Encoder Position fl", -Map.driveTrain.lfEncoder.getPosition() * ticksToFeet);
@@ -32,5 +32,6 @@ public class DriveTrain {
         Map.driveTrain.lr.set(lr);
         Map.driveTrain.rf.set(rf);
         Map.driveTrain.rr.set(rr);
+        
     }
 }

@@ -23,10 +23,10 @@ public class Map {
         public static CANSparkMax rr = new CANSparkMax(3, MotorType.kBrushless);
 
         //Drive Train Encoders
-        private final CANEncoder lfEncoder = lf.getEncoder();
-        private final CANEncoder lrEncoder = lr.getEncoder();
-        private final CANEncoder rfEncoder = rf.getEncoder();
-        private final CANEncoder rrEncoder = rr.getEncoder();        
+        public static CANEncoder lfEncoder = lf.getEncoder();
+        public static CANEncoder lrEncoder = lr.getEncoder();
+        public static CANEncoder rfEncoder = rf.getEncoder();
+        public static CANEncoder rrEncoder = rr.getEncoder();        
 
     }
     public static class Controllers{
@@ -50,6 +50,9 @@ public class Map {
         public static Solenoid RightPiston = new Solenoid (1,1);
         public static Solenoid LeftPiston = new Solenoid (2,2);
         public static TalonSRX ArmRoller = new TalonSRX(5);
+        public static TalonSRX Conveyor1 = new TalonSRX(6);
+        public static TalonSRX Conveyor2 = new TalonSRX(7);
+        public static TalonSRX Conveyor3 = new TalonSRX(8);
         public static class Sensors{
             public static DigitalInput fullSensor = new DigitalInput(0);
         }
