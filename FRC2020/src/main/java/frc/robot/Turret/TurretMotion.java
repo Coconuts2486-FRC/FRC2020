@@ -22,9 +22,19 @@ public class TurretMotion {
         }
     }
     public static class Rotation{
+
+        private static int ticksInrevolution = 5000; // needs to be changed to actual number
+        
+        public static void setPosition(int pos){
+            // Used to reset the known position of the turret
+            Map.Turret.motors.rotation.setSelectedSensorPosition(pos);
+        }
         public static void goToPosition(double pos){
             // Turns turret to specific position 
-            Map.Turret.motors.rotation.set(ControlMode.Position, pos);
+            Map.Turret.motors.rotation.set(ControlMode.Position, degreesToTicks(pos));
+        }
+        private static int degreesToTicks(double degrees){
+            return (int) ((degrees / 360) * ticksInrevolution);
         }
         public static double getPosition(){
             // Gets current position in motor ticks
@@ -32,7 +42,6 @@ public class TurretMotion {
         }
         public static double getDegrees(){
             // Gets current position in Degrees
-            double ticksInrevolution = 5000; // needs to be changed to actual number
             return (getPosition()/ticksInrevolution)*360;
         }
         public static void turn(double pwr){
