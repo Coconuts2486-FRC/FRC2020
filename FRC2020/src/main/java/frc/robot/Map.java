@@ -59,6 +59,7 @@ public class Map {
         public static TalonSRX Conveyor3 = new TalonSRX(10);
         public static class Sensors{
             public static DigitalInput fullSensor = new DigitalInput(0);
+            boolean full = false;
         }
 
         public static class PIDcontrol{
