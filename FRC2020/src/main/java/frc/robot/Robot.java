@@ -30,6 +30,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     TurretControl.run(); // Runs turret
+    TurretDisplay.display(); // Displays LimeLight stats
   }
 
   @Override
@@ -38,7 +39,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testPeriodic() {
-    TurretDisplay.display();
   }
 
 }
