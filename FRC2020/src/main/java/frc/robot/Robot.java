@@ -10,6 +10,10 @@ public class Robot extends TimedRobot {
     TurretMotion.Rotation.setPosition(0); // Resets encoder ticks
   }
 
+  public void robotPeriodic(){
+    
+  }
+
   @Override
   public void autonomousInit() {
   }
