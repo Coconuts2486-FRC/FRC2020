@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.Turret.TurretControl;
+import frc.robot.Turret.TurretDisplay;
 import frc.robot.Turret.TurretMotion;
 
 public class Robot extends TimedRobot {
@@ -33,6 +34,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testPeriodic() {
+    TurretDisplay.display();
   }
 
 }

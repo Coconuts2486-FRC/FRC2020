@@ -7,21 +7,23 @@ import edu.wpi.first.networktables.NetworkTableInstance;
  * LimeLight
  */
 public class LimeLight {
-    private static NetworkTable table = NetworkTableInstance
-    .getDefault().getTable("limelight"); // might have to be updated in methods
+    public static NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight"); // might have to be
+                                                                                                 // updated in methods
 
-    public static double getX(){
+    public static double getX() {
         // Returns the X axis of the target
-        return table.getEntry("tx").getDouble(0.0)/27; //translated degrees -27 to 27 to a value between -1 and 1
+        return table.getEntry("tx").getDouble(0.0) / 27; // translated degrees -27 to 27 to a value between -1 and 1
     }
-    public static double getY(){
+
+    public static double getY() {
         // Returns the Y axis of the target
-        return table.getEntry("ty").getDouble(0.0)/27; //translated degrees -27 to 27 to a value between -1 and 1
+        return table.getEntry("ty").getDouble(0.0) / 27; // translated degrees -27 to 27 to a value between -1 and 1
     }
-    public static boolean isTarget(){
+
+    public static boolean isTarget() {
         // Returns true if there is a target in frame
-        String tv = table.getEntry("tv").toString();
-        if(tv.equals("1")){
+        int tv = (int) table.getEntry("tv").getDouble(0.0);
+        if(tv==1){
             return true;
         }else{
             return false;
