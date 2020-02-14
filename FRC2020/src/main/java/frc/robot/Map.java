@@ -60,7 +60,10 @@ public class Map {
             public static DigitalInput fullSensor = new DigitalInput(0);
             
         }
-        
+        public static class controllers{
+            public static int zeroInOnTarget = 0; // Raw button number for lining up with closest ball
+            public static int grabTarget = 1; // Raw button number for picking up ball
+        }
 
         public static class PIDcontrol{
             //PID variables

@@ -10,34 +10,31 @@ public class pixyMotion {
     private static double errorRange = 0.01; // distance from target on pixy screen (-1 to 1) until considered zeroed in
     private static double slopeRange = 0.05; // distance from target until drive starts to slow down
     private static double targetPosition = -0.57; // target position 
-    private static boolean zeroIn = false;
     public static boolean zeroedInOnTarget = false;
-    
+
     public static void zeroInOnTarget(){
         if(Pixy.isTarget()){
-            zeroIn = true;
             int targetIndex = Pixy.getBiggestBlock();
             double x = Pixy.getX(targetIndex);
             double error = x-targetPosition;
             double abserror = Math.abs(error);
-            while(zeroIn){
-                x = Pixy.getX(targetIndex);
-                error = x-targetPosition;
-                abserror = Math.abs(error);
-                if(abserror>errorRange){
-                    zeroedInOnTarget = false;
-                    if(abserror>slopeRange){
-                        if(error>0){
-                            drive.strafe(-1);
-                        }else{
-                            drive.strafe(1);
-                        }
+            x = Pixy.getX(targetIndex);
+            error = x-targetPosition;
+            abserror = Math.abs(error);
+            if(abserror>errorRange){
+                zeroedInOnTarget = false;
+                if(abserror>slopeRange){
+                    if(error>0){
+                        drive.strafe(-1);
                     }else{
-                        drive.strafe(error);
+                        drive.strafe(1);
                     }
                 }else{
-                    zeroedInOnTarget = true;
+                    drive.strafe(error);
                 }
+            }else{
+                drive.strafe(0);
+                zeroedInOnTarget = true;
             }
         }
     }
