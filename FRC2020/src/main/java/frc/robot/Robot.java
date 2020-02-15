@@ -38,11 +38,13 @@ public class Robot extends TimedRobot {
     pixyControl.run(); // Runs pixy homing automation
 
     //DriveTrain.drive(); // Driver Controll ** BIG DEAL ** (needs to have correct CAN IDs)
+    /*
     if(Map.Controllers.xbox.getRawButton(1)){
       LimeLight.LED.on();
     }else{
       LimeLight.LED.off();
     }
+    */
   }
 
   @Override

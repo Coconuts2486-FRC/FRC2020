@@ -11,27 +11,32 @@ public class TurretControl {
     private static XboxController xbox = Map.Controllers.xbox;
     private static boolean turretInitiated = false;
     private static boolean warningIsRunning = false;
+    public static boolean manuelMode = false;
 
     public static void run() {
-        if (Targeting.readyToFire()) {
-            xbox.setRumble(RumbleType.kLeftRumble, 1);
-            xbox.setRumble(RumbleType.kRightRumble, 1);
-        }
-        if (xbox.getRawButtonPressed(Map.Turret.controllers.initiation)) {
-            if (!turretInitiated) {
-                turretInitiated = true;
-                Targeting.initilize();
-            } else {
-                Targeting.stop();
-                turretInitiated = false;
-            }
-        }
-        if (xbox.getRawButton(Map.Turret.controllers.launch)) {
+        if(!manuelMode){
             if (Targeting.readyToFire()) {
-                Targeting.launch();
-            } else {
-                warningVibration();
+                xbox.setRumble(RumbleType.kLeftRumble, 1);
+                xbox.setRumble(RumbleType.kRightRumble, 1);
             }
+            if (xbox.getRawButtonPressed(Map.Turret.controllers.initiation)) {
+                if (!turretInitiated) {
+                    turretInitiated = true;
+                    Targeting.initilize();
+                }else {
+                    Targeting.stop();
+                    turretInitiated = false;
+                }
+            }
+            if(xbox.getRawButton(Map.Turret.controllers.launch)) {
+                if(Targeting.readyToFire()) {
+                    Targeting.launch();
+                }else {
+                    warningVibration();
+                }
+            }
+        }else{
+            //Targeting.
         }
     }
     private static Thread vibe = new Thread() {

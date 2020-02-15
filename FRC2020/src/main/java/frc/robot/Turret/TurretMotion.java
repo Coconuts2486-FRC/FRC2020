@@ -46,7 +46,15 @@ public class TurretMotion {
         }
         public static void turn(double pwr){
             // Turns turret using pwr as input (-1 to 1)
-            Map.Turret.motors.rotation.set(ControlMode.PercentOutput, pwr);
+            if(pwr>0){
+                if(getDegrees()<180){
+                    Map.Turret.motors.rotation.set(ControlMode.PercentOutput, pwr);
+                }
+            }else if(pwr<0){
+                if(getDegrees()>0){
+                    Map.Turret.motors.rotation.set(ControlMode.PercentOutput, pwr);
+                }
+            }
         }
     }
 }
