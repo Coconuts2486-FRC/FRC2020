@@ -1,6 +1,8 @@
 package frc.robot.Turret;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.SensorCollection;
+
 import frc.robot.Map;
 
 /**
@@ -24,7 +26,22 @@ public class TurretMotion {
     public static class Rotation{
 
         private static int ticksInrevolution = 5000; // needs to be changed to actual number
-        
+        private static SensorCollection sensors = new Map.Turret.motors().rotation.getSensorCollection();
+        private volatile int lastValue = Integer.MIN_VALUE;
+        public int getPwmPosition() {
+            int raw = sensors.getPulseWidthRiseToFallUs();
+            if (raw == 0) {
+            int lastValue = this.lastValue;
+            if (lastValue == Integer.MIN_VALUE) {
+            return 0;
+            }
+            return lastValue;
+            }
+            int actualValue = Math.min(4096, raw - 128);
+            lastValue = actualValue;
+            return actualValue;
+            }
+
         public static void setPosition(int pos){
             // Used to reset the known position of the turret
             Map.Turret.motors.rotation.setSelectedSensorPosition(pos);

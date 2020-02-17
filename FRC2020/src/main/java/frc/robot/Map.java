@@ -17,10 +17,10 @@ public class Map {
     // Where all controllers and gamepads are stored
     public static class driveTrain{
         // Drive Train Motors
-        public static CANSparkMax lf = new CANSparkMax(0, MotorType.kBrushless);
-        public static CANSparkMax lr = new CANSparkMax(1, MotorType.kBrushless);
-        public static CANSparkMax rf = new CANSparkMax(2, MotorType.kBrushless);
-        public static CANSparkMax rr = new CANSparkMax(3, MotorType.kBrushless);
+        public static CANSparkMax lf = new CANSparkMax(1, MotorType.kBrushless);
+        public static CANSparkMax lr = new CANSparkMax(2, MotorType.kBrushless);
+        public static CANSparkMax rf = new CANSparkMax(3, MotorType.kBrushless);
+        public static CANSparkMax rr = new CANSparkMax(4, MotorType.kBrushless);
 
         //Drive Train Encoders
         public static CANEncoder lfEncoder = lf.getEncoder();
@@ -39,24 +39,30 @@ public class Map {
         // Turret Motors
         public static class motors{
             // Rotation motors
-            public static TalonSRX rotation = new TalonSRX(4);
+            public static TalonSRX rotation = new TalonSRX(5);
             // Launching Motors
-            public static TalonSRX launcher = new TalonSRX(5);
-            public static TalonSRX follower = new TalonSRX(6);
+            public static TalonSRX launcher = new TalonSRX(9);
+            public static TalonSRX follower = new TalonSRX(7);
         }
         public static class controllers{
             public static int initiation = 5; // Raw button number for launching initiation
             public static int launch = 6; // Raw button number for launching ball
+            public static int manuelRotateLarge = 0;
+            public static int manuelRotateSmall = 2;
+            public static int manuelLauncherAddPower = 4;
+            public static int manuelLauncherSubtractPower = 2;
+            public static int manuelMode = 10; // button that changes remote into manuel
         }
     }
         public static class Cartridge{
         // Cartridge / Loading-Arm motors (and pneumatics)
-        public static Solenoid RightPiston = new Solenoid (1,1);
-        public static Solenoid LeftPiston = new Solenoid (2,2);
-        public static TalonSRX ArmRoller = new TalonSRX(7);
-        public static TalonSRX Conveyor1 = new TalonSRX(8);
-        public static TalonSRX Conveyor2 = new TalonSRX(9);
-        public static TalonSRX Conveyor3 = new TalonSRX(10);
+        public static Solenoid RightPiston = new Solenoid(1, 4);
+        //private static Solenoid test = new Solenoid(4);
+        //public static Solenoid LeftPiston = new Solenoid (2,2);
+        public static TalonSRX ArmRoller = new TalonSRX(2);
+        public static TalonSRX Conveyor1 = new TalonSRX(4);
+        public static TalonSRX Conveyor2 = new TalonSRX(3);
+        public static TalonSRX Conveyor3 = new TalonSRX(8);
         public static class Sensors{
             public static DigitalInput fullSensor = new DigitalInput(0);
             

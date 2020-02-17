@@ -89,9 +89,7 @@ public class Targeting {
         }
     }
     public static void launch(){
-        if(launcherUpToSpeed&&targetZeroedIn){
             // load ball into chamber (Owens code)
-        }
     }
     private static void initLauncher(){
         //maintains a launch speed (will need to be in a thread)
