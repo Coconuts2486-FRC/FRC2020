@@ -4,7 +4,10 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.ColorSensorV3;
+import com.revrobotics.ColorSensorV3.RawColor;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.XboxController;
@@ -79,6 +82,19 @@ public class Map {
             double kD = 0;
         }
 
+        public static class ColorWheel{
+            //piston,motor, and color sensor used in color wheel manipulator
+
+            public static Solenoid SensorLift = new Solenoid(3,3);
+            public static TalonSRX Color = new TalonSRX(11);
+            public final static I2C.Port i2cPort = I2C.Port.kOnboard;
+            public static ColorSensorV3 sensor = new ColorSensorV3(i2cPort);
+
+           
+
+        }
+
 
     }
+		public static final String ColorWheel = null;
 }
