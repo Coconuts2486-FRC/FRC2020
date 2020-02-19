@@ -3,22 +3,28 @@ import com.ctre.phoenix.motorcontrol.*;
 import frc.robot.Map;
 
 public class pistonlift {
-    public static void pistons() {
-        if (Map.Controllers.driverLeft.getRawButton(1) || Map.Controllers.driverRight.getRawButton(1)) {
-            Map.Cartridge.RightPiston.set(true);
-            Map.Cartridge.LeftPiston.set(true);
-          
-        } else {
-            Map.Cartridge.RightPiston.set(false);
-            Map.Cartridge.LeftPiston.set(false);
-        }
-       
-    }
-    public static void PistonRoller() {
-       if (Map.Controllers.driverLeft.getRawButton(1) || Map.Controllers.driverRight.getRawButton(1) ) {
+    private static boolean pistonactive = false;
+    public static void run() {
+        if (Map.Controllers.driverLeft.getRawButtonPressed(1)) {
+            if(!pistonactive){
+                Map.Cartridge.RightPiston.set(true);
+                pistonactive = true;
+            }else{
+                Map.Cartridge.RightPiston.set(false);
+                Map.Cartridge.ArmRoller.set(ControlMode.PercentOutput, 0);
+                Map.Cartridge.Conveyor1.set(ControlMode.PercentOutput, 0);
+                pistonactive = false;
+            }
+        } 
+        if(Map.Controllers.driverRight.getRawButton(1)){
             Map.Cartridge.ArmRoller.set(ControlMode.PercentOutput, 1);
-       }else{
-             Map.Cartridge.ArmRoller.set(ControlMode.PercentOutput, 0);
-       }
+            Map.Cartridge.Conveyor1.set(ControlMode.PercentOutput, -0.25);
+        }else if(Map.Controllers.driverRight.getRawButton(5)){
+            Map.Cartridge.ArmRoller.set(ControlMode.PercentOutput, -1);
+            Map.Cartridge.Conveyor1.set(ControlMode.PercentOutput, 1);
+        }else{
+            Map.Cartridge.ArmRoller.set(ControlMode.PercentOutput, 0);
+            Map.Cartridge.Conveyor1.set(ControlMode.PercentOutput, 0);
+        }
     }
 }

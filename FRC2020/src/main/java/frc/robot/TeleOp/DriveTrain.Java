@@ -1,5 +1,9 @@
 package frc.robot.TeleOp;
 
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.SparkMax;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Map;
 
@@ -7,7 +11,7 @@ import frc.robot.Map;
  * DriveTrain
  */
 public class DriveTrain {
-
+    private static double deadBand = 0.05;
     public static double ticksToFeet = 6 * Math.PI / 84;
     
     public static void drive(){
@@ -27,11 +31,19 @@ public class DriveTrain {
         final double lr = leftY + leftX;
         final double rr = rightY - rightX;
         // returns the final movement variables
-    
-        Map.driveTrain.lf.set(lf);
-        Map.driveTrain.lr.set(lr);
-        Map.driveTrain.rf.set(rf);
-        Map.driveTrain.rr.set(rr);
-        
+        powerManagement(Map.driveTrain.lf, lf);
+        powerManagement(Map.driveTrain.lr, lr);
+        powerManagement(Map.driveTrain.rf, rf);
+        powerManagement(Map.driveTrain.rr, rr);
+         SmartDashboard.putNumber("Driver Left", Map.Controllers.driverLeft.getY());
+         SmartDashboard.putNumber("Driver Right", Map.Controllers.driverRight.getY());
+    }
+    private static void powerManagement(CANSparkMax motor, double pwr){
+        double abspwr = Math.abs(pwr);
+        if(abspwr>deadBand){
+            motor.set(pwr);
+        }else{
+            motor.set(0);
+        }
     }
 }
