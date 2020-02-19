@@ -1,9 +1,7 @@
 package frc.robot.Turret;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-
 import frc.robot.Map;
-import frc.robot.Cartridge.Conveyor;
 import frc.robot.Vision.LimeLight;
 
 /**
@@ -32,7 +30,6 @@ public class Targeting {
 
     public static void initilize() {
         // Starts tracking process
-        LimeLight.LED.on();
         // Sets launching motors at base speed
         Thread setBaseLaunchingSpeed = new Thread() {
             public void run() {
@@ -72,10 +69,11 @@ public class Targeting {
         launcherUpToSpeed = false;
         maintainBaseLaunchSpeed = false;
         LimeLight.LED.off();
+        TurretMotion.Rotation.turn(0);
     }
 
     private static void setBaseLaunchingSpeed() {
-        while (maintainBaseLaunchSpeed) {
+        while (maintainBaseLaunchSpeed&&track) {
             TurretMotion.Launcher.setVelocity(baseLaunchSpeed);
         }
     }
@@ -83,15 +81,12 @@ public class Targeting {
     private static void findTarget() {
         // Finds target
         if (!LimeLight.isTarget()) {
-            while (!LimeLight.isTarget()) {
-                if (TurretMotion.Rotation.getDegrees() >= 90) {
-                    while (TurretMotion.Rotation.getDegrees() < 180 || (!LimeLight.isTarget())) {
-                        TurretMotion.Rotation.turn(1);
-                    }
-                } else {
-                    while (TurretMotion.Rotation.getDegrees() > 0 || (!LimeLight.isTarget())) {
-                        TurretMotion.Rotation.turn(-1);
-                    }
+            while (!LimeLight.isTarget()&&track) {
+                while(!LimeLight.isTarget()&&TurretMotion.Rotation.getDegrees()<180&&track){
+                    TurretMotion.Rotation.turn(0.5);
+                }
+                while(!LimeLight.isTarget()&&TurretMotion.Rotation.getDegrees()>0&&track){
+                    TurretMotion.Rotation.turn(-0.5);
                 }
             }
         }
@@ -116,7 +111,7 @@ public class Targeting {
         double targetSpeed = calculateLaunchSpeed();
         double abserror = Math.abs(targetSpeed - motorSpeed);
         double error = targetSpeed - motorSpeed;
-        while (maintainLaunchingSpeed) {
+        while (maintainLaunchingSpeed&&track) {
             motorSpeed = TurretMotion.Launcher.getVelocity();
             targetSpeed = calculateLaunchSpeed();
             abserror = Math.abs(targetSpeed - motorSpeed);
@@ -163,7 +158,7 @@ public class Targeting {
                 targetZeroedIn = true;
                 TurretMotion.Rotation.turn(0);
             }else{
-                //findTarget();
+                findTarget();
             }
         }
     }

@@ -22,6 +22,7 @@ public class TurretControl {
         if(Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.manuelMode)){
             if(manuelMode){
                 manuelMode = false;
+                led = false;
                 LimeLight.LED.off();
             }else{
                 manuelMode = true;
@@ -47,10 +48,13 @@ public class TurretControl {
             double large = Math.abs(Map.Controllers.xbox.getRawAxis(Map.Turret.controllers.manuelRotateLarge));
             double small = Math.abs(Map.Controllers.xbox.getRawAxis(Map.Turret.controllers.manuelRotateSmall));
             if(large>small){
-                TurretMotion.Rotation.turn(-Map.Controllers.xbox.getRawAxis(Map.Turret.controllers.manuelRotateLarge)/manuelLargeAdjusterDivision);
+                TurretMotion.Rotation.turn(Map.Controllers.xbox.getRawAxis(Map.Turret.controllers.manuelRotateLarge)/manuelLargeAdjusterDivision);
             }else{
-                TurretMotion.Rotation.turn(-Map.Controllers.xbox.getRawAxis(Map.Turret.controllers.manuelRotateSmall)/manuelSmallAdjusterDivision);
+                TurretMotion.Rotation.turn(Map.Controllers.xbox.getRawAxis(Map.Turret.controllers.manuelRotateSmall)/manuelSmallAdjusterDivision);
             }
+            if(Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.manuelEncoderZeroer)){
+                Map.Turret.motors.rotation.setSelectedSensorPosition(0);
+              }
             if(Map.Controllers.xbox.getRawButtonPressed(1)){
                 if(!led){
                   LimeLight.LED.on();

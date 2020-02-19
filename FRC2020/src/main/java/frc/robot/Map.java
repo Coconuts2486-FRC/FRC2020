@@ -54,6 +54,7 @@ public class Map {
             public static int manuelLauncherAddPower = 4;
             public static int manuelLauncherSubtractPower = 2;
             public static int manuelMode = 10; // button that changes remote into manuel
+            public static int manuelEncoderZeroer = 7;
         }
     }
         public static class Cartridge{
