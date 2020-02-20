@@ -1,7 +1,6 @@
 package frc.robot.Turret;
 
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Map;
 import frc.robot.Vision.LimeLight;
 
@@ -13,10 +12,12 @@ public class TurretControl {
     private static boolean turretInitiated = false;
     public static boolean manuelMode = false;
     private static boolean led = false;
+    private static double manuelAngle = 90;
     private static int manuelVelocity = 1000; // set to whatever base velocity should be
     private static int manuelVelocityChange = 100; // The amount that velocity is adjusted when POV is pressed
     private static double manuelSmallAdjusterDivision = 6; // how much the small adjuster is divided by
     private static double manuelLargeAdjusterDivision = 2; // how much the large adjuster is divided by
+    public static boolean firing = false;
 
     public static void run() {
         if(Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.manuelMode)){
@@ -30,8 +31,8 @@ public class TurretControl {
                 turretInitiated = false;
             }
         }
-        if(!manuelMode){
-            SmartDashboard.putBoolean("Ready to Fire!", Targeting.readyToFire());
+        if(!manuelMode){ 
+            // Auto Mode
             if (xbox.getRawButtonPressed(Map.Turret.controllers.initiation)) {
                 if (!turretInitiated) {
                     turretInitiated = true;
@@ -42,9 +43,14 @@ public class TurretControl {
                 }
             }
             if(xbox.getRawButton(Map.Turret.controllers.launch)&&Targeting.readyToFire()){
+                firing=true;
                 Targeting.launch();
+            }else{
+                firing=false;
             }
         }else{
+            // Manuel Mode
+            //Turning
             double large = Math.abs(Map.Controllers.xbox.getRawAxis(Map.Turret.controllers.manuelRotateLarge));
             double small = Math.abs(Map.Controllers.xbox.getRawAxis(Map.Turret.controllers.manuelRotateSmall));
             if(large>small){
@@ -52,9 +58,7 @@ public class TurretControl {
             }else{
                 TurretMotion.Rotation.turn(Map.Controllers.xbox.getRawAxis(Map.Turret.controllers.manuelRotateSmall)/manuelSmallAdjusterDivision);
             }
-            if(Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.manuelEncoderZeroer)){
-                Map.Turret.motors.rotation.setSelectedSensorPosition(0);
-              }
+            // LED config
             if(Map.Controllers.xbox.getRawButtonPressed(1)){
                 if(!led){
                   LimeLight.LED.on();
@@ -64,11 +68,13 @@ public class TurretControl {
                   led = false;
                 }
               }
-              if(xbox.getRawButton(Map.Turret.controllers.launch)){
-                    Targeting.launch();
-                }else{
-                    Targeting.stopLaunch();
-                }
+            // Launch
+            if(xbox.getRawButton(Map.Turret.controllers.launch)){
+                Targeting.launch();
+            }else{
+                Targeting.stopLaunch();
+            }
+            // Initiate Launcher
             if(Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.initiation)){
                 if(!turretInitiated){
                     turretInitiated = true;
@@ -77,11 +83,19 @@ public class TurretControl {
                     turretInitiated = false;
                     TurretMotion.Launcher.setPercentSpeed(0);
                 }
-                if(Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.manuelLauncherAddPower)){
-                    manuelVelocity+=manuelVelocityChange;
-                }else if(Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.manuelLauncherSubtractPower)){
-                    manuelVelocity-=manuelVelocityChange;
-                }
+            }
+            // Change launch velocity
+            if(Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.manuelLauncherAddPower)){
+                manuelVelocity+=manuelVelocityChange;
+            }else if(Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.manuelLauncherSubtractPower)){
+                manuelVelocity-=manuelVelocityChange;
+            }
+            
+            if(Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.manuelSetAngle)){
+                manuelAngle = TurretMotion.Rotation.getDegrees();
+            }
+            if(Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.manuelGoToAngle)){
+                TurretMotion.Rotation.goToPosition(manuelAngle);
             }
         }
     }

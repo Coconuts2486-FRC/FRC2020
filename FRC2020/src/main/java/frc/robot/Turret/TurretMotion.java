@@ -32,7 +32,7 @@ public class TurretMotion {
         private static int ticksInrevolution = 4095; // needs to be changed to actual number
         private static int maxDeg = 180;
         private static int minDeg = 0;
-
+        
         public static void setPosition(int pos){
             // Used to reset the known position of the turret
             Map.Turret.motors.rotation.setSelectedSensorPosition(pos);

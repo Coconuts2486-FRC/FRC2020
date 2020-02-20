@@ -1,9 +1,13 @@
 package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Autonomous.AutoMissions;
+import frc.robot.Cartridge.Conveyor;
+import frc.robot.Cartridge.pistonlift;
+import frc.robot.Cartridge.pixyDisplay;
 import frc.robot.Color_Wheel.ColorSensor;
 import frc.robot.Turret.TurretControl;
 import frc.robot.Turret.TurretDisplay;
@@ -11,19 +15,21 @@ import frc.robot.Turret.TurretMotion;
 import frc.robot.Vision.Pixy;
 
 public class Robot extends TimedRobot {
+  public static AnalogInput dig = new AnalogInput(0);
   @Override
   public void robotInit() {
     TurretMotion.init();
     Pixy.init(); // Starts up the Pixy2 Camera
+    Conveyor.init();
   }
 
   public void robotPeriodic(){
     SmartDashboard.putString("Auto Mode", AutoMissions.CurrentAuto);
     SmartDashboard.getNumber("Auto Selection", AutoMissions.SelectedAuto);
 
-    
-    
-    
+    if(Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.manuelEncoderZeroer)){
+      Map.Turret.motors.rotation.setSelectedSensorPosition(0);
+    }
   }
 
   @Override
@@ -38,6 +44,7 @@ public class Robot extends TimedRobot {
     if(AutoMissions.SelectedAuto == 2){
       AutoMissions.GeneratorAuto();
     }
+    Map.Turret.motors.rotation.setNeutralMode(NeutralMode.Brake);
   }
 
   @Override
@@ -53,16 +60,21 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     TurretControl.run(); // Runs turret
     TurretDisplay.display(); // Displays LimeLight stats
+    pixyDisplay.display();
     //pixyControl.run(); // Runs pixy homing automation
+    pistonlift.run();
+    Conveyor.run();
   }
 
   @Override
   public void testInit() {
+    Map.Turret.motors.rotation.setNeutralMode(NeutralMode.Brake);
   }
 
   @Override
   public void testPeriodic() {
     SmartDashboard.putNumber("Red: ", ColorSensor.GetColor());
+    SmartDashboard.putNumber("Sensor ", dig.getVoltage());
   }
 
 }

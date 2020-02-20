@@ -94,9 +94,8 @@ public class Targeting {
 
     public static void launch() {
         Map.Cartridge.Conveyor1.set(ControlMode.PercentOutput, 0.5);
-        Map.Cartridge.Conveyor2.set(ControlMode.PercentOutput, -0.5);
+        Map.Cartridge.Conveyor2.set(ControlMode.PercentOutput, 0.5);
         Map.Cartridge.Conveyor3.set(ControlMode.PercentOutput, 0.5);
-        // load ball into chamber (Owens code)
     }
     public static void stopLaunch(){
         Map.Cartridge.Conveyor1.set(ControlMode.PercentOutput, 0);

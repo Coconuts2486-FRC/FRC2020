@@ -16,6 +16,7 @@ public class pistonlift {
                 pistonactive = false;
             }
         } 
+        /*
         if(Map.Controllers.driverRight.getRawButton(1)){
             Map.Cartridge.ArmRoller.set(ControlMode.PercentOutput, 1);
             Map.Cartridge.Conveyor1.set(ControlMode.PercentOutput, -0.25);
@@ -26,5 +27,6 @@ public class pistonlift {
             Map.Cartridge.ArmRoller.set(ControlMode.PercentOutput, 0);
             Map.Cartridge.Conveyor1.set(ControlMode.PercentOutput, 0);
         }
+        */
     }
 }
