@@ -7,7 +7,7 @@ import frc.robot.Vision.Pixy;
  * pixyDisplay
  */
 public class pixyDisplay {
-    public static void display(){
+    public static void display() {
         SmartDashboard.putBoolean("PowerCell Available: ", Pixy.isTarget());
     }
 }

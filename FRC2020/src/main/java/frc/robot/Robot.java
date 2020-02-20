@@ -16,6 +16,7 @@ import frc.robot.Vision.Pixy;
 
 public class Robot extends TimedRobot {
   public static AnalogInput dig = new AnalogInput(0);
+
   @Override
   public void robotInit() {
     TurretMotion.init();
@@ -23,25 +24,25 @@ public class Robot extends TimedRobot {
     Conveyor.init();
   }
 
-  public void robotPeriodic(){
+  public void robotPeriodic() {
     SmartDashboard.putString("Auto Mode", AutoMissions.CurrentAuto);
     SmartDashboard.getNumber("Auto Selection", AutoMissions.SelectedAuto);
 
-    if(Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.manuelEncoderZeroer)){
+    if (Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.manuelEncoderZeroer)) {
       Map.Turret.motors.rotation.setSelectedSensorPosition(0);
     }
   }
 
   @Override
   public void autonomousInit() {
-    if(AutoMissions.SelectedAuto == 0){
+    if (AutoMissions.SelectedAuto == 0) {
       AutoMissions.NoAutoSelected();
     }
-    if(AutoMissions.SelectedAuto == 1){
+    if (AutoMissions.SelectedAuto == 1) {
       AutoMissions.TrenchRun();
     }
 
-    if(AutoMissions.SelectedAuto == 2){
+    if (AutoMissions.SelectedAuto == 2) {
       AutoMissions.GeneratorAuto();
     }
     Map.Turret.motors.rotation.setNeutralMode(NeutralMode.Brake);
@@ -61,7 +62,7 @@ public class Robot extends TimedRobot {
     TurretControl.run(); // Runs turret
     TurretDisplay.display(); // Displays LimeLight stats
     pixyDisplay.display();
-    //pixyControl.run(); // Runs pixy homing automation
+    // pixyControl.run(); // Runs pixy homing automation
     pistonlift.run();
     Conveyor.run();
   }

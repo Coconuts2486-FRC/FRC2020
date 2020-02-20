@@ -20,81 +20,83 @@ public class TurretControl {
     public static boolean firing = false;
 
     public static void run() {
-        if(Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.manuelMode)){
-            if(manuelMode){
+        if (Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.manuelMode)) {
+            if (manuelMode) {
                 manuelMode = false;
                 led = false;
                 LimeLight.LED.off();
-            }else{
+            } else {
                 manuelMode = true;
                 Targeting.stop();
                 turretInitiated = false;
             }
         }
-        if(!manuelMode){ 
+        if (!manuelMode) {
             // Auto Mode
             if (xbox.getRawButtonPressed(Map.Turret.controllers.initiation)) {
                 if (!turretInitiated) {
                     turretInitiated = true;
                     Targeting.initilize();
-                }else {
+                } else {
                     Targeting.stop();
                     turretInitiated = false;
                 }
             }
-            if(xbox.getRawButton(Map.Turret.controllers.launch)&&Targeting.readyToFire()){
-                firing=true;
+            if (xbox.getRawButton(Map.Turret.controllers.launch) && Targeting.readyToFire()) {
+                firing = true;
                 Targeting.launch();
-            }else{
-                firing=false;
+            } else {
+                firing = false;
             }
-        }else{
+        } else {
             // Manuel Mode
-            //Turning
+            // Turning
             double large = Math.abs(Map.Controllers.xbox.getRawAxis(Map.Turret.controllers.manuelRotateLarge));
             double small = Math.abs(Map.Controllers.xbox.getRawAxis(Map.Turret.controllers.manuelRotateSmall));
-            if(large>small){
-                TurretMotion.Rotation.turn(Map.Controllers.xbox.getRawAxis(Map.Turret.controllers.manuelRotateLarge)/manuelLargeAdjusterDivision);
-            }else{
-                TurretMotion.Rotation.turn(Map.Controllers.xbox.getRawAxis(Map.Turret.controllers.manuelRotateSmall)/manuelSmallAdjusterDivision);
+            if (large > small) {
+                TurretMotion.Rotation.turn(Map.Controllers.xbox.getRawAxis(Map.Turret.controllers.manuelRotateLarge)
+                        / manuelLargeAdjusterDivision);
+            } else {
+                TurretMotion.Rotation.turn(Map.Controllers.xbox.getRawAxis(Map.Turret.controllers.manuelRotateSmall)
+                        / manuelSmallAdjusterDivision);
             }
             // LED config
-            if(Map.Controllers.xbox.getRawButtonPressed(1)){
-                if(!led){
-                  LimeLight.LED.on();
-                  led = true;
-                }else{
-                  LimeLight.LED.off();
-                  led = false;
+            if (Map.Controllers.xbox.getRawButtonPressed(1)) {
+                if (!led) {
+                    LimeLight.LED.on();
+                    led = true;
+                } else {
+                    LimeLight.LED.off();
+                    led = false;
                 }
-              }
+            }
             // Launch
-            if(xbox.getRawButton(Map.Turret.controllers.launch)){
+            if (xbox.getRawButton(Map.Turret.controllers.launch)) {
                 Targeting.launch();
-            }else{
+            } else {
                 Targeting.stopLaunch();
             }
             // Initiate Launcher
-            if(Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.initiation)){
-                if(!turretInitiated){
+            if (Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.initiation)) {
+                if (!turretInitiated) {
                     turretInitiated = true;
                     TurretMotion.Launcher.setVelocity(manuelVelocity);
-                }else{
+                } else {
                     turretInitiated = false;
                     TurretMotion.Launcher.setPercentSpeed(0);
                 }
             }
             // Change launch velocity
-            if(Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.manuelLauncherAddPower)){
-                manuelVelocity+=manuelVelocityChange;
-            }else if(Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.manuelLauncherSubtractPower)){
-                manuelVelocity-=manuelVelocityChange;
+            if (Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.manuelLauncherAddPower)) {
+                manuelVelocity += manuelVelocityChange;
+            } else if (Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.manuelLauncherSubtractPower)) {
+                manuelVelocity -= manuelVelocityChange;
             }
-            
-            if(Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.manuelSetAngle)){
+
+            if (Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.manuelSetAngle)) {
                 manuelAngle = TurretMotion.Rotation.getDegrees();
             }
-            if(Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.manuelGoToAngle)){
+            if (Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.manuelGoToAngle)) {
                 TurretMotion.Rotation.goToPosition(manuelAngle);
             }
         }
