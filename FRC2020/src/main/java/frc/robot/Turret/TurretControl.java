@@ -97,7 +97,11 @@ public class TurretControl {
                 manuelAngle = TurretMotion.Rotation.getDegrees();
             }
             if (Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.manuelGoToAngle)) {
-                TurretMotion.Rotation.goToPosition(manuelAngle);
+                if(!TurretMotion.Rotation.goTo){
+                    TurretMotion.Rotation.goToPosition(manuelAngle);
+                }else{
+                    TurretMotion.Rotation.goTo = false;
+                }
             }
         }
     }

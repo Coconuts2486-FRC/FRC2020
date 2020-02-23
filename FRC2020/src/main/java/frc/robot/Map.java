@@ -57,8 +57,8 @@ public class Map {
             public static int manuelLauncherSubtractPower = 2;
             public static int manuelMode = 10; // button that changes remote into manuel
             public static int manuelEncoderZeroer = 7;
-            public static int manuelSetAngle = 100; // Sets an angle for manuel mode
-            public static int manuelGoToAngle = 101; // Turns turret to preset angle
+            public static int manuelSetAngle = 11; // Sets an angle for manuel mode
+            public static int manuelGoToAngle = 12; // Turns turret to preset angle
         }
     }
 

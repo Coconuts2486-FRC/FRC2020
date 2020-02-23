@@ -94,8 +94,8 @@ public class Targeting {
 
     public static void launch() {
         Map.Cartridge.Conveyor1.set(ControlMode.PercentOutput, 0.5);
-        Map.Cartridge.Conveyor2.set(ControlMode.PercentOutput, 0.5);
-        Map.Cartridge.Conveyor3.set(ControlMode.PercentOutput, 0.5);
+        Map.Cartridge.Conveyor2.set(ControlMode.PercentOutput, 1);
+        Map.Cartridge.Conveyor3.set(ControlMode.PercentOutput, 1);
     }
 
     public static void stopLaunch() {

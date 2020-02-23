@@ -14,5 +14,6 @@ public class TurretDisplay {
         SmartDashboard.putNumber("Lime Val", LimeLight.table.getEntry("tv").getDouble(-5));
         SmartDashboard.putNumber("Angle: ", TurretMotion.Rotation.getDegrees());
         SmartDashboard.putBoolean("Ready to Fire!", Targeting.readyToFire());
+        SmartDashboard.putNumber("Ticks: ", TurretMotion.Rotation.getPosition());
     }
 }
