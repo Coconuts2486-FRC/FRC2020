@@ -7,8 +7,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
  * LimeLight
  */
 public class LimeLight {
-    public static NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight"); // might have to be
-                                                                                                 // updated in methods
+    public static NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 
     public static double getX() {
         // Returns the X axis of the target
@@ -23,23 +22,25 @@ public class LimeLight {
     public static boolean isTarget() {
         // Returns true if there is a target in frame
         int tv = (int) table.getEntry("tv").getDouble(0.0);
-        if(tv==1){
+        if (tv == 1) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
 
-    public static class LED{
-        public static void on(){
+    public static class LED {
+        public static void on() {
             // Turns LEDs on
             table.getEntry("ledMode").setNumber(3);
         }
-        public static void off(){
+
+        public static void off() {
             // Turns LEDs off
             table.getEntry("ledMode").setNumber(1);
         }
-        public static void flash(){
+
+        public static void flash() {
             // Quickly flashes LEDs
             table.getEntry("ledMode").setNumber(2);
         }

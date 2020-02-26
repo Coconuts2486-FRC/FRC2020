@@ -73,7 +73,7 @@ public class Targeting {
     }
 
     private static void setBaseLaunchingSpeed() {
-        while (maintainBaseLaunchSpeed&&track) {
+        while (maintainBaseLaunchSpeed && track) {
             TurretMotion.Launcher.setVelocity(baseLaunchSpeed);
         }
     }
@@ -81,11 +81,11 @@ public class Targeting {
     private static void findTarget() {
         // Finds target
         if (!LimeLight.isTarget()) {
-            while (!LimeLight.isTarget()&&track) {
-                while(!LimeLight.isTarget()&&TurretMotion.Rotation.getDegrees()<180&&track){
+            while (!LimeLight.isTarget() && track) {
+                while (!LimeLight.isTarget() && TurretMotion.Rotation.getDegrees() < 180 && track) {
                     TurretMotion.Rotation.turn(0.5);
                 }
-                while(!LimeLight.isTarget()&&TurretMotion.Rotation.getDegrees()>0&&track){
+                while (!LimeLight.isTarget() && TurretMotion.Rotation.getDegrees() > 0 && track) {
                     TurretMotion.Rotation.turn(-0.5);
                 }
             }
@@ -94,11 +94,11 @@ public class Targeting {
 
     public static void launch() {
         Map.Cartridge.Conveyor1.set(ControlMode.PercentOutput, 0.5);
-        Map.Cartridge.Conveyor2.set(ControlMode.PercentOutput, -0.5);
-        Map.Cartridge.Conveyor3.set(ControlMode.PercentOutput, 0.5);
-        // load ball into chamber (Owens code)
+        Map.Cartridge.Conveyor2.set(ControlMode.PercentOutput, 1);
+        Map.Cartridge.Conveyor3.set(ControlMode.PercentOutput, 1);
     }
-    public static void stopLaunch(){
+
+    public static void stopLaunch() {
         Map.Cartridge.Conveyor1.set(ControlMode.PercentOutput, 0);
         Map.Cartridge.Conveyor2.set(ControlMode.PercentOutput, 0);
         Map.Cartridge.Conveyor3.set(ControlMode.PercentOutput, 0);
@@ -111,7 +111,7 @@ public class Targeting {
         double targetSpeed = calculateLaunchSpeed();
         double abserror = Math.abs(targetSpeed - motorSpeed);
         double error = targetSpeed - motorSpeed;
-        while (maintainLaunchingSpeed&&track) {
+        while (maintainLaunchingSpeed && track) {
             motorSpeed = TurretMotion.Launcher.getVelocity();
             targetSpeed = calculateLaunchSpeed();
             abserror = Math.abs(targetSpeed - motorSpeed);
@@ -137,27 +137,27 @@ public class Targeting {
         double error = Math.abs(position);
         track = true;
         LimeLight.LED.on();
-        while(track){
-            if(LimeLight.isTarget()&&track){
+        while (track) {
+            if (LimeLight.isTarget() && track) {
                 position = LimeLight.getX();
                 error = Math.abs(position);
-                while(error>trackingerror&&track){
+                while (error > trackingerror && track) {
                     targetZeroedIn = false;
                     position = LimeLight.getX();
                     error = Math.abs(position);
-                    if(error>slopePoint){
-                        if(position>0){
+                    if (error > slopePoint) {
+                        if (position > 0) {
                             TurretMotion.Rotation.turn(-1);
-                        }else{
+                        } else {
                             TurretMotion.Rotation.turn(1);
                         }
-                    }else{
-                        TurretMotion.Rotation.turn(0-(position/slopePoint));
+                    } else {
+                        TurretMotion.Rotation.turn(0 - (position / slopePoint));
                     }
                 }
                 targetZeroedIn = true;
                 TurretMotion.Rotation.turn(0);
-            }else{
+            } else {
                 findTarget();
             }
         }
