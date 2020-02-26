@@ -4,7 +4,6 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Autonomous.AutoMissions;
-import frc.robot.Color_Wheel.ColorSensor;
 import frc.robot.Turret.TurretControl;
 import frc.robot.Turret.TurretDisplay;
 import frc.robot.Turret.TurretMotion;
@@ -62,7 +61,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testPeriodic() {
-    SmartDashboard.putNumber("Red: ", ColorSensor.GetColor());
+   
   }
 
 }

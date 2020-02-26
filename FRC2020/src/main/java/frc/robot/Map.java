@@ -66,6 +66,7 @@ public class Map {
         public static TalonSRX Conveyor1 = new TalonSRX(4);
         public static TalonSRX Conveyor2 = new TalonSRX(3);
         public static TalonSRX Conveyor3 = new TalonSRX(8);
+       
         public static class Sensors{
             public static DigitalInput fullSensor = new DigitalInput(0);
             
@@ -81,20 +82,16 @@ public class Map {
             double kI = 0;
             double kD = 0;
         }
+    }
+		public static class ColorWheel{
 
-        public static class ColorWheel{
-            //piston,motor, and color sensor used in color wheel manipulator
-
-            public static Solenoid SensorLift = new Solenoid(3,3);
-            public static TalonSRX Color = new TalonSRX(11);
+            public static Solenoid SensorLift1 = new Solenoid(3,3);
+            public static TalonSRX ColorSpinner = new TalonSRX(11);
             public final static I2C.Port i2cPort = I2C.Port.kOnboard;
             public static ColorSensorV3 sensor = new ColorSensorV3(i2cPort);
 
-           
+
 
         }
-
-
-    }
-		public static final String ColorWheel = null;
+		
 }
