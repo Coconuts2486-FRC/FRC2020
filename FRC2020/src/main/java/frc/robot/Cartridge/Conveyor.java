@@ -8,6 +8,7 @@ import frc.robot.Turret.TurretControl;
 public class Conveyor {
     public static void init() {
         Map.Cartridge.Conveyor1.setInverted(true);
+        Map.Cartridge.Conveyor2.setInverted(true);
     }
 
     public static void run() {

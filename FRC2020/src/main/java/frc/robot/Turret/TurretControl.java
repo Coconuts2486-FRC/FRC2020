@@ -13,11 +13,12 @@ public class TurretControl {
     public static boolean manuelMode = false;
     private static boolean led = false;
     private static double manuelAngle = 90;
-    private static int manuelVelocity = 1000; // set to whatever base velocity should be
-    private static int manuelVelocityChange = 100; // The amount that velocity is adjusted when POV is pressed
+    public static int manuelVelocity = 10000; // set to whatever base velocity should be
+    private static int manuelVelocityChange = 1000; // The amount that velocity is adjusted when POV is pressed
     private static double manuelSmallAdjusterDivision = 6; // how much the small adjuster is divided by
     private static double manuelLargeAdjusterDivision = 2; // how much the large adjuster is divided by
     public static boolean firing = false;
+    public static boolean autoIsTracking = true;
 
     public static void run() {
         if (Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.manuelMode)) {
@@ -25,9 +26,11 @@ public class TurretControl {
                 manuelMode = false;
                 led = false;
                 LimeLight.LED.off();
+                autoIsTracking = true;
             } else {
                 manuelMode = true;
                 Targeting.stop();
+                autoIsTracking = false;
                 turretInitiated = false;
             }
         }
@@ -47,6 +50,7 @@ public class TurretControl {
                 Targeting.launch();
             } else {
                 firing = false;
+                Targeting.stopLaunch();
             }
         } else {
             // Manuel Mode
@@ -78,12 +82,19 @@ public class TurretControl {
             }
             // Initiate Launcher
             if (Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.initiation)) {
-                if (!turretInitiated) {
-                    turretInitiated = true;
-                    TurretMotion.Launcher.setVelocity(manuelVelocity);
-                } else {
+                if(turretInitiated){
                     turretInitiated = false;
-                    TurretMotion.Launcher.setPercentSpeed(0);
+                }else{
+                    turretInitiated = true;
+                }
+            }
+            if(!autoIsTracking){
+                if (turretInitiated) {
+                    //TurretMotion.Launcher.setVelocity(manuelVelocity);
+                    TurretMotion.Launcher.setVelocity(manuelVelocity);
+                    //TurretMotion.Launcher.setPercentSpeed(1);
+                } else {
+                    TurretMotion.Launcher.setVelocity(0);
                 }
             }
             // Change launch velocity

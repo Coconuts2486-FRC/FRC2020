@@ -7,13 +7,14 @@ import frc.robot.Autonomous.AutoMissions;
 import frc.robot.Cartridge.Conveyor;
 import frc.robot.Cartridge.pistonlift;
 import frc.robot.Cartridge.pixyDisplay;
+import frc.robot.TeleOp.DriveTrain;
 import frc.robot.Turret.TurretControl;
 import frc.robot.Turret.TurretDisplay;
 import frc.robot.Turret.TurretMotion;
 import frc.robot.Vision.Pixy;
 
 public class Robot extends TimedRobot {
-
+  public static boolean colorwheel = false;
   @Override
   public void robotInit() {
     TurretMotion.init(); // Configs the turret 
@@ -61,8 +62,18 @@ public class Robot extends TimedRobot {
     TurretDisplay.display(); // Displays LimeLight stats
     pixyDisplay.display();
     // pixyControl.run(); // Runs pixy homing automation
-    pistonlift.run();
+    //DriveTrain.drive();
+    //pistonlift.run();
     Conveyor.run();
+    if(Map.Controllers.xbox.getRawButtonPressed(8)){
+      if(!colorwheel){
+        colorwheel = true;
+        Map.Cartridge.ColorWheel.SensorLift.set(true);
+      }else{
+        colorwheel = false;
+        Map.Cartridge.ColorWheel.SensorLift.set(false);
+      }
+    }
   }
 
   @Override

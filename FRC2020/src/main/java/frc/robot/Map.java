@@ -92,7 +92,7 @@ public class Map {
         public static class ColorWheel {
             // piston,motor, and color sensor used in color wheel manipulator
 
-            public static Solenoid SensorLift = new Solenoid(3, 3);
+            public static Solenoid SensorLift = new Solenoid(1, 5);
             public static TalonSRX Color = new TalonSRX(11);
             public final static I2C.Port i2cPort = I2C.Port.kOnboard;
             public static ColorSensorV3 sensor = new ColorSensorV3(i2cPort);
