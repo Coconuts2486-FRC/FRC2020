@@ -104,7 +104,7 @@ public class Map {
         }
 		
 
-        public static class ColorWheel {
+        public static class ColorWheelDefs {
             // piston,motor, and color sensor used in color wheel manipulator
 
             public static Solenoid SensorLift = new Solenoid(3, 3);
@@ -116,6 +116,5 @@ public class Map {
 
     }
 
-    public static final String ColorWheel = null;
+    
 
-}

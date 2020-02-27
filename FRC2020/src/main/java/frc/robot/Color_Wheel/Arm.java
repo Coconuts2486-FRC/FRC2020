@@ -14,6 +14,7 @@ public class Arm{
             } else{
                 Map.ColorWheel.SensorLift.set(false);
                 colorPistonActive = false;
+                
 
             }
 
