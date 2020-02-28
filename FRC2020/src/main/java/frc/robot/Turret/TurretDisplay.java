@@ -8,10 +8,15 @@ import frc.robot.Vision.LimeLight;
  */
 public class TurretDisplay {
     public static void display(){
-        SmartDashboard.putNumber("LimeLight X: ", LimeLight.getX());
-        SmartDashboard.putNumber("LimeLight Y: ", LimeLight.getY());
+        //SmartDashboard.putNumber("LimeLight X: ", LimeLight.getX());
+        //SmartDashboard.putNumber("LimeLight Y: ", LimeLight.getY());
         SmartDashboard.putBoolean("LimeLight Target:", LimeLight.isTarget());
-        SmartDashboard.putNumber("Lime Val", LimeLight.table.getEntry("tv").getDouble(-5));
-        SmartDashboard.putNumber("Position!!! ", TurretMotion.Rotation.getDegrees());
+        //SmartDashboard.putNumber("Lime Val", LimeLight.table.getEntry("tv").getDouble(-5));
+        SmartDashboard.putNumber("Angle: ", TurretMotion.Rotation.getDegrees());
+        SmartDashboard.putBoolean("Ready to Fire!", Targeting.readyToFire());
+        //SmartDashboard.putNumber("Ticks: ", TurretMotion.Rotation.getPosition());
+        SmartDashboard.putNumber("Velocity: ", TurretMotion.Launcher.getVelocity());
+        SmartDashboard.putNumber("Manuel Velocity: ", TurretControl.manuelVelocity);
+        SmartDashboard.putNumber("Error: ", Math.abs(LimeLight.getX()));
     }
 }

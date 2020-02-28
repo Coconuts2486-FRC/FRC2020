@@ -3,9 +3,9 @@ package frc.robot.Color_Wheel;
 import edu.wpi.first.wpilibj.DriverStation;
 
 
-public class Color_Wheel_Data{
+public class Color_Wheel{
 
-public static void getColor(){
+public static void spinToColor(){
 String gameData;
 gameData = DriverStation.getInstance().getGameSpecificMessage();
 if(gameData.length() > 0)

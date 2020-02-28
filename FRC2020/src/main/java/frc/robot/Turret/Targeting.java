@@ -13,9 +13,9 @@ public class Targeting {
     private static double slopePoint = 1; // Point at which turret uses slope formula to turn
     private static double trackingerror = 0.05; // X axis distange from 0 error range
     // Launching Settings
-    public static double launchingSpeedAddition = 50; // additional power added to launching function
-    private static double maxLaunchingSpeedError = 20; // maximum velocity error for launcher
-    private static double baseLaunchSpeed = 200; // init speed (so that its close to target launch speed)
+    public static double launchingSpeedAddition = 20000; // additional power added to launching function
+    private static double maxLaunchingSpeedError = 3000; // maximum velocity error for launcher
+    private static double baseLaunchSpeed = 10000; // init speed (so that its close to target launch speed)
 
     // Method Settings
     private static boolean track = false; // tracks target as long as true
@@ -30,6 +30,8 @@ public class Targeting {
 
     public static void initilize() {
         // Starts tracking process
+        track = true;
+        maintainBaseLaunchSpeed = true;
         // Sets launching motors at base speed
         Thread setBaseLaunchingSpeed = new Thread() {
             public void run() {
@@ -73,19 +75,21 @@ public class Targeting {
     }
 
     private static void setBaseLaunchingSpeed() {
-        while (maintainBaseLaunchSpeed&&track) {
+        maintainBaseLaunchSpeed = true;
+        while (maintainBaseLaunchSpeed && track) {
             TurretMotion.Launcher.setVelocity(baseLaunchSpeed);
         }
     }
 
     private static void findTarget() {
         // Finds target
+        targetZeroedIn = false;
         if (!LimeLight.isTarget()) {
-            while (!LimeLight.isTarget()&&track) {
-                while(!LimeLight.isTarget()&&TurretMotion.Rotation.getDegrees()<180&&track){
+            while (!LimeLight.isTarget() && track) {
+                while (!LimeLight.isTarget() && TurretMotion.Rotation.getDegrees() < 180 && track) {
                     TurretMotion.Rotation.turn(0.5);
                 }
-                while(!LimeLight.isTarget()&&TurretMotion.Rotation.getDegrees()>0&&track){
+                while (!LimeLight.isTarget() && TurretMotion.Rotation.getDegrees() > 0 && track) {
                     TurretMotion.Rotation.turn(-0.5);
                 }
             }
@@ -94,11 +98,11 @@ public class Targeting {
 
     public static void launch() {
         Map.Cartridge.Conveyor1.set(ControlMode.PercentOutput, 0.5);
-        Map.Cartridge.Conveyor2.set(ControlMode.PercentOutput, -0.5);
-        Map.Cartridge.Conveyor3.set(ControlMode.PercentOutput, 0.5);
-        // load ball into chamber (Owens code)
+        Map.Cartridge.Conveyor2.set(ControlMode.PercentOutput, 1);
+        Map.Cartridge.Conveyor3.set(ControlMode.PercentOutput, 1);
     }
-    public static void stopLaunch(){
+
+    public static void stopLaunch() {
         Map.Cartridge.Conveyor1.set(ControlMode.PercentOutput, 0);
         Map.Cartridge.Conveyor2.set(ControlMode.PercentOutput, 0);
         Map.Cartridge.Conveyor3.set(ControlMode.PercentOutput, 0);
@@ -107,17 +111,17 @@ public class Targeting {
     private static void initLauncher() {
         // maintains a launch speed (will need to be in a thread)
         maintainBaseLaunchSpeed = false; // overrides base launch code
+        maintainLaunchingSpeed = true;
         double motorSpeed = TurretMotion.Launcher.getVelocity();
         double targetSpeed = calculateLaunchSpeed();
         double abserror = Math.abs(targetSpeed - motorSpeed);
-        double error = targetSpeed - motorSpeed;
-        while (maintainLaunchingSpeed&&track) {
+        while (maintainLaunchingSpeed && track) {
             motorSpeed = TurretMotion.Launcher.getVelocity();
             targetSpeed = calculateLaunchSpeed();
             abserror = Math.abs(targetSpeed - motorSpeed);
             if (abserror > maxLaunchingSpeedError) {
                 launcherUpToSpeed = false;
-                TurretMotion.Launcher.setVelocity(targetSpeed - error);// might be minus error (too tired to think rn)
+                TurretMotion.Launcher.setVelocity(targetSpeed);// might be minus error (too tired to think rn)
             } else {
                 launcherUpToSpeed = true;
             }
@@ -135,29 +139,29 @@ public class Targeting {
         // Lines turret to center of target
         double position = LimeLight.getX();
         double error = Math.abs(position);
-        track = true;
         LimeLight.LED.on();
-        while(track){
-            if(LimeLight.isTarget()&&track){
+        while (track) {
+            if (LimeLight.isTarget() && track) {
                 position = LimeLight.getX();
                 error = Math.abs(position);
-                while(error>trackingerror&&track){
+                while (error > trackingerror && track) {
                     targetZeroedIn = false;
                     position = LimeLight.getX();
                     error = Math.abs(position);
-                    if(error>slopePoint){
-                        if(position>0){
+                    if (error > slopePoint) {
+                        if (position > 0) {
                             TurretMotion.Rotation.turn(-1);
-                        }else{
+                        } else {
                             TurretMotion.Rotation.turn(1);
                         }
-                    }else{
-                        TurretMotion.Rotation.turn(0-(position/slopePoint));
+                    } else {
+                        //TurretMotion.Rotation.turn(0 - (position / slopePoint));
+                        TurretMotion.Rotation.turn((position / slopePoint));
                     }
                 }
                 targetZeroedIn = true;
                 TurretMotion.Rotation.turn(0);
-            }else{
+            } else {
                 findTarget();
             }
         }
