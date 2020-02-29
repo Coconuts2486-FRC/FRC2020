@@ -48,7 +48,7 @@ public class TurretControl {
             }
             if (xbox.getRawButton(Map.Turret.controllers.launch) && Targeting.readyToFire()) {
                 firing = true;
-                Targeting.launch();
+                Targeting.autoLaunch();
             } else {
                 firing = false;
                 Targeting.stopLaunch();

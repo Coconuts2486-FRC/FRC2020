@@ -20,6 +20,9 @@ public class Conveyor {
                 Map.Cartridge.ArmRoller.set(ControlMode.PercentOutput, 1); // adjust speeds
                 Map.Cartridge.Conveyor1.set(ControlMode.PercentOutput, 0);
             }
+        }else if(Map.Controllers.driverLeft.getRawButton(5)&&(!TurretControl.firing)){
+            Map.Cartridge.ArmRoller.set(ControlMode.PercentOutput, -1);
+            Map.Cartridge.Conveyor1.set(ControlMode.PercentOutput, -1);
         } else if (!TurretControl.firing) {
             Map.Cartridge.ArmRoller.set(ControlMode.PercentOutput, 0);
             Map.Cartridge.Conveyor1.set(ControlMode.PercentOutput, 0);

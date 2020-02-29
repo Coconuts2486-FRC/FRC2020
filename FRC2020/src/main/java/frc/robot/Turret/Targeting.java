@@ -13,9 +13,9 @@ public class Targeting {
     private static double slopePoint = 1; // Point at which turret uses slope formula to turn
     private static double trackingerror = 0.05; // X axis distange from 0 error range
     // Launching Settings
-    public static double launchingSpeedAddition = 20000; // additional power added to launching function
-    private static double maxLaunchingSpeedError = 3000; // maximum velocity error for launcher
-    private static double baseLaunchSpeed = 10000; // init speed (so that its close to target launch speed)
+    public static double launchingSpeedAddition = 90000; // additional power added to launching function
+    private static double maxLaunchingSpeedError = 1000; // maximum velocity error for launcher
+    private static double baseLaunchSpeed = 50000; // init speed (so that its close to target launch speed)
 
     // Method Settings
     private static boolean track = false; // tracks target as long as true
@@ -23,6 +23,7 @@ public class Targeting {
     private static boolean maintainLaunchingSpeed = false; // keeps launcher loop up to speed as long as true
     private static boolean launcherUpToSpeed = false; // nofifies if launcher is at wanted velocity
     private static boolean maintainBaseLaunchSpeed = false; // maintains a basic launching velocity while true
+    private static double launchDrop = 1000;
     /*
      * Example data: 180 Degrees of rotation y and x (on LimeLight) range from -1 to
      * 1
@@ -72,6 +73,7 @@ public class Targeting {
         maintainBaseLaunchSpeed = false;
         LimeLight.LED.off();
         TurretMotion.Rotation.turn(0);
+        TurretMotion.Launcher.setPercentSpeed(0);
     }
 
     private static void setBaseLaunchingSpeed() {
@@ -100,6 +102,13 @@ public class Targeting {
         Map.Cartridge.Conveyor1.set(ControlMode.PercentOutput, 0.5);
         Map.Cartridge.Conveyor2.set(ControlMode.PercentOutput, 1);
         Map.Cartridge.Conveyor3.set(ControlMode.PercentOutput, 1);
+    }
+    public static void autoLaunch(){
+        double initVelocity = TurretMotion.Launcher.getVelocity();
+        double shutoffVelocity = initVelocity-launchDrop;
+        while((TurretMotion.Launcher.getVelocity()>shutoffVelocity)&&Map.Controllers.xbox.getRawButton(Map.Turret.controllers.launch)){
+            launch();
+        }
     }
 
     public static void stopLaunch() {
