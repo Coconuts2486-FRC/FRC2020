@@ -7,6 +7,7 @@ public class Arm{
     public static boolean colorPistonActive = false;
 
     public static void lift() {
+        /*
         if (Map.Controllers.xbox.getRawButtonPressed(20)) {
             if (!colorPistonActive) {
                 Map.ColorWheel.SensorLift.set(true);
@@ -18,9 +19,9 @@ public class Arm{
 
             }
 
-
+            
         }
-
+        */
 
     }
 

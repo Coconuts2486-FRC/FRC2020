@@ -2,12 +2,10 @@ package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Autonomous.AutoMissions;
 import frc.robot.Cartridge.Conveyor;
 import frc.robot.Cartridge.pistonlift;
 import frc.robot.Cartridge.pixyDisplay;
-import frc.robot.TeleOp.DriveTrain;
 import frc.robot.Turret.TurretControl;
 import frc.robot.Turret.TurretDisplay;
 import frc.robot.Turret.TurretMotion;
@@ -23,13 +21,8 @@ public class Robot extends TimedRobot {
   }
 
   public void robotPeriodic() {
-    SmartDashboard.putString("Auto Mode", AutoMissions.CurrentAuto);
-    SmartDashboard.getNumber("Auto Selection", AutoMissions.SelectedAuto);
     TurretDisplay.display();
-
-    if (Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.manuelEncoderZeroer)) {
-      Map.Turret.motors.rotation.setSelectedSensorPosition(0);
-    }
+    TurretControl.periodicRun();
   }
 
   @Override
@@ -44,7 +37,6 @@ public class Robot extends TimedRobot {
     if (AutoMissions.SelectedAuto == 2) {
       AutoMissions.GeneratorAuto();
     }
-    Map.Turret.motors.rotation.setNeutralMode(NeutralMode.Brake);
   }
 
   @Override
@@ -53,7 +45,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    Map.Turret.motors.rotation.setNeutralMode(NeutralMode.Brake);
   }
 
   @Override
@@ -63,17 +54,8 @@ public class Robot extends TimedRobot {
     pixyDisplay.display();
     // pixyControl.run(); // Runs pixy homing automation
     //DriveTrain.drive();
-    //pistonlift.run();
+    pistonlift.run();
     Conveyor.run();
-    if(Map.Controllers.xbox.getRawButtonPressed(8)){
-      if(!colorwheel){
-        colorwheel = true;
-        Map.Cartridge.ColorWheel.SensorLift.set(true);
-      }else{
-        colorwheel = false;
-        Map.Cartridge.ColorWheel.SensorLift.set(false);
-      }
-    }
   }
 
   @Override

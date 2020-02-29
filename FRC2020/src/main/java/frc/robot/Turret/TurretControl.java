@@ -19,6 +19,7 @@ public class TurretControl {
     private static double manuelLargeAdjusterDivision = 2; // how much the large adjuster is divided by
     public static boolean firing = false;
     public static boolean autoIsTracking = true;
+    public static boolean encoderDisabled = false;
 
     public static void run() {
         if (Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.manuelMode)) {
@@ -55,14 +56,34 @@ public class TurretControl {
         } else {
             // Manuel Mode
             // Turning
+            if(Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.manuelEncoderDisable)){
+                if(encoderDisabled){
+                    encoderDisabled = false;
+                }else{
+                    encoderDisabled = true;
+                }
+            }
             double large = Math.abs(Map.Controllers.xbox.getRawAxis(Map.Turret.controllers.manuelRotateLarge));
             double small = Math.abs(Map.Controllers.xbox.getRawAxis(Map.Turret.controllers.manuelRotateSmall));
-            if (large > small) {
-                TurretMotion.Rotation.turn(Map.Controllers.xbox.getRawAxis(Map.Turret.controllers.manuelRotateLarge)
-                        / manuelLargeAdjusterDivision);
-            } else {
-                TurretMotion.Rotation.turn(Map.Controllers.xbox.getRawAxis(Map.Turret.controllers.manuelRotateSmall)
-                        / manuelSmallAdjusterDivision);
+            if(encoderDisabled){
+                if (large > small) {
+                    TurretMotion.Rotation.overrideTurn(Map.Controllers.xbox.getRawAxis(Map.Turret.controllers.manuelRotateLarge)
+                            / manuelLargeAdjusterDivision);
+                } else {
+                    TurretMotion.Rotation.overrideTurn(Map.Controllers.xbox.getRawAxis(Map.Turret.controllers.manuelRotateSmall)
+                            / manuelSmallAdjusterDivision);
+                }
+                if (Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.manuelEncoderZeroer)) {
+                    Map.Turret.motors.rotation.setSelectedSensorPosition(0);
+                  }
+            }else{
+                if (large > small) {
+                    TurretMotion.Rotation.turn(Map.Controllers.xbox.getRawAxis(Map.Turret.controllers.manuelRotateLarge)
+                            / manuelLargeAdjusterDivision);
+                } else {
+                    TurretMotion.Rotation.turn(Map.Controllers.xbox.getRawAxis(Map.Turret.controllers.manuelRotateSmall)
+                            / manuelSmallAdjusterDivision);
+                }
             }
             // LED config
             if (Map.Controllers.xbox.getRawButtonPressed(1)) {
@@ -115,5 +136,22 @@ public class TurretControl {
                 }
             }
         }
+    }
+    public static void periodicRun(){
+
+        if (Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.manuelEncoderZeroer)) {
+            Map.Turret.motors.rotation.setSelectedSensorPosition(0);
+          }
+        /*
+        double large = Math.abs(Map.Controllers.xbox.getRawAxis(Map.Turret.controllers.manuelRotateLarge));
+        double small = Math.abs(Map.Controllers.xbox.getRawAxis(Map.Turret.controllers.manuelRotateSmall));
+        if (large > small) {
+            TurretMotion.Rotation.overrideTurn(Map.Controllers.xbox.getRawAxis(Map.Turret.controllers.manuelRotateLarge)
+                / manuelLargeAdjusterDivision);
+        } else {
+            TurretMotion.Rotation.overrideTurn(Map.Controllers.xbox.getRawAxis(Map.Turret.controllers.manuelRotateSmall)
+                / manuelSmallAdjusterDivision);
+        }
+        */
     }
 }

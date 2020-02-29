@@ -3,8 +3,6 @@ package frc.robot.Turret;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Map;
 
 /**
@@ -16,7 +14,7 @@ public class TurretMotion {
         Map.Turret.motors.follower.follow(Map.Turret.motors.launcher);
         Map.Turret.motors.rotation.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
         Map.Turret.motors.launcher.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
-        Map.Turret.motors.rotation.setNeutralMode(NeutralMode.Coast);
+        Map.Turret.motors.rotation.setNeutralMode(NeutralMode.Brake);
         Map.Turret.motors.launcher.setNeutralMode(NeutralMode.Coast);
         Map.Turret.motors.rotation.setInverted(true);
         Map.Turret.motors.follower.setInverted(true);
@@ -65,7 +63,6 @@ public class TurretMotion {
                     while(goTo&&abserror>errorRange){
                         abserror = Math.abs(pos-getDegrees());
                         error = pos-getDegrees();
-                        SmartDashboard.putNumber("Error: ", error);
                         if(abserror>slopePoint){
                             if(error>0){
                                 turn(topSpeed);
@@ -75,11 +72,6 @@ public class TurretMotion {
                         }else{
                             turn((error/slopePoint)*topSpeed);
                         }
-                        /*
-                        abserror = Math.abs(pos-getDegrees());
-                        error = pos-getDegrees();
-                        turn(error/maxDeg);
-                        */
                     }
                     turn(0);
                     goTo = false;
@@ -87,10 +79,6 @@ public class TurretMotion {
             };
             thread.start();
             //Map.Turret.motors.rotation.set(ControlMode.Position, degreesToTicks(pos));
-        }
-
-        private static int degreesToTicks(double degrees) {
-            return (int) ((degrees / 360) * ticksInrevolution);
         }
 
         public static double getPosition() {
@@ -102,7 +90,9 @@ public class TurretMotion {
             // Gets current position in Degrees
             return (getPosition() / ticksInrevolution) * 360;
         }
-
+        public static void overrideTurn(double pwr){
+            Map.Turret.motors.rotation.set(ControlMode.PercentOutput, pwr);
+        }
         public static void turn(double pwr) {
             // Turns turret using pwr as input (-1 to 1)
             // Map.Turret.motors.rotation.set(ControlMode.PercentOutput, pwr);
