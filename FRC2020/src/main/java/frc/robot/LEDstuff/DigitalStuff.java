@@ -1,6 +1,6 @@
 package frc.robot.LEDstuff;
-import edu.wpi.first.wpilibj.PWM;
 public class DigitalStuff{
+    /*
 private static PWM Red = new PWM(0);
 private static PWM Blue = new PWM(1);
 private static PWM Green = new PWM(2);
@@ -17,7 +17,7 @@ private static void test(){
 
     
 }
-    
+    */  
 
 
 }

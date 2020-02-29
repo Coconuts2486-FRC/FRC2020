@@ -2,7 +2,6 @@ package frc.robot.Color_Wheel;
 
 import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.Map;
-import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
@@ -18,7 +17,7 @@ public class ColorSensor {
   double green = 0;
 
   public void CalibrateBlue(){
-
+    /*
     double redB = SmartDashboard.getNumber("Red", red);
     double blueB = SmartDashboard.getNumber("Blue", blue);
     double greenB = SmartDashboard.getNumber("green", green);
@@ -34,7 +33,7 @@ public class ColorSensor {
     double redY = SmartDashboard.getNumber("Red", red);
     double blueY = SmartDashboard.getNumber("Blue", blue);
     double greenY = SmartDashboard.getNumber("green", green);
-
+    */
     
 
   }

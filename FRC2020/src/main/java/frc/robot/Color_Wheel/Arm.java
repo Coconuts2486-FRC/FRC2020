@@ -1,7 +1,5 @@
 package frc.robot.Color_Wheel;
 
-import frc.robot.Map;
-
 public class Arm{
 
     public static boolean colorPistonActive = false;
