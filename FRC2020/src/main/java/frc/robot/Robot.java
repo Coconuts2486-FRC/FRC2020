@@ -37,6 +37,7 @@ public class Robot extends TimedRobot {
     if (AutoMissions.SelectedAuto == 2) {
       AutoMissions.GeneratorAuto();
     }
+    Map.Turret.motors.rotation.setNeutralMode(NeutralMode.Brake);
   }
 
   @Override
@@ -45,6 +46,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    Map.Turret.motors.rotation.setNeutralMode(NeutralMode.Brake);
   }
 
   @Override

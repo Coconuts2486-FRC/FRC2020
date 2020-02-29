@@ -13,9 +13,9 @@ public class Targeting {
     private static double slopePoint = 1; // Point at which turret uses slope formula to turn
     private static double trackingerror = 0.05; // X axis distange from 0 error range
     // Launching Settings
-    public static double launchingSpeedAddition = 90000; // additional power added to launching function
-    private static double maxLaunchingSpeedError = 1000; // maximum velocity error for launcher
-    private static double baseLaunchSpeed = 50000; // init speed (so that its close to target launch speed)
+    public static double launchingSpeedAddition = 30000; // additional power added to launching function
+    private static double maxLaunchingSpeedError = 3000; // maximum velocity error for launcher
+    private static double baseLaunchSpeed = 10000; // init speed (so that its close to target launch speed)
 
     // Method Settings
     private static boolean track = false; // tracks target as long as true
@@ -115,6 +115,10 @@ public class Targeting {
         Map.Cartridge.Conveyor1.set(ControlMode.PercentOutput, 0);
         Map.Cartridge.Conveyor2.set(ControlMode.PercentOutput, 0);
         Map.Cartridge.Conveyor3.set(ControlMode.PercentOutput, 0);
+    }
+
+    private static double setVelocityToRealVelocity(double setVelocity) {
+        return setVelocity-3000; // change to graphed function
     }
 
     private static void initLauncher() {
