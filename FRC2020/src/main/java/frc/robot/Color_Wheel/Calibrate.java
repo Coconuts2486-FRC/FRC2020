@@ -7,20 +7,20 @@ public class Calibrate{
     
     
     public static class Colors{
-        public static Color1 Red;
-        public static Color1 Blue;
-        public static Color1 Green;
-        public static Color1 Yellow;
+        public static Color1 Red = new Color1();
+        public static Color1 Blue = new Color1();
+        public static Color1 Green = new Color1();
+        public static Color1 Yellow = new Color1();
     }
 
-    public class Color1{
+    public static class Color1{
         public double r;
         public double g;
         public double b;
     }
 
-    public static void setColor(String color){
-        Color detectedColor = Map.ColorWheelDefs.sensor.getColor();
+    public static void setColor(String color) {
+        final Color detectedColor = Map.ColorWheelDefs.sensor.getColor();
 
         switch(color){
             case("red"):
