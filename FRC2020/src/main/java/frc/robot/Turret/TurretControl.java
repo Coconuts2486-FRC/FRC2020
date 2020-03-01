@@ -2,6 +2,7 @@ package frc.robot.Turret;
 
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Map;
+import frc.robot.Cartridge.Conveyor;
 import frc.robot.Vision.LimeLight;
 
 /**
@@ -53,6 +54,16 @@ public class TurretControl {
                 firing = false;
                 Targeting.stopLaunch();
             }
+
+            if (Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.LimeLightLED)) {
+                if (!led) {
+                    LimeLight.LED.on();
+                    led = true;
+                } else {
+                    LimeLight.LED.off();
+                    led = false;
+                }
+            }
         } else {
             // Manuel Mode
             // Turning
@@ -86,7 +97,7 @@ public class TurretControl {
                 }
             }
             // LED config
-            if (Map.Controllers.xbox.getRawButtonPressed(1)) {
+            if (Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.LimeLightLED)) {
                 if (!led) {
                     LimeLight.LED.on();
                     led = true;
@@ -96,9 +107,16 @@ public class TurretControl {
                 }
             }
             // Launch
-            
             if (xbox.getRawButtonPressed(Map.Turret.controllers.launch)) {
                     Targeting.learningLauncher();
+            }
+            
+            //outputs balls
+            if(xbox.getRawButton(Map.Turret.controllers.outtake)){
+                Targeting.isFiring=true;
+                Conveyor.outtake();
+            }else{
+                Targeting.isFiring=false;
             }
             
             // Initiate Launcher
@@ -137,21 +155,9 @@ public class TurretControl {
             }
         }
     }
-    public static void periodicRun(){
-
+    public static void periodicRun() {
         if (Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.manuelEncoderZeroer)) {
             Map.Turret.motors.rotation.setSelectedSensorPosition(0);
           }
-        /*
-        double large = Math.abs(Map.Controllers.xbox.getRawAxis(Map.Turret.controllers.manuelRotateLarge));
-        double small = Math.abs(Map.Controllers.xbox.getRawAxis(Map.Turret.controllers.manuelRotateSmall));
-        if (large > small) {
-            TurretMotion.Rotation.overrideTurn(Map.Controllers.xbox.getRawAxis(Map.Turret.controllers.manuelRotateLarge)
-                / manuelLargeAdjusterDivision);
-        } else {
-            TurretMotion.Rotation.overrideTurn(Map.Controllers.xbox.getRawAxis(Map.Turret.controllers.manuelRotateSmall)
-                / manuelSmallAdjusterDivision);
-        }
-        */
     }
 }

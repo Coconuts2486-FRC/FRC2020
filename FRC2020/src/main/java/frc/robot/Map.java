@@ -60,6 +60,8 @@ public class Map {
             public static int manuelSetAngle = 11; // Sets an angle for manuel mode
             public static int manuelGoToAngle = 12; // Turns turret to preset angle
             public static int manuelEncoderDisable = 9;
+            public static int LimeLightLED = 1;
+            public static int outtake = 8;
         }
     }
 
@@ -83,6 +85,8 @@ public class Map {
         public static class controllers {
             public static int zeroInOnTarget = 1; // Raw button number for lining up with closest ball
             public static int grabTarget = 2; // Raw button number for picking up ball
+            public static int outtake = 5;
+            public static int intake = 1;
         }
 
         public static class PIDcontrol {

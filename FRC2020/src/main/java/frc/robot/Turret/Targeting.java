@@ -106,24 +106,36 @@ public class Targeting {
         Map.Cartridge.Conveyor2.set(ControlMode.PercentOutput, 1);
         Map.Cartridge.Conveyor3.set(ControlMode.PercentOutput, 1);
     }
-    public static void autoLaunch(){
+
+    public static void autoLaunch() {
         double initVelocity = TurretMotion.Launcher.getVelocity();
-        double shutoffVelocity = initVelocity-launchDrop;
-        while((TurretMotion.Launcher.getVelocity()>shutoffVelocity)&&Map.Controllers.xbox.getRawButton(Map.Turret.controllers.launch)&&track){
+        double shutoffVelocity = initVelocity - launchDrop;
+        while ((TurretMotion.Launcher.getVelocity() > shutoffVelocity)
+                && Map.Controllers.xbox.getRawButton(Map.Turret.controllers.launch) && track) {
             launch();
         }
     }
-    public static void learningLauncher(){
+
+    public static void learningLauncher() {
         manuelLaunch = true;
+        LimeLight.Snapshot.start();
         double initVelocity = TurretMotion.Launcher.getVelocity();
-        double shutoffVelocity = initVelocity-launchDrop;
-        while((TurretMotion.Launcher.getVelocity()>shutoffVelocity)&&manuelLaunch){
+        double shutoffVelocity = initVelocity - launchDrop;
+        while ((TurretMotion.Launcher.getVelocity() > shutoffVelocity) && manuelLaunch) {
             launch();
-            if(Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.launch)){
-                manuelLaunch=false;
+            if (Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.launch)
+                    || Map.Controllers.xbox.getRawButton(Map.Turret.controllers.outtake)) {
+                manuelLaunch = false;
             }
         }
+        LimeLight.Snapshot.stop();
         stopLaunch();
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         TurretDisplay.learningDisplay(TurretControl.manuelVelocity, initVelocity, LimeLight.getY());
     }
     public static void stopLaunch() {
