@@ -14,7 +14,7 @@ public class TurretControl {
     private static boolean led = false;
     private static double manuelAngle = 90;
     public static int manuelVelocity = 10000; // set to whatever base velocity should be
-    private static int manuelVelocityChange = 1000; // The amount that velocity is adjusted when POV is pressed
+    private static int manuelVelocityChange = 10000; // The amount that velocity is adjusted when POV is pressed
     private static double manuelSmallAdjusterDivision = 6; // how much the small adjuster is divided by
     private static double manuelLargeAdjusterDivision = 2; // how much the large adjuster is divided by
     public static boolean firing = false;
@@ -48,7 +48,7 @@ public class TurretControl {
             }
             if (xbox.getRawButton(Map.Turret.controllers.launch) && Targeting.readyToFire()) {
                 firing = true;
-                Targeting.launch();
+                Targeting.autoLaunch();
             } else {
                 firing = false;
                 Targeting.stopLaunch();
@@ -96,11 +96,11 @@ public class TurretControl {
                 }
             }
             // Launch
-            if (xbox.getRawButton(Map.Turret.controllers.launch)) {
-                Targeting.launch();
-            } else {
-                Targeting.stopLaunch();
+            
+            if (xbox.getRawButtonPressed(Map.Turret.controllers.launch)) {
+                    Targeting.learningLauncher();
             }
+            
             // Initiate Launcher
             if (Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.initiation)) {
                 if(turretInitiated){

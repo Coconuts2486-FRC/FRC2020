@@ -2,10 +2,12 @@ package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Autonomous.AutoMissions;
 import frc.robot.Cartridge.Conveyor;
 import frc.robot.Cartridge.pistonlift;
 import frc.robot.Cartridge.pixyDisplay;
+import frc.robot.Color_Wheel.ColorWheelControl;
 import frc.robot.Turret.TurretControl;
 import frc.robot.Turret.TurretDisplay;
 import frc.robot.Turret.TurretMotion;
@@ -37,6 +39,7 @@ public class Robot extends TimedRobot {
     if (AutoMissions.SelectedAuto == 2) {
       AutoMissions.GeneratorAuto();
     }
+    Map.Turret.motors.rotation.setNeutralMode(NeutralMode.Brake);
   }
 
   @Override
@@ -45,6 +48,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    Map.Turret.motors.rotation.setNeutralMode(NeutralMode.Brake);
   }
 
   @Override
@@ -56,6 +60,8 @@ public class Robot extends TimedRobot {
     //DriveTrain.drive();
     pistonlift.run();
     Conveyor.run();
+    ColorWheelControl.run();
+    SmartDashboard.putBoolean("SENSOR!!!: ", Map.Cartridge.Sensors.fullSensor.get());
   }
 
   @Override

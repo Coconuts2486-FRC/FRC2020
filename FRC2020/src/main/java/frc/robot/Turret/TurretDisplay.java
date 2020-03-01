@@ -19,4 +19,9 @@ public class TurretDisplay {
         SmartDashboard.putNumber("Manuel Velocity: ", TurretControl.manuelVelocity);
         SmartDashboard.putNumber("Error: ", Math.abs(LimeLight.getX()));
     }
+    public static void learningDisplay(double setvelocity,double actualvelocity,double limelighty){
+        SmartDashboard.putNumber("Learning Set Velocity: ", setvelocity);
+        SmartDashboard.putNumber("Learning Actual Velocity: ", actualvelocity);
+        SmartDashboard.putNumber("Learning LimeLight Y: ", limelighty);
+    }
 }

@@ -14,7 +14,7 @@ public class TurretMotion {
         Map.Turret.motors.follower.follow(Map.Turret.motors.launcher);
         Map.Turret.motors.rotation.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
         Map.Turret.motors.launcher.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
-        Map.Turret.motors.rotation.setNeutralMode(NeutralMode.Brake);
+        Map.Turret.motors.rotation.setNeutralMode(NeutralMode.Coast);
         Map.Turret.motors.launcher.setNeutralMode(NeutralMode.Coast);
         Map.Turret.motors.rotation.setInverted(true);
         Map.Turret.motors.follower.setInverted(true);
