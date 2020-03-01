@@ -95,7 +95,7 @@ public class Map {
 		public static class ColorWheel{
 
 
-            public static Solenoid SensorLift1 = new Solenoid(3,3);
+            public static Solenoid SensorLift1 = new Solenoid(1,5);
             public static TalonSRX ColorSpinner = new TalonSRX(11);
             public final static I2C.Port i2cPort = I2C.Port.kOnboard;
             public static ColorSensorV3 sensor = new ColorSensorV3(i2cPort);
