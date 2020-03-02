@@ -137,7 +137,7 @@ public class Targeting {
         Map.Cartridge.Conveyor2.set(ControlMode.PercentOutput, 0);
         Map.Cartridge.Conveyor3.set(ControlMode.PercentOutput, 0);
     }
-
+    
     private static double setVelocityToRealVelocity(double setVelocity) {
         return setVelocity-3000; // change to graphed function
     }

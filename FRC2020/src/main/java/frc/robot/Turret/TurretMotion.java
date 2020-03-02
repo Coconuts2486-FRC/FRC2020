@@ -26,7 +26,32 @@ public class TurretMotion {
         public static void setPercentSpeed(double speed) {
             Map.Turret.motors.launcher.set(ControlMode.PercentOutput, speed);
         }
-
+        public static void testsetVelocity(double velocity){
+            TurretSettings.launching.automatic.velocity = velocity;
+            Thread thread = new Thread(){
+                public void run(){
+                    double set = 1;
+                    double target = TurretSettings.launching.automatic.velocity/TurretSettings.launching.general.maxVelocity;
+                    double current = getVelocity()/TurretSettings.launching.general.maxVelocity;
+                    while(TurretSettings.launching.automatic.velocityIsRunning&&TurretSettings.launching.automatic.velocity>0){
+                        target = TurretSettings.launching.automatic.velocity/TurretSettings.launching.general.maxVelocity;
+                        current = getVelocity()/TurretSettings.launching.general.maxVelocity;
+                        if(current<target&&set<=(1-TurretSettings.launching.automatic.adjustment)){
+                            set+=TurretSettings.launching.automatic.adjustment;
+                        }else if(current>target&&set>=(0+TurretSettings.launching.automatic.adjustment)){
+                            set-=TurretSettings.launching.automatic.adjustment;
+                        }
+                        setPercentSpeed(set);
+                    }
+                    setPercentSpeed(0);
+                    TurretSettings.launching.automatic.velocityIsRunning = false;
+                }
+            };
+            if(!TurretSettings.launching.automatic.velocityIsRunning){
+                TurretSettings.launching.automatic.velocityIsRunning = true;
+                thread.start();
+            }
+        }
         public static void setVelocity(double speed) {
             //Map.Turret.motors.launcher.set(ControlMode.Velocity, speed);
             double s=speed/TurretSettings.launching.general.maxVelocity;

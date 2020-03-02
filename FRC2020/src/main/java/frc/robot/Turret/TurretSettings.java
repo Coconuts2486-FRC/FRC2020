@@ -46,6 +46,10 @@ public class TurretSettings {
             public static double maxLaunchingSpeedError = 20000; // maximum velocity error for launcher
             public static double baseLaunchSpeed = 30000; // init speed (so that its close to target launch speed)
             public static double launchDrop = 3000;
+
+            public static double adjustment = 1000/general.maxVelocity;
+            public static double velocity = 0;
+            public static boolean velocityIsRunning = false;
         }
     }
 }
