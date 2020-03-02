@@ -2,34 +2,20 @@ package frc.robot.Turret;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import frc.robot.Map;
+import frc.robot.Utilities.Sleep;
 import frc.robot.Vision.LimeLight;
 
 /**
  * Targeting
  */
 public class Targeting {
-    // Customizable Settings
-    // Turret Rotation Settings
-    private static double slopePoint = 1; // Point at which turret uses slope formula to turn
-    private static double trackingerror = 0.05; // X axis distange from 0 error range
-    // Launching Settings
-    public static double launchingSpeedAddition = 50000; // additional power added to launching function
-    private static double maxLaunchingSpeedError = 3000; // maximum velocity error for launcher
-    private static double baseLaunchSpeed = 10000; // init speed (so that its close to target launch speed)
-
     // Method Settings
     private static boolean track = false; // tracks target as long as true
     private static boolean targetZeroedIn = false; // true if target is within trackingerror
     private static boolean maintainLaunchingSpeed = false; // keeps launcher loop up to speed as long as true
     private static boolean launcherUpToSpeed = false; // nofifies if launcher is at wanted velocity
     private static boolean maintainBaseLaunchSpeed = false; // maintains a basic launching velocity while true
-    private static double launchDrop = 1000;
-    public static boolean isFiring = false;
-    public static boolean manuelLaunch = false;
-    /*
-     * Example data: 180 Degrees of rotation y and x (on LimeLight) range from -1 to
-     * 1
-     */
+    //public static boolean isFiring = false;
 
     public static void initilize() {
         // Starts tracking process
@@ -73,15 +59,17 @@ public class Targeting {
         maintainLaunchingSpeed = false;
         launcherUpToSpeed = false;
         maintainBaseLaunchSpeed = false;
+        TurretSettings.launching.manual.manualLaunch = false;
         LimeLight.LED.off();
         TurretMotion.Rotation.turn(0);
         TurretMotion.Launcher.setPercentSpeed(0);
+        stopLaunch();
     }
 
     private static void setBaseLaunchingSpeed() {
         maintainBaseLaunchSpeed = true;
         while (maintainBaseLaunchSpeed && track) {
-            TurretMotion.Launcher.setVelocity(baseLaunchSpeed);
+            TurretMotion.Launcher.setVelocity(TurretSettings.launching.automatic.baseLaunchSpeed);
         }
     }
 
@@ -101,45 +89,50 @@ public class Targeting {
     }
 
     public static void launch() {
-        isFiring = true;
+        TurretSettings.turretUsingConveyors = true;
         Map.Cartridge.Conveyor1.set(ControlMode.PercentOutput, 0.5);
         Map.Cartridge.Conveyor2.set(ControlMode.PercentOutput, 1);
         Map.Cartridge.Conveyor3.set(ControlMode.PercentOutput, 1);
     }
 
     public static void autoLaunch() {
-        double initVelocity = TurretMotion.Launcher.getVelocity();
-        double shutoffVelocity = initVelocity - launchDrop;
-        while ((TurretMotion.Launcher.getVelocity() > shutoffVelocity)
-                && Map.Controllers.xbox.getRawButton(Map.Turret.controllers.launch) && track) {
-            launch();
-        }
+        Thread thread = new Thread(){
+            public void run(){
+                double initVelocity = TurretMotion.Launcher.getVelocity();
+                double shutoffVelocity = initVelocity - TurretSettings.launching.automatic.launchDrop;
+                while ((TurretMotion.Launcher.getVelocity() > shutoffVelocity)
+                     && Map.Controllers.xbox.getRawButton(Map.Turret.controllers.launch) && track) {
+                    launch();
+                }
+            }
+        };
+        thread.start();
     }
 
     public static void learningLauncher() {
-        manuelLaunch = true;
-        LimeLight.Snapshot.start();
-        double initVelocity = TurretMotion.Launcher.getVelocity();
-        double shutoffVelocity = initVelocity - launchDrop;
-        while ((TurretMotion.Launcher.getVelocity() > shutoffVelocity) && manuelLaunch) {
-            launch();
-            if (Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.launch)
-                    || Map.Controllers.xbox.getRawButton(Map.Turret.controllers.outtake)) {
-                manuelLaunch = false;
+        Thread thread = new Thread(){
+            public void run(){
+                TurretSettings.launching.manual.manualLaunch = true;
+                LimeLight.Snapshot.start();
+                double initVelocity = TurretMotion.Launcher.getVelocity();
+                double shutoffVelocity = initVelocity - TurretSettings.launching.automatic.launchDrop;
+                while ((TurretMotion.Launcher.getVelocity() > shutoffVelocity) && TurretSettings.launching.manual.manualLaunch) {
+                    launch();
+                    if (Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.launch)
+                            || Map.Controllers.xbox.getRawButton(Map.Turret.controllers.outtake)) {
+                            TurretSettings.launching.manual.manualLaunch = false;
+                    }
+                }
+                LimeLight.Snapshot.stop();
+                stopLaunch();
+                TurretDisplay.learningDisplay(TurretSettings.launching.manual.manuelVelocity, initVelocity, LimeLight.getY());
+                Sleep.delay(100);
             }
-        }
-        LimeLight.Snapshot.stop();
-        stopLaunch();
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        TurretDisplay.learningDisplay(TurretControl.manuelVelocity, initVelocity, LimeLight.getY());
+        };
+        thread.start();
     }
     public static void stopLaunch() {
-        isFiring = false;
+        TurretSettings.turretUsingConveyors = false;
         Map.Cartridge.Conveyor1.set(ControlMode.PercentOutput, 0);
         Map.Cartridge.Conveyor2.set(ControlMode.PercentOutput, 0);
         Map.Cartridge.Conveyor3.set(ControlMode.PercentOutput, 0);
@@ -162,7 +155,7 @@ public class Targeting {
             targetSpeed = calculateLaunchSpeed();
             //targetSpeed = setVelocityToRealVelocity(calculateLaunchSpeed());
             abserror = Math.abs(targetSpeed - motorSpeed);
-            if (abserror > maxLaunchingSpeedError) {
+            if (abserror > TurretSettings.launching.automatic.maxLaunchingSpeedError) {
                 launcherUpToSpeed = false;
                 TurretMotion.Launcher.setVelocity(targetSpeed);// might be minus error (too tired to think rn)
             } else {
@@ -174,7 +167,7 @@ public class Targeting {
     private static double calculateLaunchSpeed() {
         // Finds the speed of the flywheen needed to hit the target
         double y = LimeLight.getY();
-        double output = (y) + launchingSpeedAddition; // replace 'y' with custom function
+        double output = (y) + TurretSettings.launching.automatic.launchingSpeedAddition; // replace 'y' with custom function
         return output;
     }
 
@@ -187,11 +180,11 @@ public class Targeting {
             if (LimeLight.isTarget() && track) {
                 position = LimeLight.getX();
                 error = Math.abs(position);
-                while (error > trackingerror && track) {
+                while (error > TurretSettings.rotation.automatic.trackingerror && track) {
                     targetZeroedIn = false;
                     position = LimeLight.getX();
                     error = Math.abs(position);
-                    if (error > slopePoint) {
+                    if (error > TurretSettings.rotation.automatic.slopePoint) {
                         if (position > 0) {
                             TurretMotion.Rotation.turn(-1);
                         } else {
@@ -199,7 +192,7 @@ public class Targeting {
                         }
                     } else {
                         //TurretMotion.Rotation.turn(0 - (position / slopePoint));
-                        TurretMotion.Rotation.turn((position / slopePoint));
+                        TurretMotion.Rotation.turn((position / TurretSettings.rotation.automatic.slopePoint));
                     }
                 }
                 targetZeroedIn = true;

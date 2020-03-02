@@ -16,7 +16,7 @@ public class TurretDisplay {
         SmartDashboard.putBoolean("Ready to Fire!", Targeting.readyToFire());
         //SmartDashboard.putNumber("Ticks: ", TurretMotion.Rotation.getPosition());
         SmartDashboard.putNumber("Velocity: ", TurretMotion.Launcher.getVelocity());
-        SmartDashboard.putNumber("Manual Velocity: ", TurretControl.manuelVelocity);
+        SmartDashboard.putNumber("Manual Velocity: ", TurretSettings.launching.manual.manuelVelocity);
         SmartDashboard.putNumber("Error: ", Math.abs(LimeLight.getX()));
     }
     public static void learningDisplay(double setvelocity,double actualvelocity,double limelighty){

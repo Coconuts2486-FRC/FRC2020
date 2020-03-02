@@ -1,10 +1,9 @@
 package frc.robot.Cartridge;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Map;
-import frc.robot.Turret.Targeting;
+import frc.robot.Turret.TurretSettings;
 
 public class Conveyor {
     public static void init() {
@@ -16,20 +15,20 @@ public class Conveyor {
     }
     public static void run() {
         if (Map.Controllers.driverRight.getRawButton(Map.Cartridge.controllers.intake)) {
-            if (FullSensor.getSensorValue()&&(!Targeting.isFiring)) {
+            if (FullSensor.getSensorValue()&&(!TurretSettings.turretUsingConveyors)) {
                 Map.Cartridge.ArmRoller.set(ControlMode.PercentOutput, 1); // adjust speeds
                 Map.Cartridge.Conveyor1.set(ControlMode.PercentOutput, 0.3); // adjust speeds
                 Map.Cartridge.Conveyor2.set(ControlMode.PercentOutput, 0.3);
                 Map.Cartridge.Conveyor3.set(ControlMode.PercentOutput, 0.3);
-            } else if(!Targeting.isFiring){
+            } else if(!TurretSettings.turretUsingConveyors){
                 Map.Cartridge.ArmRoller.set(ControlMode.PercentOutput, 1); // adjust speeds
                 Map.Cartridge.Conveyor1.set(ControlMode.PercentOutput, 0);
                 Map.Cartridge.Conveyor2.set(ControlMode.PercentOutput, 0);
                 Map.Cartridge.Conveyor3.set(ControlMode.PercentOutput, 0);
             }
-        }else if((Map.Controllers.driverLeft.getRawButton(Map.Cartridge.controllers.outtake)||Map.Controllers.driverRight.getRawButton(Map.Cartridge.controllers.outtake))&&(!Targeting.isFiring)){
+        }else if((Map.Controllers.driverLeft.getRawButton(Map.Cartridge.controllers.outtake)||Map.Controllers.driverRight.getRawButton(Map.Cartridge.controllers.outtake))&&(!TurretSettings.turretUsingConveyors)){
             outtake();
-        }else if(!Targeting.isFiring){
+        }else if(!TurretSettings.turretUsingConveyors){
             stop();
         }
     }

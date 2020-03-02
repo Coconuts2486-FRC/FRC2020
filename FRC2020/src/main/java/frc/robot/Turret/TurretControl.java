@@ -1,6 +1,5 @@
 package frc.robot.Turret;
 
-import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Map;
 import frc.robot.Cartridge.Conveyor;
 import frc.robot.Vision.LimeLight;
@@ -9,49 +8,29 @@ import frc.robot.Vision.LimeLight;
  * TurretControl
  */
 public class TurretControl {
-    private static XboxController xbox = Map.Controllers.xbox;
-    private static boolean turretInitiated = false;
-    public static boolean manuelMode = false;
     private static boolean led = false;
-    private static double manuelAngle = 90;
-    public static int manuelVelocity = 10000; // set to whatever base velocity should be
-    private static int manuelVelocityChange = 10000; // The amount that velocity is adjusted when POV is pressed
-    private static double manuelSmallAdjusterDivision = 6; // how much the small adjuster is divided by
-    private static double manuelLargeAdjusterDivision = 2; // how much the large adjuster is divided by
-    public static boolean firing = false;
-    public static boolean autoIsTracking = true;
     public static boolean encoderDisabled = false;
 
     public static void run() {
         if (Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.manuelMode)) {
-            if (manuelMode) {
-                manuelMode = false;
-                led = false;
-                LimeLight.LED.off();
-                autoIsTracking = true;
-            } else {
-                manuelMode = true;
-                Targeting.stop();
-                autoIsTracking = false;
-                turretInitiated = false;
-            }
+            switchModes();
         }
-        if (!manuelMode) {
+        if (TurretSettings.automaticModeActive) {
             // Auto Mode
-            if (xbox.getRawButtonPressed(Map.Turret.controllers.initiation)) {
-                if (!turretInitiated) {
-                    turretInitiated = true;
+            if (Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.initiation)) {
+                if (!TurretSettings.launching.automatic.automaticLauncherInitiated) {
+                    TurretSettings.launching.automatic.automaticLauncherInitiated = true;
                     Targeting.initilize();
                 } else {
+                    TurretSettings.launching.automatic.automaticLauncherInitiated = false;
                     Targeting.stop();
-                    turretInitiated = false;
                 }
             }
-            if (xbox.getRawButton(Map.Turret.controllers.launch) && Targeting.readyToFire()) {
-                firing = true;
+            if (Map.Controllers.xbox.getRawButton(Map.Turret.controllers.launch) && Targeting.readyToFire()) {
+                TurretSettings.turretUsingConveyors = true;
                 Targeting.autoLaunch();
             } else {
-                firing = false;
+                TurretSettings.turretUsingConveyors = false;
                 Targeting.stopLaunch();
             }
 
@@ -79,10 +58,10 @@ public class TurretControl {
             if(encoderDisabled){
                 if (large > small) {
                     TurretMotion.Rotation.overrideTurn(Map.Controllers.xbox.getRawAxis(Map.Turret.controllers.manuelRotateLarge)
-                            / manuelLargeAdjusterDivision);
+                            / TurretSettings.rotation.manual.manuelLargeAdjusterDivision);
                 } else {
                     TurretMotion.Rotation.overrideTurn(Map.Controllers.xbox.getRawAxis(Map.Turret.controllers.manuelRotateSmall)
-                            / manuelSmallAdjusterDivision);
+                            / TurretSettings.rotation.manual.manuelSmallAdjusterDivision);
                 }
                 if (Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.manuelEncoderZeroer)) {
                     Map.Turret.motors.rotation.setSelectedSensorPosition(0);
@@ -90,10 +69,10 @@ public class TurretControl {
             }else{
                 if (large > small) {
                     TurretMotion.Rotation.turn(Map.Controllers.xbox.getRawAxis(Map.Turret.controllers.manuelRotateLarge)
-                            / manuelLargeAdjusterDivision);
+                            / TurretSettings.rotation.manual.manuelLargeAdjusterDivision);
                 } else {
                     TurretMotion.Rotation.turn(Map.Controllers.xbox.getRawAxis(Map.Turret.controllers.manuelRotateSmall)
-                            / manuelSmallAdjusterDivision);
+                            / TurretSettings.rotation.manual.manuelSmallAdjusterDivision);
                 }
             }
             // LED config
@@ -107,50 +86,43 @@ public class TurretControl {
                 }
             }
             // Launch
-            if (xbox.getRawButtonPressed(Map.Turret.controllers.launch)) {
+            if (Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.launch)) {
                     Targeting.learningLauncher();
             }
             
             //outputs balls
-            if(xbox.getRawButton(Map.Turret.controllers.outtake)){
-                Targeting.isFiring=true;
+            if(Map.Controllers.xbox.getRawButton(Map.Turret.controllers.outtake)){
+                TurretSettings.turretUsingConveyors=true;
                 Conveyor.outtake();
             }else{
-                Targeting.isFiring=false;
+                TurretSettings.turretUsingConveyors=false;
             }
             
             // Initiate Launcher
             if (Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.initiation)) {
-                if(turretInitiated){
-                    turretInitiated = false;
-                }else{
-                    turretInitiated = true;
-                }
-            }
-            if(!autoIsTracking){
-                if (turretInitiated) {
-                    //TurretMotion.Launcher.setVelocity(manuelVelocity);
-                    TurretMotion.Launcher.setVelocity(manuelVelocity);
-                    //TurretMotion.Launcher.setPercentSpeed(1);
-                } else {
+                if(TurretSettings.launching.manual.manualLauncherInitiated){
                     TurretMotion.Launcher.setVelocity(0);
+                    TurretSettings.launching.manual.manualLauncherInitiated = false;
+                }else{
+                    TurretMotion.Launcher.setVelocity(TurretSettings.launching.manual.manuelVelocity);
+                    TurretSettings.launching.manual.manualLauncherInitiated = true;
                 }
             }
             // Change launch velocity
             if (Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.manuelLauncherAddPower)) {
-                manuelVelocity += manuelVelocityChange;
+                TurretSettings.launching.manual.manuelVelocity += TurretSettings.launching.manual.manuelVelocityChange;
             } else if (Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.manuelLauncherSubtractPower)) {
-                manuelVelocity -= manuelVelocityChange;
+                TurretSettings.launching.manual.manuelVelocity -= TurretSettings.launching.manual.manuelVelocityChange;
             }
 
             if (Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.manuelSetAngle)) {
-                manuelAngle = TurretMotion.Rotation.getDegrees();
+                TurretSettings.rotation.manual.manuelAngle = TurretMotion.Rotation.getDegrees();
             }
             if (Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.manuelGoToAngle)) {
-                if(!TurretMotion.Rotation.goTo){
-                    TurretMotion.Rotation.goToPosition(manuelAngle);
+                if(!TurretSettings.rotation.manual.manualGoTo){
+                    TurretMotion.Rotation.goToPosition(TurretSettings.rotation.manual.manuelAngle);
                 }else{
-                    TurretMotion.Rotation.goTo = false;
+                    TurretSettings.rotation.manual.manualGoTo = false;
                 }
             }
         }
@@ -159,5 +131,17 @@ public class TurretControl {
         if (Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.manuelEncoderZeroer)) {
             Map.Turret.motors.rotation.setSelectedSensorPosition(0);
           }
+    }
+    public static void switchModes(){
+        if (!TurretSettings.automaticModeActive) {
+            // Switch to Automatic Targeting
+            TurretSettings.automaticModeActive = true;
+            led = false;
+            Targeting.stop();
+        }else {
+            // Switch to Manual Targeting
+            TurretSettings.automaticModeActive = false;
+            Targeting.stop();
+        }
     }
 }

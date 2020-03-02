@@ -4,12 +4,12 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import frc.robot.Map;
+import frc.robot.Vision.LimeLight;
 
 /**
  * TurretMotion
  */
 public class TurretMotion {
-    private static double maxVelocity = 100000;
     public static void init() {
         Map.Turret.motors.follower.follow(Map.Turret.motors.launcher);
         Map.Turret.motors.rotation.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
@@ -18,6 +18,7 @@ public class TurretMotion {
         Map.Turret.motors.launcher.setNeutralMode(NeutralMode.Coast);
         Map.Turret.motors.rotation.setInverted(true);
         Map.Turret.motors.follower.setInverted(true);
+        LimeLight.LED.off();
         TurretMotion.Rotation.setPosition(0);
     }
 
@@ -28,7 +29,7 @@ public class TurretMotion {
 
         public static void setVelocity(double speed) {
             //Map.Turret.motors.launcher.set(ControlMode.Velocity, speed);
-            double s=speed/maxVelocity;
+            double s=speed/TurretSettings.launching.general.maxVelocity;
             Map.Turret.motors.launcher.set(ControlMode.PercentOutput, s);
         }
 
@@ -38,16 +39,6 @@ public class TurretMotion {
     }
 
     public static class Rotation {
-
-        private static int ticksInrevolution = 4120; // needs to be changed to actual number
-        private static int maxDeg = 180;
-        private static int minDeg = 0;
-
-        private static double errorRange = 1; // in degrees
-        public static boolean goTo = false;
-        private static double slopePoint = 5;
-        private static double topSpeed = 0.5;
-
         public static void setPosition(int pos) {
             // Used to reset the known position of the turret
             Map.Turret.motors.rotation.setSelectedSensorPosition(pos);
@@ -55,30 +46,29 @@ public class TurretMotion {
 
         public static void goToPosition(double pos) {
             // Turns turret to specific position
-            goTo = true;
+            TurretSettings.rotation.manual.manualGoTo = true;
             Thread thread = new Thread(){
                 public void run(){
                     double abserror = Math.abs(getDegrees()-pos);
                     double error = getDegrees()-pos;
-                    while(goTo&&abserror>errorRange){
+                    while(TurretSettings.rotation.manual.manualGoTo&&abserror>TurretSettings.rotation.manual.errorRange){
                         abserror = Math.abs(pos-getDegrees());
                         error = pos-getDegrees();
-                        if(abserror>slopePoint){
+                        if(abserror>TurretSettings.rotation.manual.slopePoint){
                             if(error>0){
-                                turn(topSpeed);
+                                turn(TurretSettings.rotation.manual.topSpeed);
                             }else{
-                                turn(-topSpeed);
+                                turn(-TurretSettings.rotation.manual.topSpeed);
                             }
                         }else{
-                            turn((error/slopePoint)*topSpeed);
+                            turn((error/TurretSettings.rotation.manual.slopePoint)*TurretSettings.rotation.manual.topSpeed);
                         }
                     }
                     turn(0);
-                    goTo = false;
+                    TurretSettings.rotation.manual.manualGoTo = false;
                 }
             };
             thread.start();
-            //Map.Turret.motors.rotation.set(ControlMode.Position, degreesToTicks(pos));
         }
 
         public static double getPosition() {
@@ -88,17 +78,16 @@ public class TurretMotion {
 
         public static double getDegrees() {
             // Gets current position in Degrees
-            return (getPosition() / ticksInrevolution) * 360;
+            return (getPosition() / TurretSettings.rotation.general.ticksInrevolution) * 360;
         }
         public static void overrideTurn(double pwr){
             Map.Turret.motors.rotation.set(ControlMode.PercentOutput, pwr);
         }
         public static void turn(double pwr) {
             // Turns turret using pwr as input (-1 to 1)
-            // Map.Turret.motors.rotation.set(ControlMode.PercentOutput, pwr);
-            if (pwr > 0 && getDegrees() <= maxDeg) {
+            if (pwr > 0 && getDegrees() <= TurretSettings.rotation.general.maxDeg) {
                 Map.Turret.motors.rotation.set(ControlMode.PercentOutput, pwr);
-            } else if (pwr < 0 && getDegrees() > minDeg) {
+            } else if (pwr < 0 && getDegrees() > TurretSettings.rotation.general.minDeg) {
                 Map.Turret.motors.rotation.set(ControlMode.PercentOutput, pwr);
             } else {
                 Map.Turret.motors.rotation.set(ControlMode.PercentOutput, 0);
