@@ -15,7 +15,10 @@ public class AutoMissions {
         PID.drivePID.lastError = 0;
         PID.drivePID.errorSum = 0;
         PID.drivePID.lastTimestamp = Timer.getFPGATimestamp();
-        
+        Map.driveTrain.lfEncoder.setPosition(0);
+        Map.driveTrain.lrEncoder.setPosition(0);
+        Map.driveTrain.rfEncoder.setPosition(0);
+        Map.driveTrain.rrEncoder.setPosition(0);
 
     }
 
