@@ -1,12 +1,26 @@
 package frc.robot.Autonomous;
 
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Map;
 
 public class AutoMissions {
 
     public static String CurrentAuto = "None Selected";
     public static double SelectedAuto = 0;
+    public static boolean TrenchAuto = false;
+    public static boolean GeneratorAuto = false; 
     // SmartDashboard.putString("Auto Mode", AutoMissions.CurrentAuto);
+
+    public static void AutoInit(){
+        PID.drivePID.lastError = 0;
+        PID.drivePID.errorSum = 0;
+        PID.drivePID.lastTimestamp = Timer.getFPGATimestamp();
+        Map.driveTrain.lfEncoder.setPosition(0);
+        Map.driveTrain.lrEncoder.setPosition(0);
+        Map.driveTrain.rfEncoder.setPosition(0);
+        Map.driveTrain.rrEncoder.setPosition(0);
+
+    }
 
     public static void NoAutoSelected() {
         CurrentAuto = "None Selected";
@@ -21,7 +35,7 @@ public class AutoMissions {
 
     }
 
-    public static void GeneratorAuto() {
+    public static void GeneratorRun() {
         CurrentAuto = "GeneratorAuto";
 
     }

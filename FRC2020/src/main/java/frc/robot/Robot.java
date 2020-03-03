@@ -2,6 +2,7 @@ package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Autonomous.AutoMissions;
 import frc.robot.Cartridge.Conveyor;
 import frc.robot.Cartridge.pistonlift;
@@ -18,6 +19,7 @@ public class Robot extends TimedRobot {
     TurretMotion.init(); // Configs the turret 
     Pixy.init(); // Starts up the Pixy2 Camera
     Conveyor.init(); // Configs the conveyor belts
+    Map.driveTrain.gyro.setYaw(0);
   }
   public void robotPeriodic() {
     TurretDisplay.display();
@@ -29,24 +31,38 @@ public class Robot extends TimedRobot {
   }
   public void disabledPeriodic() {
     TurretControl.periodicRun();
+
+    if (Map.Controllers.driverLeft.getRawButtonPressed(20)){
+      AutoMissions.TrenchAuto = true;
+    } else{
+      AutoMissions.TrenchAuto = false;
+    }
+
+    if (Map.Controllers.driverRight.getRawButtonPressed(20)){
+      AutoMissions.GeneratorAuto = true;
+    } else{
+      AutoMissions.GeneratorAuto = false;
+    }
+
+    SmartDashboard.putBoolean("TrenchRun", AutoMissions.TrenchAuto);
+    SmartDashboard.putBoolean("GeneratorRun", AutoMissions.GeneratorAuto);
+
   }
   @Override
   public void autonomousInit() {
-    if (AutoMissions.SelectedAuto == 0) {
-      AutoMissions.NoAutoSelected();
-    }
-    if (AutoMissions.SelectedAuto == 1) {
-      AutoMissions.TrenchRun();
-    }
-
-    if (AutoMissions.SelectedAuto == 2) {
-      AutoMissions.GeneratorAuto();
-    }
-    Map.Turret.motors.rotation.setNeutralMode(NeutralMode.Brake);
+    AutoMissions.AutoInit();
   }
 
   @Override
   public void autonomousPeriodic() {
+
+    if (AutoMissions.TrenchAuto == true){
+      AutoMissions.TrenchRun();
+    }
+
+    if (AutoMissions.GeneratorAuto == false){
+      AutoMissions.TrenchRun();
+    }
   }
 
   @Override
