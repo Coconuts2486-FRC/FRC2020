@@ -30,8 +30,8 @@ public class TurretMotion {
             TurretSettings.launching.automatic.velocity = velocity;
             Thread thread = new Thread(){
                 public void run(){
-                    double set = 1;
                     double target = TurretSettings.launching.automatic.velocity/TurretSettings.launching.general.maxVelocity;
+                    double set = (target/TurretSettings.launching.general.maxVelocity)+0.3;
                     double current = getVelocity()/TurretSettings.launching.general.maxVelocity;
                     while(TurretSettings.launching.automatic.velocityIsRunning&&TurretSettings.launching.automatic.velocity>0){
                         target = TurretSettings.launching.automatic.velocity/TurretSettings.launching.general.maxVelocity;
@@ -41,6 +41,7 @@ public class TurretMotion {
                         }else if(current>target&&set>=(0+TurretSettings.launching.automatic.adjustment)){
                             set-=TurretSettings.launching.automatic.adjustment;
                         }
+                        //TurretSettings.launching.automatic.adjustment = TurretSettings.launching.automatic.adjustment/2;
                         setPercentSpeed(set);
                     }
                     setPercentSpeed(0);

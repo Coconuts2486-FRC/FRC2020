@@ -18,8 +18,8 @@ public class Conveyor {
             if (FullSensor.getSensorValue()&&(!TurretSettings.turretUsingConveyors)) {
                 Map.Cartridge.ArmRoller.set(ControlMode.PercentOutput, 1); // adjust speeds
                 Map.Cartridge.Conveyor1.set(ControlMode.PercentOutput, 0.3); // adjust speeds
-                Map.Cartridge.Conveyor2.set(ControlMode.PercentOutput, 0.3);
-                Map.Cartridge.Conveyor3.set(ControlMode.PercentOutput, 0.3);
+                Map.Cartridge.Conveyor2.set(ControlMode.PercentOutput, 0.1);
+                Map.Cartridge.Conveyor3.set(ControlMode.PercentOutput, 0.1);
             } else if(!TurretSettings.turretUsingConveyors){
                 Map.Cartridge.ArmRoller.set(ControlMode.PercentOutput, 1); // adjust speeds
                 Map.Cartridge.Conveyor1.set(ControlMode.PercentOutput, 0);

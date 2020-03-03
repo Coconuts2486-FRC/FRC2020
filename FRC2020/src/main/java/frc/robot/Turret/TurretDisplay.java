@@ -1,6 +1,7 @@
 package frc.robot.Turret;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Map;
 import frc.robot.Vision.LimeLight;
 
 /**
@@ -18,6 +19,7 @@ public class TurretDisplay {
         SmartDashboard.putNumber("Velocity: ", TurretMotion.Launcher.getVelocity());
         SmartDashboard.putNumber("Manual Velocity: ", TurretSettings.launching.manual.manuelVelocity);
         SmartDashboard.putNumber("Error: ", Math.abs(LimeLight.getX()));
+        SmartDashboard.putBoolean("TESTTESTTEST", Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.launch));
     }
     public static void learningDisplay(double setvelocity,double actualvelocity,double limelighty){
         SmartDashboard.putNumber("Learning Set Velocity: ", setvelocity);

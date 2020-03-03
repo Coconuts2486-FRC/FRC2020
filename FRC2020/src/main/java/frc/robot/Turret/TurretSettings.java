@@ -37,17 +37,18 @@ public class TurretSettings {
         public static class manual{
             public static boolean manualLauncherInitiated = false;
             public static boolean manualLaunch = false;
+            public static boolean testLaunch = false;
             public static int manuelVelocity = 10000; // set to whatever base velocity should be
             public static int manuelVelocityChange = 5000; // The amount that velocity is adjusted when POV is pressed
         }
         public static class automatic{
             public static boolean automaticLauncherInitiated = false;
-            public static double launchingSpeedAddition = 50000; // additional power added to launching function
+            public static double launchingSpeedAddition = 20000; // additional power added to launching function
             public static double maxLaunchingSpeedError = 1000; // maximum velocity error for launcher
-            public static double baseLaunchSpeed = 40000; // init speed (so that its close to target launch speed)
+            public static double baseLaunchSpeed = 10000; // init speed (so that its close to target launch speed)
             public static double launchDrop = 3000;
 
-            public static double adjustment = 100/general.maxVelocity;
+            public static double adjustment = 0.0000001;//(general.maxVelocity/100)/general.maxVelocity;
             public static double velocity = 0;
             public static boolean velocityIsRunning = false;
         }

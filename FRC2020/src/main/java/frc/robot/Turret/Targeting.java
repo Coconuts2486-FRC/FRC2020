@@ -20,7 +20,7 @@ public class Targeting {
     public static void initilize() {
         // Starts tracking process
         track = true;
-        maintainBaseLaunchSpeed = true;
+        TurretSettings.launching.automatic.automaticLauncherInitiated = true;
         // Sets launching motors at base speed
         Thread setBaseLaunchingSpeed = new Thread() {
             public void run() {
@@ -60,6 +60,7 @@ public class Targeting {
         launcherUpToSpeed = false;
         maintainBaseLaunchSpeed = false;
         TurretSettings.launching.manual.manualLaunch = false;
+        TurretSettings.launching.automatic.automaticLauncherInitiated = false;
         LimeLight.LED.off();
         TurretMotion.Rotation.turn(0);
         TurretMotion.Launcher.setPercentSpeed(0);
@@ -78,11 +79,11 @@ public class Targeting {
         targetZeroedIn = false;
         if (!LimeLight.isTarget()) {
             while (!LimeLight.isTarget() && track) {
-                while (!LimeLight.isTarget() && TurretMotion.Rotation.getDegrees() < 180 && track) {
-                    TurretMotion.Rotation.turn(0.5);
+                while (!LimeLight.isTarget() && TurretMotion.Rotation.getDegrees() < TurretSettings.rotation.general.maxDeg && track) {
+                    TurretMotion.Rotation.turn(TurretSettings.rotation.manual.topSpeed);
                 }
-                while (!LimeLight.isTarget() && TurretMotion.Rotation.getDegrees() > 0 && track) {
-                    TurretMotion.Rotation.turn(-0.5);
+                while (!LimeLight.isTarget() && TurretMotion.Rotation.getDegrees() > TurretSettings.rotation.general.minDeg && track) {
+                    TurretMotion.Rotation.turn(-TurretSettings.rotation.manual.topSpeed);
                 }
             }
         }
@@ -104,6 +105,8 @@ public class Targeting {
                      && Map.Controllers.xbox.getRawButton(Map.Turret.controllers.launch) && track) {
                     launch();
                 }
+                TurretSettings.launching.automatic.automaticLauncherInitiated = false;
+                TurretSettings.turretUsingConveyors=false;
             }
         };
         thread.start();
@@ -132,12 +135,15 @@ public class Targeting {
         thread.start();
     }
     public static void stopLaunch() {
-        TurretSettings.turretUsingConveyors = false;
+        /*
         Map.Cartridge.Conveyor1.set(ControlMode.PercentOutput, 0);
         Map.Cartridge.Conveyor2.set(ControlMode.PercentOutput, 0);
         Map.Cartridge.Conveyor3.set(ControlMode.PercentOutput, 0);
+        */
+        TurretSettings.turretUsingConveyors = false;
+        TurretSettings.launching.manual.manualLaunch = false;
     }
-    
+
     private static double setVelocityToRealVelocity(double setVelocity) {
         return setVelocity-3000; // change to graphed function
     }

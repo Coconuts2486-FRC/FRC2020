@@ -19,19 +19,16 @@ public class TurretControl {
             // Auto Mode
             if (Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.initiation)) {
                 if (!TurretSettings.launching.automatic.automaticLauncherInitiated) {
-                    TurretSettings.launching.automatic.automaticLauncherInitiated = true;
                     Targeting.initilize();
                 } else {
-                    TurretSettings.launching.automatic.automaticLauncherInitiated = false;
                     Targeting.stop();
                 }
             }
             if (Map.Controllers.xbox.getRawButton(Map.Turret.controllers.launch) && Targeting.readyToFire()) {
                 TurretSettings.turretUsingConveyors = true;
                 Targeting.autoLaunch();
-            } else {
+            } else if(TurretSettings.turretUsingConveyors){
                 TurretSettings.turretUsingConveyors = false;
-                Targeting.stopLaunch();
             }
 
             if (Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.LimeLightLED)) {
@@ -87,7 +84,11 @@ public class TurretControl {
             }
             // Launch
             if (Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.launch)) {
-                    Targeting.learningLauncher();
+                    if(!TurretSettings.launching.manual.manualLaunch){
+                        Targeting.learningLauncher();
+                    }else{
+                        Targeting.stopLaunch();
+                    }
             }
             
             //outputs balls
@@ -101,12 +102,17 @@ public class TurretControl {
             // Initiate Launcher
             if (Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.initiation)) {
                 if(TurretSettings.launching.manual.manualLauncherInitiated){
-                    TurretMotion.Launcher.setVelocity(0);
                     TurretSettings.launching.manual.manualLauncherInitiated = false;
                 }else{
-                    TurretMotion.Launcher.setVelocity(TurretSettings.launching.manual.manuelVelocity);
                     TurretSettings.launching.manual.manualLauncherInitiated = true;
                 }
+            }
+            if(TurretSettings.launching.manual.manualLauncherInitiated){
+                //TurretMotion.Launcher.setVelocity(TurretSettings.launching.manual.manuelVelocity);
+                TurretMotion.Launcher.testsetVelocity(TurretSettings.launching.manual.manuelVelocity);
+            }else{
+                //TurretMotion.Launcher.setVelocity(0);
+                TurretMotion.Launcher.testsetVelocity(0);
             }
             // Change launch velocity
             if (Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.manuelLauncherAddPower)) {
@@ -141,6 +147,7 @@ public class TurretControl {
         }else {
             // Switch to Manual Targeting
             TurretSettings.automaticModeActive = false;
+            TurretSettings.launching.manual.manualLauncherInitiated = false;
             Targeting.stop();
         }
     }
