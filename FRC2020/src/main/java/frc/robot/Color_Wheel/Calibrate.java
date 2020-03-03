@@ -20,7 +20,7 @@ public class Calibrate{
     }
 
     public static void setColor(String color) {
-        final Color detectedColor = Map.ColorWheelDefs.sensor.getColor();
+        final Color detectedColor = Map.ColorWheel.sensor.getColor();
 
         switch(color){
             case("red"):

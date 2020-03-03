@@ -8,6 +8,7 @@ public class Arm{
 
     public static boolean colorPistonActive = false;
     public static boolean isCompleted;
+    
 
     public static void lift() {
         /*

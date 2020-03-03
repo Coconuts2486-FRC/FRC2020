@@ -1,6 +1,7 @@
 package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.sensors.PigeonIMU;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -28,6 +29,11 @@ public class Map {
         public static CANEncoder lrEncoder = lr.getEncoder();
         public static CANEncoder rfEncoder = rf.getEncoder();
         public static CANEncoder rrEncoder = rr.getEncoder();
+
+        // gyro
+        public static PigeonIMU gyro = new PigeonIMU(0);
+
+        
 
     }
 
@@ -85,12 +91,7 @@ public class Map {
             public static int grabTarget = 2; // Raw button number for picking up ball
         }
 
-        public static class PIDcontrol {
-            // PID variables
-            double kP = 0;
-            double kI = 0;
-            double kD = 0;
-        }
+        
     }
 		public static class ColorWheel{
 
@@ -104,16 +105,6 @@ public class Map {
 
         }
 		
-
-        public static class ColorWheelDefs {
-            // piston,motor, and color sensor used in color wheel manipulator
-
-            public static Solenoid SensorLift = new Solenoid(1, 5);
-            public static TalonSRX Color = new TalonSRX(11);
-            public final static I2C.Port i2cPort = I2C.Port.kOnboard;
-            public static ColorSensorV3 sensor = new ColorSensorV3(i2cPort);
-
-        }
 
     }
 

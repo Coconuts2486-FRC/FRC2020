@@ -2,7 +2,6 @@ package frc.robot.Color_Wheel;
 
 import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.Map;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class ColorSensor {
