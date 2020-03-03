@@ -7,7 +7,6 @@ import frc.robot.Autonomous.AutoMissions;
 import frc.robot.Cartridge.Conveyor;
 import frc.robot.Cartridge.pistonlift;
 import frc.robot.Cartridge.pixyDisplay;
-import frc.robot.TeleOp.DriveTrain;
 import frc.robot.Turret.TurretControl;
 import frc.robot.Turret.TurretDisplay;
 import frc.robot.Turret.TurretMotion;
@@ -28,6 +27,7 @@ public class Robot extends TimedRobot {
   }
   @Override
   public void disabledInit(){
+    Map.Turret.motors.rotation.setNeutralMode(NeutralMode.Coast);
   }
   public void disabledPeriodic() {
     TurretControl.periodicRun();
@@ -51,6 +51,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     AutoMissions.AutoInit();
+    Map.Turret.motors.rotation.setNeutralMode(NeutralMode.Brake);
   }
 
   @Override
