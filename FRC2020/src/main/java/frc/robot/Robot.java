@@ -7,13 +7,13 @@ import frc.robot.Autonomous.AutoMissions;
 import frc.robot.Cartridge.Conveyor;
 import frc.robot.Cartridge.pistonlift;
 import frc.robot.Cartridge.pixyDisplay;
+import frc.robot.TeleOp.DriveTrain;
 import frc.robot.Turret.TurretControl;
 import frc.robot.Turret.TurretDisplay;
 import frc.robot.Turret.TurretMotion;
 import frc.robot.Vision.Pixy;
 
 public class Robot extends TimedRobot {
-  public static boolean colorwheel = false;
   @Override
   public void robotInit() {
     TurretMotion.init(); // Configs the turret 
@@ -21,9 +21,15 @@ public class Robot extends TimedRobot {
     Conveyor.init(); // Configs the conveyor belts
     Map.driveTrain.gyro.setYaw(0);
   }
-
   public void robotPeriodic() {
     TurretDisplay.display();
+    pixyDisplay.display();
+    Conveyor.display();
+  }
+  @Override
+  public void disabledInit(){
+  }
+  public void disabledPeriodic() {
     TurretControl.periodicRun();
 
     if (Map.Controllers.driverLeft.getRawButtonPressed(20)){
@@ -42,7 +48,6 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("GeneratorRun", AutoMissions.GeneratorAuto);
 
   }
-
   @Override
   public void autonomousInit() {
     AutoMissions.AutoInit();
@@ -58,23 +63,21 @@ public class Robot extends TimedRobot {
     if (AutoMissions.GeneratorAuto == false){
       AutoMissions.TrenchRun();
     }
-
-
   }
 
   @Override
   public void teleopInit() {
+    Map.Turret.motors.rotation.setNeutralMode(NeutralMode.Brake);
   }
 
   @Override
   public void teleopPeriodic() {
     TurretControl.run(); // Runs turret
-    TurretDisplay.display(); // Displays LimeLight stats
-    pixyDisplay.display();
     // pixyControl.run(); // Runs pixy homing automation
-    //DriveTrain.drive();
+    DriveTrain.drive();
     pistonlift.run();
     Conveyor.run();
+    //ColorWheelControl.run();
   }
 
   @Override

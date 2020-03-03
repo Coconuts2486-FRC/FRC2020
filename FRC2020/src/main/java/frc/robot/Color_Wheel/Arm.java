@@ -1,7 +1,6 @@
 package frc.robot.Color_Wheel;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-
 import frc.robot.Map;
 
 public class Arm{

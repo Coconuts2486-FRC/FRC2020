@@ -9,6 +9,7 @@ import frc.robot.Map;
  * DriveTrain
  */
 public class DriveTrain {
+
     private static double deadBand = 0.05;
     public static double ticksToFeet = 6 * Math.PI / 84;
     

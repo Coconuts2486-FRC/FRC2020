@@ -66,6 +66,8 @@ public class Map {
             public static int manuelSetAngle = 11; // Sets an angle for manuel mode
             public static int manuelGoToAngle = 12; // Turns turret to preset angle
             public static int manuelEncoderDisable = 9;
+            public static int LimeLightLED = 1;
+            public static int outtake = 8;
         }
     }
 
@@ -89,6 +91,8 @@ public class Map {
         public static class controllers {
             public static int zeroInOnTarget = 1; // Raw button number for lining up with closest ball
             public static int grabTarget = 2; // Raw button number for picking up ball
+            public static int outtake = 5;
+            public static int intake = 1;
         }
 
         
@@ -96,7 +100,7 @@ public class Map {
 		public static class ColorWheel{
 
 
-            public static Solenoid SensorLift1 = new Solenoid(3,3);
+            public static Solenoid SensorLift1 = new Solenoid(1,5);
             public static TalonSRX ColorSpinner = new TalonSRX(11);
             public final static I2C.Port i2cPort = I2C.Port.kOnboard;
             public static ColorSensorV3 sensor = new ColorSensorV3(i2cPort);
