@@ -144,10 +144,6 @@ public class Targeting {
         TurretSettings.launching.manual.manualLaunch = false;
     }
 
-    private static double setVelocityToRealVelocity(double setVelocity) {
-        return setVelocity-3000; // change to graphed function
-    }
-
     private static void initLauncher() {
         // maintains a launch speed (will need to be in a thread)
         maintainBaseLaunchSpeed = false; // overrides base launch code

@@ -48,7 +48,6 @@ public class TurretSettings {
             public static double baseLaunchSpeed = 10000; // init speed (so that its close to target launch speed)
             public static double launchDrop = 3000;
 
-            public static double adjustment = 0.0000001;//(general.maxVelocity/100)/general.maxVelocity;
             public static double velocity = 0;
             public static boolean velocityIsRunning = false;
         }

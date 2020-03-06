@@ -108,11 +108,11 @@ public class TurretControl {
                 }
             }
             if(TurretSettings.launching.manual.manualLauncherInitiated){
-                //TurretMotion.Launcher.setVelocity(TurretSettings.launching.manual.manuelVelocity);
-                TurretMotion.Launcher.testsetVelocity(TurretSettings.launching.manual.manuelVelocity);
+                TurretMotion.Launcher.setVelocity(TurretSettings.launching.manual.manuelVelocity);
+                //TurretMotion.Launcher.testsetVelocity(TurretSettings.launching.manual.manuelVelocity);
             }else{
-                //TurretMotion.Launcher.setVelocity(0);
-                TurretMotion.Launcher.testsetVelocity(0);
+                TurretMotion.Launcher.setPercentSpeed(0);
+                //TurretMotion.Launcher.testsetVelocity(0);
             }
             // Change launch velocity
             if (Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.manuelLauncherAddPower)) {
