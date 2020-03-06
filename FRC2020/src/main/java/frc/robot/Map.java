@@ -31,7 +31,7 @@ public class Map {
         public static CANEncoder rrEncoder = rr.getEncoder();
 
         // gyro
-        public static PigeonIMU gyro = new PigeonIMU(0);
+        public static PigeonIMU gyro = new PigeonIMU(Cartridge.ArmRoller);
 
         
 

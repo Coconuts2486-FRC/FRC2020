@@ -4,7 +4,6 @@ import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Map;
-
 /**
  * DriveTrain
  */

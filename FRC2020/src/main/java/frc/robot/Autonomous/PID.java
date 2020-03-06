@@ -12,19 +12,18 @@ public class PID {
     public static double RREposition = Map.driveTrain.rrEncoder.getPosition() * PID.ticksToFeet;
     public static class drivePID{
         
-        final static double kP = 0;
-        final static double kI = 0;
-        final static double kD = 0;
-        final static double iLimit = 1;
-        static double errorSum = 0;
-        static double lastTimestamp = 0;
-        static double lastError = 0;
-        static double dt = Timer.getFPGATimestamp() - lastTimestamp;     
+        public final static double kP = 0.1;
+        public final static double kI = .1;
+        public final static double kD = 0;
+        public final static double iLimit = 5;
+        public static double errorSum = 0;
+        public static double lastError = 0;
+             
     }
 
     public static class turnPID{
         
-        final static double kP = 0;
+        final static double kP = 0.05;
         final static double kI = 0;
         final static double kD = 0;
         final static double iLimit = 10;
@@ -32,7 +31,7 @@ public class PID {
         static double lastTimestamp = 0;
         static double lastError = 0;
         static double dt = Timer.getFPGATimestamp() - lastTimestamp;
-        static double [] ypr_deg = new double [3];
+        public static double [] ypr_deg = new double [3];
         
 
 

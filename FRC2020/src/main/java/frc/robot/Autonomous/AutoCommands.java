@@ -1,9 +1,11 @@
 package frc.robot.Autonomous;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Map;
 
 public class AutoCommands{
+    public static double lastTimestamp = 0;
 
     public static void driveForward(double distanceSetpoint){
         
@@ -11,6 +13,7 @@ public class AutoCommands{
         double LREposition = Map.driveTrain.lrEncoder.getPosition() * PID.ticksToFeet;
         double RFEposition = Map.driveTrain.rfEncoder.getPosition() * PID.ticksToFeet;
         double RREposition = Map.driveTrain.rrEncoder.getPosition() * PID.ticksToFeet;
+        double dt = Timer.getFPGATimestamp() - lastTimestamp;
     
 
         double averagePosition = (LFEposition + LREposition + RFEposition + RREposition) / 4;//theoretically might work
@@ -19,10 +22,10 @@ public class AutoCommands{
         double error = distanceSetpoint - averagePosition;
 
         if (Math.abs(error) < PID.drivePID.iLimit){
-            PID.drivePID.errorSum += error * PID.drivePID.dt;
+            PID.drivePID.errorSum += error * dt;
         }
         
-        double errorRate = (error - PID.drivePID.lastError) / PID.drivePID.dt;
+        double errorRate = (error - PID.drivePID.lastError) / dt;
     
         double outputSpeed = PID.drivePID.kP * error + PID.drivePID.kI * PID.drivePID.errorSum + PID.drivePID.kD * errorRate;
 
@@ -31,8 +34,11 @@ public class AutoCommands{
         Map.driveTrain.rf.set(outputSpeed);
         Map.driveTrain.rr.set(outputSpeed);
 
+        SmartDashboard.putNumber("error", error);
+        SmartDashboard.putNumber("dt", dt);
+
        //update last variables
-       PID.drivePID.lastTimestamp = Timer.getFPGATimestamp();
+       lastTimestamp = Timer.getFPGATimestamp();
        PID.drivePID.lastError = error;
 
     }
@@ -43,6 +49,7 @@ public class AutoCommands{
         double LREposition = Map.driveTrain.lrEncoder.getPosition() * PID.ticksToFeet;
         double RFEposition = Map.driveTrain.rfEncoder.getPosition() * PID.ticksToFeet;
         double RREposition = Map.driveTrain.rrEncoder.getPosition() * PID.ticksToFeet;
+        double dt = Timer.getFPGATimestamp() - lastTimestamp;
 
         double averagePosition = (LFEposition + LREposition + RFEposition + RREposition) / 4;//theoretically might work
 
@@ -50,10 +57,10 @@ public class AutoCommands{
         double error = distanceSetpoint - averagePosition;
 
         if (Math.abs(error) < PID.drivePID.iLimit){
-            PID.drivePID.errorSum += error * PID.drivePID.dt;
+            PID.drivePID.errorSum += error * dt;
         }
         
-        double errorRate = (error - PID.drivePID.lastError) / PID.drivePID.dt;
+        double errorRate = (error - PID.drivePID.lastError) / dt;
     
         double outputSpeed = PID.drivePID.kP * error + PID.drivePID.kI * PID.drivePID.errorSum + PID.drivePID.kD * errorRate;
 
@@ -63,7 +70,7 @@ public class AutoCommands{
         Map.driveTrain.rr.set(-outputSpeed);
 
         //update last variables
-        PID.drivePID.lastTimestamp = Timer.getFPGATimestamp();
+        lastTimestamp = Timer.getFPGATimestamp();
         PID.drivePID.lastError = error;
 
     }
@@ -197,4 +204,39 @@ public class AutoCommands{
         }
 
     }
-}
+
+    public static void driveStraight(double degreeSetpoint){
+        double pl = 0;
+        double pr = 0;
+
+        Map.driveTrain.gyro.getYawPitchRoll(PID.turnPID.ypr_deg);
+
+        double error = PID.turnPID.ypr_deg[0]/90;
+
+        Map.driveTrain.lf.set(-.3 - error);
+        Map.driveTrain.lr.set(-.3 - error);
+        Map.driveTrain.rf.set(-.3 + error);
+        Map.driveTrain.rr.set(-.3 + error);
+        
+        /*
+        while (PID.turnPID.ypr_deg[0] < degreeSetpoint ){
+            pl -=.1;
+        }
+
+        while (PID.turnPID.ypr_deg[0] > degreeSetpoint){
+            pr -=.1;
+        }
+        */
+        
+        
+
+
+    }
+
+    public static void stop(){
+        Map.driveTrain.lf.set(0);
+        Map.driveTrain.lr.set(0);
+        Map.driveTrain.rf.set(0);
+        Map.driveTrain.rr.set(0);
+    }
+}    

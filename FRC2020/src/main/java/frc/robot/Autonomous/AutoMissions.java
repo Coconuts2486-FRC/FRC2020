@@ -14,11 +14,12 @@ public class AutoMissions {
     public static void AutoInit(){
         PID.drivePID.lastError = 0;
         PID.drivePID.errorSum = 0;
-        PID.drivePID.lastTimestamp = Timer.getFPGATimestamp();
+        // double lastTimestamp = Timer.getFPGATimestamp();
         Map.driveTrain.lfEncoder.setPosition(0);
         Map.driveTrain.lrEncoder.setPosition(0);
         Map.driveTrain.rfEncoder.setPosition(0);
         Map.driveTrain.rrEncoder.setPosition(0);
+        Map.driveTrain.gyro.setYaw(0);
 
     }
 
@@ -32,6 +33,13 @@ public class AutoMissions {
 
     public static void TrenchRun() {
         CurrentAuto = "TrenchRun";
+        Map.Cartridge.RightPiston.set(true);
+        AutoCommands2.launch(3);
+        AutoCommands2.driveForward(-10);
+        while(!AutoCommands2.launched){
+            
+        }
+        
 
     }
 
