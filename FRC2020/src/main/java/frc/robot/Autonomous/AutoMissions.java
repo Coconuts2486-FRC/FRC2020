@@ -36,16 +36,21 @@ public class AutoMissions {
         double RFEposition = Map.driveTrain.rfEncoder.getPosition() * PID.ticksToFeet;
         double RREposition = Map.driveTrain.rrEncoder.getPosition() * PID.ticksToFeet;
 
-        double averagePosition = (LFEposition + LREposition + RFEposition + RREposition) / 4;//theoretically might work
+        double averagePosition = Math.abs((LFEposition + LREposition + RFEposition + RREposition) / 4);//theoretically might work
 
+        Map.driveTrain.gyro.getYawPitchRoll(PID.turnPID.ypr_deg);
         //Map.Cartridge.RightPiston.set(true);
         //AutoCommands2.launch(3);
-        while(averagePosition < -10){
-        AutoCommands2.driveForward(-10);
+
+        
+        while(averagePosition < 10){
+            averagePosition = Math.abs((LFEposition + LREposition + RFEposition + RREposition) / 4);
+            AutoCommands2.driveForward(10);
         }
 
         while(PID.turnPID.ypr_deg[0] > -90){
-        AutoCommands2.turnLeft(-90);
+            Map.driveTrain.gyro.getYawPitchRoll(PID.turnPID.ypr_deg);
+            AutoCommands2.turnLeft(-90);
         }
         /*while(!AutoCommands2.launched){
             
