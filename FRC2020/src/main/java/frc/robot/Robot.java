@@ -4,7 +4,6 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Autonomous.AutoCommands;
 import frc.robot.Autonomous.AutoMissions;
 import frc.robot.Autonomous.PID;
 import frc.robot.Cartridge.Conveyor;
@@ -14,7 +13,6 @@ import frc.robot.Turret.TurretControl;
 import frc.robot.Turret.TurretDisplay;
 import frc.robot.Turret.TurretMotion;
 import frc.robot.Vision.Pixy;
-import frc.robot.TeleOp.*;
 
 public class Robot extends TimedRobot {
 
