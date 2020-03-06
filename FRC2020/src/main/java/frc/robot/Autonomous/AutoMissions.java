@@ -31,13 +31,25 @@ public class AutoMissions {
     }
 
     public static void TrenchRun() {
-        CurrentAuto = "TrenchRun";
-        Map.Cartridge.RightPiston.set(true);
-        AutoCommands2.launch(3);
+        double LFEposition = Map.driveTrain.lfEncoder.getPosition() * PID.ticksToFeet;
+        double LREposition = Map.driveTrain.lrEncoder.getPosition() * PID.ticksToFeet;
+        double RFEposition = Map.driveTrain.rfEncoder.getPosition() * PID.ticksToFeet;
+        double RREposition = Map.driveTrain.rrEncoder.getPosition() * PID.ticksToFeet;
+
+        double averagePosition = (LFEposition + LREposition + RFEposition + RREposition) / 4;//theoretically might work
+
+        //Map.Cartridge.RightPiston.set(true);
+        //AutoCommands2.launch(3);
+        while(averagePosition < -10){
         AutoCommands2.driveForward(-10);
-        while(!AutoCommands2.launched){
-            
         }
+
+        while(PID.turnPID.ypr_deg[0] > -90){
+        AutoCommands2.turnLeft(-90);
+        }
+        /*while(!AutoCommands2.launched){
+            
+        }*/
         
 
     }
