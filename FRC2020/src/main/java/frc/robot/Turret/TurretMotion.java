@@ -20,12 +20,17 @@ public class TurretMotion {
         Map.Turret.motors.follower.setInverted(true);
         LimeLight.LED.off();
         TurretMotion.Rotation.setPosition(0);
+
+        Map.Turret.motors.launcher.config_kF(0, 0.01);
+		Map.Turret.motors.launcher.config_kP(0, 0.1);
+    
     }
 
     public static class Launcher {
         public static void setPercentSpeed(double speed) {
             Map.Turret.motors.launcher.set(ControlMode.PercentOutput, speed);
         }
+        /*
         public static void testsetVelocity(double velocity){
             TurretSettings.launching.automatic.velocity = velocity;
             Thread thread = new Thread(){
@@ -53,10 +58,9 @@ public class TurretMotion {
                 thread.start();
             }
         }
+        */
         public static void setVelocity(double speed) {
-            //Map.Turret.motors.launcher.set(ControlMode.Velocity, speed);
-            double s=speed/TurretSettings.launching.general.maxVelocity;
-            Map.Turret.motors.launcher.set(ControlMode.PercentOutput, s);
+            Map.Turret.motors.launcher.set(ControlMode.Velocity, speed);
         }
 
         public static double getVelocity() {
