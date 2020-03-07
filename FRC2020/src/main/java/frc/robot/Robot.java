@@ -69,24 +69,17 @@ public class Robot extends TimedRobot {
     //AutoMissions.TrenchRun();
     if(!AutoCommands3.ran){
       AutoCommands3.Turret.goTo(80.73);
-      Sleep.delay(100);
       AutoCommands3.Turret.init();
       AutoCommands3.Turret.launch(3);
       
-      AutoCommands3.goDistance(7.3); // goes up to first ball
-      Sleep.delay(100);
-      while(!AutoCommands3.Turret.hasLaunched){
-
-      }
+      AutoCommands3.goDistance(7.3,0.5); // goes up to first ball
+      AutoCommands3.wait(AutoCommands3.Turret.hasLaunched, true);
       AutoCommands3.Piston.on();
       AutoCommands3.Loading.load();
-      AutoCommands3.goDistance(9);
+      AutoCommands3.goDistance(9,0.2);
 
-      AutoCommands3.Turret.launch(1);
-      Sleep.delay(100);
-      while(!AutoCommands3.Turret.hasLaunched){
-
-      }
+      AutoCommands3.Turret.launch(3);
+      AutoCommands3.wait(AutoCommands3.Turret.hasLaunched, true);
       //Sleep.delay(5000);
       /*
       while(!AutoCommands3.Turret.hasLaunched){

@@ -1,8 +1,6 @@
 package frc.robot.Autonomous.Commands;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Map;
 import frc.robot.Cartridge.FullSensor;
@@ -25,13 +23,19 @@ public class AutoCommands3 {
         Loading.load = false;
         AutoCommands3.Turret.goTo(0);
     }
-    public static void goDistance(double feet){
+    public static void wait(boolean value, boolean toBe){
+        while(!(value=toBe)){
+
+        }
+    }
+    public static void goDistance(double feet,double speed){
         Distance.setEncoders(0);
         Sleep.delay(100);
+        feet = Math.abs(feet);
         double distanceTravelled = Distance.distanceTravelled();
         while(distanceTravelled<feet&&(!ran)){
             distanceTravelled = Distance.distanceTravelled();
-            Distance.drive(0.1);
+            Distance.drive(speed);
         }
         stop();
     }
@@ -168,7 +172,7 @@ public class AutoCommands3 {
         }
         private static double distanceTravelled() {
             double average = ticksToFeet((Map.driveTrain.lfEncoder.getPosition()+Map.driveTrain.rfEncoder.getPosition()+Map.driveTrain.lrEncoder.getPosition()+Map.driveTrain.rrEncoder.getPosition())/4);
-            return -average;
+            return Math.abs(average);
         }
         private static void setEncoders(double set){
             
