@@ -43,7 +43,7 @@ public class TurretSettings {
         }
         public static class automatic{
             public static boolean automaticLauncherInitiated = false;
-            public static double launchingSpeedAddition = 20000; // additional power added to launching function
+            public static double launchingSpeedAddition = 50000; // additional power added to launching function
             public static double maxLaunchingSpeedError = 1000; // maximum velocity error for launcher
             public static double baseLaunchSpeed = 10000; // init speed (so that its close to target launch speed)
             public static double launchDrop = 3000;

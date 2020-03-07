@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Autonomous.AutoMissions;
 import frc.robot.Autonomous.PID;
+import frc.robot.Autonomous.Commands.AutoCommands3;
 import frc.robot.Cartridge.Conveyor;
 import frc.robot.Cartridge.pistonlift;
 import frc.robot.Cartridge.pixyDisplay;
@@ -57,17 +58,33 @@ public class Robot extends TimedRobot {
     AutoMissions.AutoInit();
     Map.Turret.motors.rotation.setNeutralMode(NeutralMode.Brake);
      startTime = Timer.getFPGATimestamp();
+     ran = false;
   }
 
   
-
+  public static boolean ran = false;
   @Override
   public void autonomousPeriodic() {
     
   
-    AutoMissions.TrenchRun();
-     
-    
+    //AutoMissions.TrenchRun();
+    if(!ran){
+      AutoCommands3.Turret.goTo(80.73);
+      AutoCommands3.Turret.init();
+      AutoCommands3.Turret.launch(3);
+      
+      AutoCommands3.goDistance(5); // goes up to first ball
+      while(!AutoCommands3.Turret.hasLaunched){
+
+      }
+      /*
+      AutoCommands3.Piston.on();
+      AutoCommands3.Loading.load();
+      AutoCommands3.goDistance(3);
+      */
+      AutoCommands3.endAuto();
+      ran=true;
+    }
     
   
 
@@ -92,7 +109,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     TurretControl.run(); // Runs turret
     // pixyControl.run(); // Runs pixy homing automation
-    //DriveTrain.drive();
+    DriveTrain.drive();
     pistonlift.run();
     Conveyor.run();
     //ColorWheelControl.run();

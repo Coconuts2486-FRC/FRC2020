@@ -54,6 +54,7 @@ public class Targeting {
 
     public static void stop() {
         // stops targeting
+        TurretMotion.Launcher.setPercentSpeed(0);
         track = false;
         targetZeroedIn = false;
         maintainLaunchingSpeed = false;
@@ -105,8 +106,7 @@ public class Targeting {
                      && Map.Controllers.xbox.getRawButton(Map.Turret.controllers.launch) && track) {
                     launch();
                 }
-                TurretSettings.launching.automatic.automaticLauncherInitiated = false;
-                TurretSettings.turretUsingConveyors=false;
+                stopLaunch();
             }
         };
         thread.start();
@@ -159,7 +159,7 @@ public class Targeting {
             abserror = Math.abs(targetSpeed - motorSpeed);
             if (abserror > TurretSettings.launching.automatic.maxLaunchingSpeedError) {
                 launcherUpToSpeed = false;
-                TurretMotion.Launcher.setVelocity(targetSpeed);// might be minus error (too tired to think rn)
+                TurretMotion.Launcher.setVelocity(targetSpeed);
             } else {
                 launcherUpToSpeed = true;
             }

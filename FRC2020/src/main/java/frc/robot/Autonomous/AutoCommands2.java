@@ -115,11 +115,7 @@ public class AutoCommands2 {
             Map.driveTrain.rf.set(-.3 + error);
             Map.driveTrain.rr.set(.3 + error);
         }else{
-            Map.driveTrain.lf.set(0);
-            Map.driveTrain.lr.set(0);
-            Map.driveTrain.rf.set(0);
-            Map.driveTrain.rr.set(0);
-
+            stop();
         }
 
     }
@@ -144,10 +140,7 @@ public class AutoCommands2 {
             Map.driveTrain.rf.set(.3 + error);
             Map.driveTrain.rr.set(-.3 + error);
         }else{
-            Map.driveTrain.lf.set(0);
-            Map.driveTrain.lr.set(0);
-            Map.driveTrain.rf.set(0);
-            Map.driveTrain.rr.set(0);
+            stop();
 
         }
 
