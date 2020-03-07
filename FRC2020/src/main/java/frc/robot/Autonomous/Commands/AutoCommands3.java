@@ -60,7 +60,7 @@ public class AutoCommands3 {
                     turn(Gyro.maxSpeed);
                 }
             }else{
-                turn(-((currentAngle-angle)/(Math.abs(Gyro.slopePoint+angle))));
+                turn(-((currentAngle-angle)/(Gyro.slopePoint+Math.abs(angle))));
             }
         }
         stop();
