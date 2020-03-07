@@ -1,13 +1,8 @@
-package frc.robot.TeleOp;
+package frc.robot;
 
 import com.revrobotics.CANSparkMax;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Map;
 
-/**
- * DriveTrain
- */
 public class DriveTrain {
     private static double deadBand = 0.05;
     public static double ticksToFeet = 6 * Math.PI / 84;

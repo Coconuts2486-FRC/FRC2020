@@ -28,7 +28,14 @@ public class LimeLight {
             return false;
         }
     }
-
+    public static class Snapshot{
+        public static void start(){
+            table.getEntry("snapshot").setNumber(1);
+        }
+        public static void stop(){
+            table.getEntry("snapshot").setNumber(0);
+        }
+    }
     public static class LED {
         public static void on() {
             // Turns LEDs on

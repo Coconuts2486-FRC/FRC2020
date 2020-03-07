@@ -14,15 +14,19 @@ if(gameData.length() > 0)
   {
     case 'B' :
       //Blue case code
+      Arm.colorMatchBlue();
       break;
     case 'G' :
       //Green case code
+      Arm.colorMatchGreen();
       break;
     case 'R' :
       //Red case code
+      Arm.colorMatchRed();
       break;
     case 'Y' :
       //Yellow case code
+      Arm.colorMatchYellow();
       break;
     default :
       //This is corrupt data
