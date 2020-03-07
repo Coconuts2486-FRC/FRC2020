@@ -3,6 +3,7 @@ package frc.robot.Autonomous.Commands;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Map;
+import frc.robot.Autonomous.PID;
 import frc.robot.Cartridge.FullSensor;
 import frc.robot.Turret.Targeting;
 import frc.robot.Turret.TurretMotion;
@@ -28,14 +29,18 @@ public class AutoCommands3 {
 
         }
     }
-    public static void goDistance(double feet,double speed){
+    public static void goDistance(double feet,double speedModifier){
         Distance.setEncoders(0);
         Sleep.delay(100);
         feet = Math.abs(feet);
         double distanceTravelled = Distance.distanceTravelled();
+        double driveError = feet - distanceTravelled;
+        double speed = PID.drivePID.kP * driveError;
         while(distanceTravelled<feet&&(!ran)){
             distanceTravelled = Distance.distanceTravelled();
-            Distance.drive(speed);
+            driveError = feet - distanceTravelled;
+            speed = PID.drivePID.kP * driveError;
+            Distance.drive(speed * speedModifier);
         }
         stop();
     }
@@ -161,10 +166,14 @@ public class AutoCommands3 {
     }
     private static class Distance{
         private static void drive(double pwr){
-            Map.driveTrain.lf.set(-pwr);
-            Map.driveTrain.rf.set(-pwr);
-            Map.driveTrain.lr.set(-pwr);
-            Map.driveTrain.rr.set(-pwr);
+
+            Map.driveTrain.gyro.getYawPitchRoll(PID.turnPID.ypr_deg);
+            double turnError = PID.turnPID.ypr_deg[0]/90;
+
+            Map.driveTrain.lf.set(-pwr + turnError);
+            Map.driveTrain.rf.set(-pwr + turnError);
+            Map.driveTrain.lr.set(-pwr - turnError);
+            Map.driveTrain.rr.set(-pwr - turnError);
         }
         private static double ticksToFeet(double ticks){
             double ticksToFeet = (6 * Math.PI) / 84;
