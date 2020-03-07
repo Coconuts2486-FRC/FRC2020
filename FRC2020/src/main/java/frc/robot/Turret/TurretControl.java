@@ -17,6 +17,7 @@ public class TurretControl {
         }
         if (TurretSettings.automaticModeActive) {
             // Auto Mode
+            // Initializes Turret
             if (Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.initiation)) {
                 if (!TurretSettings.launching.automatic.automaticLauncherInitiated) {
                     Targeting.initilize();
@@ -24,6 +25,7 @@ public class TurretControl {
                     Targeting.stop();
                 }
             }
+            //Launches Ball
             if (Map.Controllers.xbox.getRawButton(Map.Turret.controllers.launch) && Targeting.readyToFire()) {
                 TurretSettings.turretUsingConveyors = true;
                 Targeting.autoLaunch();
@@ -31,6 +33,14 @@ public class TurretControl {
                 TurretSettings.turretUsingConveyors = false;
             }
 
+            //outputs balls
+            if(Map.Controllers.xbox.getRawButton(Map.Turret.controllers.outtake)){
+                TurretSettings.turretUsingConveyors=true;
+                Conveyor.outtake();
+            }else{
+                TurretSettings.turretUsingConveyors=false;
+            }
+            // Toggles LED
             if (Map.Controllers.xbox.getRawButtonPressed(Map.Turret.controllers.LimeLightLED)) {
                 if (!led) {
                     LimeLight.LED.on();

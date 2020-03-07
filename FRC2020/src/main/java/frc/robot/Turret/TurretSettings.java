@@ -32,7 +32,7 @@ public class TurretSettings {
 
     public static class launching{
         public static class general{
-            public static double maxVelocity = 110000;
+            public static double maxVelocity = 100000;
         }
         public static class manual{
             public static boolean manualLauncherInitiated = false;
