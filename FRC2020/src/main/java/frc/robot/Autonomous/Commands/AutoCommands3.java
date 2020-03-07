@@ -1,27 +1,35 @@
 package frc.robot.Autonomous.Commands;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Map;
 import frc.robot.Cartridge.FullSensor;
 import frc.robot.Turret.Targeting;
 import frc.robot.Turret.TurretMotion;
 import frc.robot.Turret.TurretSettings;
+import frc.robot.Utilities.Sleep;
 
 /**
  * AutoCommands3
  */
 public class AutoCommands3 {
+    public static boolean ran = false;
     public static void endAuto(){
+        ran = true;
         Turret.stop();
         stop();
-        Piston.off();
-        Loading.stop();
+        Map.Cartridge.RightPiston.set(false);
+        Loading.load();
+        Loading.load = false;
+        AutoCommands3.Turret.goTo(0);
     }
     public static void goDistance(double feet){
         Distance.setEncoders(0);
+        Sleep.delay(100);
         double distanceTravelled = Distance.distanceTravelled();
-        while(distanceTravelled<feet){
+        while(distanceTravelled<feet&&(!ran)){
             distanceTravelled = Distance.distanceTravelled();
             Distance.drive(0.1);
         }
@@ -32,7 +40,7 @@ public class AutoCommands3 {
         double[] ypr = new double[3];
         Map.driveTrain.gyro.getYawPitchRoll(ypr);
         double currentAngle = ypr[0];
-        while(!Gyro.isAtAngle(currentAngle,angle)){
+        while(!Gyro.isAtAngle(currentAngle,angle)&&(!ran)){
             Map.driveTrain.gyro.getYawPitchRoll(ypr);
             currentAngle = ypr[0];
             SmartDashboard.putNumber("Angle", currentAngle);
@@ -70,7 +78,7 @@ public class AutoCommands3 {
                 public void run(){
                     hasLaunched = false;
                     for(int i=0;i<amount;i++){
-                        while(!Targeting.readyToFire()){
+                        while(!Targeting.readyToFire()&&(!ran)){
                             //do nothing
                         }
                         loadBall();
@@ -82,7 +90,7 @@ public class AutoCommands3 {
         }
         public static void loadBall(){
             double shutoffVelocity = TurretMotion.Launcher.getVelocity() - TurretSettings.launching.automatic.launchDrop;
-            while(TurretMotion.Launcher.getVelocity()>shutoffVelocity){
+            while(TurretMotion.Launcher.getVelocity()>shutoffVelocity&&(!ran)){
                 runConvayers();
             }
             stopConvayers();
@@ -104,7 +112,7 @@ public class AutoCommands3 {
             Thread thread = new Thread(){
                 public void run(){
                     piston = true;
-                    while(piston){
+                    while(piston&&(!ran)){
                         Map.Cartridge.RightPiston.set(true);
                     }
                     Map.Cartridge.RightPiston.set(false);
@@ -121,7 +129,8 @@ public class AutoCommands3 {
         public static void load(){
             Thread thread = new Thread(){
                 public void run(){
-                    while(load){
+                    load = true;
+                    while(load&&(!ran)){
                         if (FullSensor.getSensorValue()) {
                             Map.Cartridge.ArmRoller.set(ControlMode.PercentOutput, 1); // adjust speeds
                             Map.Cartridge.Conveyor1.set(ControlMode.PercentOutput, 0.3); // adjust speeds
@@ -162,10 +171,12 @@ public class AutoCommands3 {
             return -average;
         }
         private static void setEncoders(double set){
-            Map.driveTrain.lfEncoder.setPosition(set);
-            Map.driveTrain.rfEncoder.setPosition(set);
-            Map.driveTrain.lrEncoder.setPosition(set);
-            Map.driveTrain.rrEncoder.setPosition(set);
+            
+            Map.driveTrain.lfEncoder.setPosition(0);
+            Map.driveTrain.lrEncoder.setPosition(0);
+            Map.driveTrain.rfEncoder.setPosition(0);
+            Map.driveTrain.rrEncoder.setPosition(0);
+            
         }
     }
     private static class Gyro{

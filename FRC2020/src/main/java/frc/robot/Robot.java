@@ -13,6 +13,7 @@ import frc.robot.Cartridge.pixyDisplay;
 import frc.robot.Turret.TurretControl;
 import frc.robot.Turret.TurretDisplay;
 import frc.robot.Turret.TurretMotion;
+import frc.robot.Utilities.Sleep;
 import frc.robot.Vision.Pixy;
 
 public class Robot extends TimedRobot {
@@ -58,32 +59,46 @@ public class Robot extends TimedRobot {
     AutoMissions.AutoInit();
     Map.Turret.motors.rotation.setNeutralMode(NeutralMode.Brake);
      startTime = Timer.getFPGATimestamp();
-     ran = false;
+     AutoCommands3.ran = false;
   }
 
-  
-  public static boolean ran = false;
   @Override
   public void autonomousPeriodic() {
     
-  
+    
     //AutoMissions.TrenchRun();
-    if(!ran){
+    if(!AutoCommands3.ran){
       AutoCommands3.Turret.goTo(80.73);
+      Sleep.delay(100);
       AutoCommands3.Turret.init();
       AutoCommands3.Turret.launch(3);
       
-      AutoCommands3.goDistance(5); // goes up to first ball
+      AutoCommands3.goDistance(7.3); // goes up to first ball
+      Sleep.delay(100);
       while(!AutoCommands3.Turret.hasLaunched){
 
       }
+      AutoCommands3.Piston.on();
+      AutoCommands3.Loading.load();
+      AutoCommands3.goDistance(9);
+
+      AutoCommands3.Turret.launch(1);
+      Sleep.delay(100);
+      while(!AutoCommands3.Turret.hasLaunched){
+
+      }
+      //Sleep.delay(5000);
+      /*
+      while(!AutoCommands3.Turret.hasLaunched){
+
+      }
+      */
       /*
       AutoCommands3.Piston.on();
       AutoCommands3.Loading.load();
       AutoCommands3.goDistance(3);
       */
       AutoCommands3.endAuto();
-      ran=true;
     }
     
   
@@ -102,6 +117,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    AutoCommands3.endAuto();
     Map.Turret.motors.rotation.setNeutralMode(NeutralMode.Brake);
   }
 
