@@ -49,23 +49,14 @@ public class AutoCommands3 {
         double[] ypr = new double[3];
         Map.driveTrain.gyro.getYawPitchRoll(ypr);
         double currentAngle = ypr[0];
-        int errorCount = 100;
-        int currentErrorCount = 0;
-        while((currentErrorCount<errorCount)&&(!ran)){
-            Map.driveTrain.gyro.getYawPitchRoll(ypr);
-            currentAngle = ypr[0];
-            if(Math.abs(currentAngle-angle)>Gyro.slopePoint){
-                if(currentAngle>angle){
-                   turn(-Gyro.maxSpeed);
-                }else{
-                    turn(Gyro.maxSpeed);
-                }
-            }else{
-                if(Gyro.isAtAngle(currentAngle,angle)){
-                    currentErrorCount++;
-                }
-                turn(-(((currentAngle-angle)/(Gyro.slopePoint+Math.abs(angle)))*Gyro.maxSpeed));
-            }
+        double turnError = angle - currentAngle;
+        double speed = PID.turnPID.kP - turnError;
+        while (currentAngle < angle && (!ran)){
+            currentAngle =ypr[0];
+            turnError = angle - currentAngle;
+            speed = PID.turnPID.kP - turnError;
+
+            turn(speed);
         }
         stop();
     }
@@ -196,6 +187,7 @@ public class AutoCommands3 {
             
         }
     }
+    /*
     private static class Gyro{
         private static double slopePoint = 18; //degrees
         private static double maxSpeed = 0.5; // 0-1.00 percent
@@ -209,6 +201,7 @@ public class AutoCommands3 {
             }
         }
     }
+    */
     private static void stop(){
         Map.driveTrain.lf.set(0);
         Map.driveTrain.rf.set(0);
