@@ -164,10 +164,10 @@ public class AutoCommands3 {
             Map.driveTrain.gyro.getYawPitchRoll(PID.turnPID.ypr_deg);
             double turnError = PID.turnPID.ypr_deg[0]/90;
 
-            Map.driveTrain.lf.set(-pwr + turnError);
+            Map.driveTrain.lf.set(-pwr - turnError);
             Map.driveTrain.rf.set(-pwr + turnError);
             Map.driveTrain.lr.set(-pwr - turnError);
-            Map.driveTrain.rr.set(-pwr - turnError);
+            Map.driveTrain.rr.set(-pwr + turnError);
         }
         private static double ticksToFeet(double ticks){
             double ticksToFeet = (6 * Math.PI) / 84;

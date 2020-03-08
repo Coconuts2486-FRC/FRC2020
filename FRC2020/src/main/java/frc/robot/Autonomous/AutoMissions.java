@@ -25,7 +25,6 @@ public class AutoMissions {
     }
     public static void test(){
         if(!AutoCommands3.ran){
-            
             AutoCommands3.turnToAngle(90);
             Sleep.delay(1000);
             AutoCommands3.turnToAngle(0);
