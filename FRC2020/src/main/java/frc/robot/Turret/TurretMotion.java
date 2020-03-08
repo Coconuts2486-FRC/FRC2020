@@ -81,7 +81,9 @@ public class TurretMotion {
                 public void run(){
                     double abserror = Math.abs(getDegrees()-pos);
                     double error = getDegrees()-pos;
-                    while(TurretSettings.rotation.manual.manualGoTo&&abserror>TurretSettings.rotation.manual.errorRange){
+                    int errorCount = 100;
+                    int currentErrorCount = 0;
+                    while(TurretSettings.rotation.manual.manualGoTo&&currentErrorCount<errorCount){
                         abserror = Math.abs(pos-getDegrees());
                         error = pos-getDegrees();
                         if(abserror>TurretSettings.rotation.manual.slopePoint){
@@ -91,6 +93,9 @@ public class TurretMotion {
                                 turn(-TurretSettings.rotation.manual.topSpeed);
                             }
                         }else{
+                            if(abserror<TurretSettings.rotation.manual.errorRange){
+                                currentErrorCount++;
+                            }
                             turn((error/TurretSettings.rotation.manual.slopePoint)*TurretSettings.rotation.manual.topSpeed);
                         }
                     }

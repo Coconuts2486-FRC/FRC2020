@@ -9,7 +9,7 @@ public class TurretSettings {
     public static class rotation{
         public static class general{
             public static int ticksInrevolution = 4120; // needs to be changed to actual number
-            public static int maxDeg = 135;
+            public static int maxDeg = 175;
             public static int minDeg = 0;
         }
         public static class manual{
@@ -18,15 +18,16 @@ public class TurretSettings {
             public static double manuelSmallAdjusterDivision = 6; // how much the small adjuster is divided by
             public static double manuelLargeAdjusterDivision = 2; // how much the large adjuster is divided by
 
-            public static double errorRange = 1; // in degrees
-            public static double slopePoint = 5;
-            public static double topSpeed = 0.5;
+            public static double errorRange = 0.1; // in degrees
+            public static double slopePoint = 10;
+            public static double topSpeed = 0.8;
 
             public static double manuelAngle = 90;
         }
         public static class automatic{
             public static double slopePoint = 1; // Point at which turret uses slope formula to turn
             public static double trackingerror = 0.05; // X axis distange from 0 error range
+            public static double topSpeed = 1;
         }
     }
 
@@ -43,7 +44,7 @@ public class TurretSettings {
         }
         public static class automatic{
             public static boolean automaticLauncherInitiated = false;
-            public static double launchingSpeedAddition = 50000; // additional power added to launching function
+            public static double launchingSpeedAddition = 0; // additional power added to launching function
             public static double maxLaunchingSpeedError = 1000; // maximum velocity error for launcher
             public static double baseLaunchSpeed = 10000; // init speed (so that its close to target launch speed)
             public static double launchDrop = 3000;

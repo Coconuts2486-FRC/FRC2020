@@ -14,6 +14,7 @@ import frc.robot.Turret.TurretControl;
 import frc.robot.Turret.TurretDisplay;
 import frc.robot.Turret.TurretMotion;
 import frc.robot.Utilities.Sleep;
+import frc.robot.Vision.LimeLight;
 import frc.robot.Vision.Pixy;
 
 public class Robot extends TimedRobot {
@@ -22,6 +23,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     TurretMotion.init(); // Configs the turret 
+    LimeLight.LED.off();
     Pixy.init(); // Starts up the Pixy2 Camera
     Conveyor.init(); // Configs the conveyor belts
     Map.driveTrain.gyro.setYaw(0);
@@ -64,48 +66,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
-    
-    
-    //AutoMissions.TrenchRun();
-    if(!AutoCommands3.ran){
-      AutoCommands3.Turret.goTo(80.73);
-      AutoCommands3.Turret.init();
-      AutoCommands3.Turret.launch(3);
-      
-      AutoCommands3.goDistance(7.3,0.5); // goes up to first ball
-      AutoCommands3.wait(AutoCommands3.Turret.hasLaunched, true);
-      AutoCommands3.Piston.on();
-      AutoCommands3.Loading.load();
-      AutoCommands3.goDistance(9,0.2);
-
-      AutoCommands3.Turret.launch(3);
-      AutoCommands3.wait(AutoCommands3.Turret.hasLaunched, true);
-      //Sleep.delay(5000);
-      /*
-      while(!AutoCommands3.Turret.hasLaunched){
-
-      }
-      */
-      /*
-      AutoCommands3.Piston.on();
-      AutoCommands3.Loading.load();
-      AutoCommands3.goDistance(3);
-      */
-      AutoCommands3.endAuto();
-    }
-    
-  
-
-
-    /*if (AutoMissions.TrenchAuto == true){
-      AutoMissions.TrenchRun();
-    }
-
-    if (AutoMissions.GeneratorAuto == false){
-      AutoMissions.TrenchRun();
-    }*/
-
-    
+    AutoMissions.trenchRun2();
   }
 
   @Override
@@ -118,7 +79,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     TurretControl.run(); // Runs turret
     // pixyControl.run(); // Runs pixy homing automation
-    DriveTrain.drive();
+    //DriveTrain.drive();
     pistonlift.run();
     Conveyor.run();
     //ColorWheelControl.run();

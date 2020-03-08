@@ -22,7 +22,7 @@ public class AutoCommands3 {
         Map.Cartridge.RightPiston.set(false);
         Loading.load();
         Loading.load = false;
-        AutoCommands3.Turret.goTo(0);
+        //AutoCommands3.Turret.goTo(90);
     }
     public static void wait(boolean value, boolean toBe){
         while(!(value=toBe)){
@@ -49,10 +49,11 @@ public class AutoCommands3 {
         double[] ypr = new double[3];
         Map.driveTrain.gyro.getYawPitchRoll(ypr);
         double currentAngle = ypr[0];
-        while(!Gyro.isAtAngle(currentAngle,angle)&&(!ran)){
+        int errorCount = 100;
+        int currentErrorCount = 0;
+        while((currentErrorCount<errorCount)&&(!ran)){
             Map.driveTrain.gyro.getYawPitchRoll(ypr);
             currentAngle = ypr[0];
-            SmartDashboard.putNumber("Angle", currentAngle);
             if(Math.abs(currentAngle-angle)>Gyro.slopePoint){
                 if(currentAngle>angle){
                    turn(-Gyro.maxSpeed);
@@ -60,7 +61,10 @@ public class AutoCommands3 {
                     turn(Gyro.maxSpeed);
                 }
             }else{
-                turn(-((currentAngle-angle)/(Gyro.slopePoint+Math.abs(angle))));
+                if(Gyro.isAtAngle(currentAngle,angle)){
+                    currentErrorCount++;
+                }
+                turn(-(((currentAngle-angle)/(Gyro.slopePoint+Math.abs(angle)))*Gyro.maxSpeed));
             }
         }
         stop();
@@ -193,9 +197,9 @@ public class AutoCommands3 {
         }
     }
     private static class Gyro{
-        private static double slopePoint = 90; //degrees
-        private static double maxSpeed = 1; // 0-1.00 percent
-        private static double error = 3; //angle error
+        private static double slopePoint = 18; //degrees
+        private static double maxSpeed = 0.5; // 0-1.00 percent
+        private static double error = 0.5; //angle error
         private static boolean isAtAngle(double currentAngle, double targetAngle){
             double absError = Math.abs(currentAngle-targetAngle);
             if(absError>error){

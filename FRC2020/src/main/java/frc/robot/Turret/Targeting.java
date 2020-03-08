@@ -188,13 +188,13 @@ public class Targeting {
                     error = Math.abs(position);
                     if (error > TurretSettings.rotation.automatic.slopePoint) {
                         if (position > 0) {
-                            TurretMotion.Rotation.turn(-1);
+                            TurretMotion.Rotation.turn(-TurretSettings.rotation.automatic.topSpeed);
                         } else {
-                            TurretMotion.Rotation.turn(1);
+                            TurretMotion.Rotation.turn(TurretSettings.rotation.automatic.topSpeed);
                         }
                     } else {
                         //TurretMotion.Rotation.turn(0 - (position / slopePoint));
-                        TurretMotion.Rotation.turn((position / TurretSettings.rotation.automatic.slopePoint));
+                        TurretMotion.Rotation.turn((position / TurretSettings.rotation.automatic.slopePoint)*TurretSettings.rotation.automatic.topSpeed);
                     }
                 }
                 targetZeroedIn = true;
