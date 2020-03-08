@@ -2,6 +2,7 @@ package frc.robot.Autonomous;
 
 import frc.robot.Map;
 import frc.robot.Autonomous.Commands.AutoCommands3;
+import frc.robot.Utilities.Sleep;
 
 public class AutoMissions {
 
@@ -21,6 +22,16 @@ public class AutoMissions {
         Map.driveTrain.rrEncoder.setPosition(0);
         Map.driveTrain.gyro.setYaw(0);
 
+    }
+    public static void test(){
+        if(!AutoCommands3.ran){
+            
+            AutoCommands3.turnToAngle(90);
+            Sleep.delay(1000);
+            AutoCommands3.turnToAngle(0);
+
+            AutoCommands3.endAuto();
+        }
     }
     public static void trenchRun2(){
         if(!AutoCommands3.ran){

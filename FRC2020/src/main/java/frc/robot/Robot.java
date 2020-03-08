@@ -66,7 +66,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
-    AutoMissions.trenchRun2();
+    //AutoMissions.trenchRun2();
+    AutoMissions.test();
   }
 
   @Override
