@@ -10,10 +10,10 @@ import frc.robot.Autonomous.Commands.AutoCommands3;
 import frc.robot.Cartridge.Conveyor;
 import frc.robot.Cartridge.pistonlift;
 import frc.robot.Cartridge.pixyDisplay;
+import frc.robot.Color_Wheel.ColorWheelControl;
 import frc.robot.Turret.TurretControl;
 import frc.robot.Turret.TurretDisplay;
 import frc.robot.Turret.TurretMotion;
-import frc.robot.Utilities.Sleep;
 import frc.robot.Vision.LimeLight;
 import frc.robot.Vision.Pixy;
 
@@ -82,11 +82,8 @@ public class Robot extends TimedRobot {
     //DriveTrain.drive();
     pistonlift.run();
     Conveyor.run();
-    //ColorWheelControl.run();
+    ColorWheelControl.run();
     Map.driveTrain.gyro.getYawPitchRoll(PID.turnPID.ypr_deg);
-    SmartDashboard.putNumber("Angle", PID.turnPID.ypr_deg[0]);
-
-
   }
 
   @Override

@@ -6,16 +6,23 @@ import frc.robot.Map;
  * ColorWheelControl
  */
 public class ColorWheelControl {
-    private static boolean climberActive = false;
+    private static boolean piston = false;
     public static void run(){
-        if(Map.Controllers.xbox.getRawButtonPressed(8)){
-            if(!climberActive){
-                climberActive = true;
-                Map.ColorWheel.SensorLift1.set(true);
+        if(Map.Controllers.driverLeft.getRawButtonPressed(Map.ColorWheel.controllers.piston)){
+            if(!piston){
+                piston = true;
+                Map.ColorWheel.piston.set(true);
             }else{
-                climberActive = false;
-                Map.ColorWheel.SensorLift1.set(false);
+                piston = false;
+                Map.ColorWheel.piston.set(false);
             }
+        }
+        if(Map.Controllers.driverLeft.getRawButton(Map.ColorWheel.controllers.leftTurn)){
+            Arm.spin(-0.5);
+        }else if(Map.Controllers.driverLeft.getRawButton(Map.ColorWheel.controllers.rightTurn)){
+            Arm.spin(0.5);
+        }else{
+
         }
     }
 }
