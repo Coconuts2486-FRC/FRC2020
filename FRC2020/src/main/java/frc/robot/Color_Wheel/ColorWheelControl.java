@@ -22,7 +22,7 @@ public class ColorWheelControl {
         }else if(Map.Controllers.driverLeft.getRawButton(Map.ColorWheel.controllers.rightTurn)){
             Arm.spin(0.5);
         }else{
-
+            Arm.spin(0);
         }
     }
 }

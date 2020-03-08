@@ -80,7 +80,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     TurretControl.run(); // Runs turret
     // pixyControl.run(); // Runs pixy homing automation
-    //DriveTrain.drive();
+    DriveTrain.drive();
     pistonlift.run();
     Conveyor.run();
     ColorWheelControl.run();

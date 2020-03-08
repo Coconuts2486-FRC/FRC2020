@@ -40,7 +40,7 @@ public class TurretSettings {
             public static boolean manualLaunch = false;
             public static boolean testLaunch = false;
             public static int manuelVelocity = 10000; // set to whatever base velocity should be
-            public static int manuelVelocityChange = 5000; // The amount that velocity is adjusted when POV is pressed
+            public static int manuelVelocityChange = 1000; // The amount that velocity is adjusted when POV is pressed
         }
         public static class automatic{
             public static boolean automaticLauncherInitiated = false;

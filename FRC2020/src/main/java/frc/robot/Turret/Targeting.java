@@ -1,6 +1,8 @@
 package frc.robot.Turret;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Map;
 import frc.robot.Utilities.Sleep;
 import frc.robot.Vision.LimeLight;
@@ -169,7 +171,12 @@ public class Targeting {
     private static double calculateLaunchSpeed() {
         // Finds the speed of the flywheen needed to hit the target
         double y = LimeLight.getY();
-        double output = (y) + TurretSettings.launching.automatic.launchingSpeedAddition; // replace 'y' with custom function
+        double a = -748474;
+        double b = 1.1795e6;
+        double c = -495639;
+        double d = 62999.9;
+        double output = ((a*Math.pow(y, 4))+(b*Math.pow(y, 3))+(c*Math.pow(y, 2))+(d)) + TurretSettings.launching.automatic.launchingSpeedAddition; // replace 'y' with custom function
+        SmartDashboard.putNumber("Calculated Velocity", output);
         return output;
     }
 
