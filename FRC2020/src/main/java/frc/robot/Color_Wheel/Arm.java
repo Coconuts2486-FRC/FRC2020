@@ -115,11 +115,8 @@ public class Arm{
 
     }
 
-    public static void spin(){
-        if(Map.Controllers.xbox.getRawButton(50)){
-            Map.ColorWheel.ColorSpinner.set(ControlMode.PercentOutput, .5);
-        }
-
+    public static void spin(double pwr){
+            Map.ColorWheel.ColorSpinner.set(ControlMode.PercentOutput, pwr);
     }
 
 }

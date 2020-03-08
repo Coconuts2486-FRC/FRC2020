@@ -1,7 +1,6 @@
 package frc.robot.Autonomous.Commands;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Map;
 import frc.robot.Autonomous.PID;
 import frc.robot.Cartridge.FullSensor;
@@ -19,7 +18,7 @@ public class AutoCommands3 {
         ran = true;
         Turret.stop();
         stop();
-        Map.Cartridge.RightPiston.set(false);
+        Map.Cartridge.piston.set(false);
         Loading.load();
         Loading.load = false;
         //AutoCommands3.Turret.goTo(90);
@@ -117,9 +116,9 @@ public class AutoCommands3 {
                 public void run(){
                     piston = true;
                     while(piston&&(!ran)){
-                        Map.Cartridge.RightPiston.set(true);
+                        Map.Cartridge.piston.set(true);
                     }
-                    Map.Cartridge.RightPiston.set(false);
+                    Map.Cartridge.piston.set(false);
                 }
             };
             thread.start();
