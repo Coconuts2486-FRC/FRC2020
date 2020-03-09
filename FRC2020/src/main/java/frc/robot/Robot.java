@@ -85,13 +85,15 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     TurretControl.run(); // Runs turret
     // pixyControl.run(); // Runs pixy homing automation
-    //DriveTrain.drive();
+    DriveTrain.drive();
     pistonlift.run();
     Conveyor.run();
     Climb.run();
     ColorWheelControl.run();
+    /*
     Map.driveTrain.gyro.getYawPitchRoll(PID.turnPID.ypr_deg);
     SmartDashboard.putNumber("gyro angle2", PID.turnPID.ypr_deg[0]);
+    */
   }
 
   @Override
