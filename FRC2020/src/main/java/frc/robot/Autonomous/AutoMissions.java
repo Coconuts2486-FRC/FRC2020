@@ -1,6 +1,5 @@
 package frc.robot.Autonomous;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Map;
 import frc.robot.Autonomous.Commands.AutoCommands3;
 import frc.robot.Utilities.Sleep;
