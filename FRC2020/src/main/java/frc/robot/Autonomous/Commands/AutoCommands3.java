@@ -61,24 +61,30 @@ public class AutoCommands3 {
         double currentAngle = PID.turnPID.ypr_deg[0];
         double spinError = angle - currentAngle;
         double speed = PID.turnPID.kP * spinError;
-        if ( direction == 1){
-            while (currentAngle < angle && (!ran)){
+        if(direction == 1){
+            int errorCount = 100;
+            int currentErrorCount = 0;
+            while (currentErrorCount<errorCount && (!ran)){
                 Map.driveTrain.gyro.getYawPitchRoll(PID.turnPID.ypr_deg);// LOGAN!!! READ!!!! THIS!!!!once currentAngle > angle, pid can't correct back. Need to tell it to not exit until its at set angle for a couple seconds
                 currentAngle = PID.turnPID.ypr_deg[0];
                 spinError = angle - currentAngle;
                 speed = PID.turnPID.kP * spinError;
-
+                if(Math.abs(spinError)<1){
+                    currentErrorCount++;
+                }
                 turn(speed);
-        }
-    }
-
-        if (direction == -1){
-            while (currentAngle > angle && (!ran)){
+            }
+        }else if(direction == -1){
+            int errorCount = 100;
+            int currentErrorCount = 0;
+            while (currentErrorCount<errorCount && (!ran)){
                 Map.driveTrain.gyro.getYawPitchRoll(PID.turnPID.ypr_deg);
                 currentAngle = PID.turnPID.ypr_deg[0];
                 spinError = angle - currentAngle;
                 speed = PID.turnPID.kP * spinError;
-
+                if(Math.abs(spinError)<1){
+                    currentErrorCount++;
+                }
                 turn(speed);
             }
         }
