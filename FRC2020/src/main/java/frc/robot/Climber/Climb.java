@@ -15,7 +15,7 @@ public class Climb{
 
         Map.climber.leftClimb.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
         Map.climber.rightClimb.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
-        
+
         Map.climber.rightClimb.setInverted(true);
         Map.climber.leftClimb.setInverted(false);
         Map.climber.leftClimb.setSensorPhase(true);
@@ -31,34 +31,40 @@ public class Climb{
     }
     public static void run(){
             if (Map.Controllers.driverRight.getRawButton(Map.climber.lift)){
-                lift();
+                lift(1);
             } else if (Map.Controllers.driverRight.getRawButton(Map.climber.lower)){
-                drop();
+                lift(-1);
             } else{
                 Map.climber.leftClimb.set(ControlMode.PercentOutput, 0);
                 Map.climber.rightClimb.set(ControlMode.PercentOutput, 0);
             }
     }
     private static double maxError = 300;
-    private static void drop(){
-        double error = Map.climber.leftClimb.getSelectedSensorPosition()-Map.climber.rightClimb.getSelectedSensorPosition();
+    private static double maxHight = 3800;
+    private static void lift(double pwr){
+        double leftP = Map.climber.leftClimb.getSelectedSensorPosition();
+        double rightP = Map.climber.rightClimb.getSelectedSensorPosition();
+        double error = leftP-rightP;
         double absError = Math.abs(error);
         if(absError>maxError){
             absError = maxError;
         }
         double speedRatio = 1-(absError/maxError);
-        Map.climber.leftClimb.set(ControlMode.PercentOutput, -(speedRatio-((error/maxError))));
-        Map.climber.rightClimb.set(ControlMode.PercentOutput,-(speedRatio+((error/maxError))));
-    }
-    private static void lift(){
-        double error = Map.climber.leftClimb.getSelectedSensorPosition()-Map.climber.rightClimb.getSelectedSensorPosition();
-        double absError = Math.abs(error);
-        if(absError>maxError){
-            absError = maxError;
+        if(pwr>0){
+            if(leftP<maxHight){
+                Map.climber.leftClimb.set(ControlMode.PercentOutput, ((speedRatio-((error/maxError))))*pwr);
+            }
+            if(rightP<maxHight){
+                Map.climber.rightClimb.set(ControlMode.PercentOutput,((speedRatio+((error/maxError))))*pwr);
+            }
+        }else{
+            if(leftP>0){
+                Map.climber.leftClimb.set(ControlMode.PercentOutput, ((speedRatio-((error/maxError))))*pwr);
+            }
+            if(rightP>0){
+                Map.climber.rightClimb.set(ControlMode.PercentOutput,((speedRatio+((error/maxError))))*pwr);
+            }
         }
-        double speedRatio = 1-(absError/maxError);
-        Map.climber.leftClimb.set(ControlMode.PercentOutput, (speedRatio-((error/maxError))));
-        Map.climber.rightClimb.set(ControlMode.PercentOutput,(speedRatio+((error/maxError))));
     }
 
     
