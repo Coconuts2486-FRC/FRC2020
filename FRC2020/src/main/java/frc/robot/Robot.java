@@ -10,6 +10,7 @@ import frc.robot.Autonomous.Commands.AutoCommands3;
 import frc.robot.Cartridge.Conveyor;
 import frc.robot.Cartridge.pistonlift;
 import frc.robot.Cartridge.pixyDisplay;
+import frc.robot.Climber.Climb;
 import frc.robot.Color_Wheel.ColorWheelControl;
 import frc.robot.Turret.TurretControl;
 import frc.robot.Turret.TurretDisplay;
@@ -26,6 +27,7 @@ public class Robot extends TimedRobot {
     LimeLight.LED.off();
     Pixy.init(); // Starts up the Pixy2 Camera
     Conveyor.init(); // Configs the conveyor belts
+    Climb.Init();
     Map.driveTrain.gyro.setYaw(0);
   }
   public void robotPeriodic() {
@@ -65,9 +67,11 @@ public class Robot extends TimedRobot {
   }
 
   @Override
+
   public void autonomousPeriodic() {
     //AutoMissions.trenchRun2();
     AutoMissions.test();
+    SmartDashboard.putNumber("gyro angle2", PID.turnPID.ypr_deg[0]);
   }
 
   @Override
@@ -83,8 +87,10 @@ public class Robot extends TimedRobot {
     DriveTrain.drive();
     pistonlift.run();
     Conveyor.run();
+    Climb.run();
     ColorWheelControl.run();
     Map.driveTrain.gyro.getYawPitchRoll(PID.turnPID.ypr_deg);
+    SmartDashboard.putNumber("gyro angle2", PID.turnPID.ypr_deg[0]);
   }
 
   @Override

@@ -1,6 +1,8 @@
 package frc.robot.Autonomous.Commands;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Map;
 import frc.robot.Autonomous.PID;
 import frc.robot.Cartridge.FullSensor;
@@ -14,6 +16,7 @@ import frc.robot.Utilities.Sleep;
  */
 public class AutoCommands3 {
     public static boolean ran = false;
+    public static double range = 0.0;
     public static void endAuto(){
         ran = true;
         Turret.stop();
@@ -28,37 +31,61 @@ public class AutoCommands3 {
 
         }
     }
-    public static void goDistance(double feet,double speedModifier){
+    public static void goDistance(double feet,double speedModifier){//works, but be careful about slight drift, lower power won't matter. when it starts, it drifts a bit, but starightens out. Solved through aligning center of balls with roughly the middle of the front right wheel
         Distance.setEncoders(0);
+        Map.driveTrain.gyro.setYaw(0);
         Sleep.delay(100);
         feet = Math.abs(feet);
+        double turnError = PID.turnPID.ypr_deg[0]/90;
         double distanceTravelled = Distance.distanceTravelled();
         double driveError = feet - distanceTravelled;
         double speed = PID.drivePID.kP * driveError;
         while(distanceTravelled<feet&&(!ran)){
+            SmartDashboard.putNumber("turnError", turnError);
+            SmartDashboard.putNumber("gyro angle", PID.turnPID.ypr_deg[0]);
+            SmartDashboard.putNumber("distance", distanceTravelled);
+            Map.driveTrain.gyro.getYawPitchRoll(PID.turnPID.ypr_deg);
+            turnError = PID.turnPID.ypr_deg[0]/90;
             distanceTravelled = Distance.distanceTravelled();
             driveError = feet - distanceTravelled;
             speed = PID.drivePID.kP * driveError;
-            Distance.drive(speed * speedModifier);
+            Distance.drive(speed * speedModifier, turnError);
         }
         stop();
     }
-    public static void turnToAngle(double angle){
-        angle = 0-angle;
-        double[] ypr = new double[3];
-        Map.driveTrain.gyro.getYawPitchRoll(ypr);
-        double currentAngle = ypr[0];
-        double turnError = angle - currentAngle;
-        double speed = PID.turnPID.kP - turnError;
-        while (currentAngle < angle && (!ran)){
-            currentAngle =ypr[0];
-            turnError = angle - currentAngle;
-            speed = PID.turnPID.kP - turnError;
+    public static void turnToAngle(double angle, int direction){//could make a turn left and turn right function, this should keep it to one
+        //angle = 0-angle;
+        Map.driveTrain.gyro.setYaw(0);
+        Sleep.delay(100);
+        Map.driveTrain.gyro.getYawPitchRoll(PID.turnPID.ypr_deg);
+        double currentAngle = PID.turnPID.ypr_deg[0];
+        double spinError = angle - currentAngle;
+        double speed = PID.turnPID.kP * spinError;
+        if ( direction == 1){
+            while (currentAngle < angle && (!ran)){
+                Map.driveTrain.gyro.getYawPitchRoll(PID.turnPID.ypr_deg);// LOGAN!!! READ!!!! THIS!!!!once currentAngle > angle, pid can't correct back. Need to tell it to not exit until its at set angle for a couple seconds
+                currentAngle = PID.turnPID.ypr_deg[0];
+                spinError = angle - currentAngle;
+                speed = PID.turnPID.kP * spinError;
 
-            turn(speed);
+                turn(speed);
+        }
+    }
+
+        if (direction == -1){
+            while (currentAngle > angle && (!ran)){
+                Map.driveTrain.gyro.getYawPitchRoll(PID.turnPID.ypr_deg);
+                currentAngle = PID.turnPID.ypr_deg[0];
+                spinError = angle - currentAngle;
+                speed = PID.turnPID.kP * spinError;
+
+                turn(speed);
+            }
         }
         stop();
     }
+
+    
     private static void turn(double pwr){
         Map.driveTrain.lf.set(pwr);
         Map.driveTrain.rf.set(-pwr);
@@ -159,15 +186,13 @@ public class AutoCommands3 {
         }
     }
     private static class Distance{
-        private static void drive(double pwr){
+        private static void drive(double pwr, double turnError){
+            
 
-            Map.driveTrain.gyro.getYawPitchRoll(PID.turnPID.ypr_deg);
-            double turnError = PID.turnPID.ypr_deg[0]/90;
-
-            Map.driveTrain.lf.set(-pwr + turnError);
+            Map.driveTrain.lf.set(-pwr - turnError);
             Map.driveTrain.rf.set(-pwr + turnError);
             Map.driveTrain.lr.set(-pwr - turnError);
-            Map.driveTrain.rr.set(-pwr - turnError);
+            Map.driveTrain.rr.set(-pwr + turnError);
         }
         private static double ticksToFeet(double ticks){
             double ticksToFeet = (6 * Math.PI) / 84;

@@ -23,7 +23,7 @@ public class PID {
 
     public static class turnPID{
         
-        public final static double kP = 0.05;
+        public final static double kP = 0.1;
         final static double kI = 0;
         final static double kD = 0;
         final static double iLimit = 10;

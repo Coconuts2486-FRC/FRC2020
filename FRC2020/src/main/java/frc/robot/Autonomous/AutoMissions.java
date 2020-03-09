@@ -1,5 +1,6 @@
 package frc.robot.Autonomous;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Map;
 import frc.robot.Autonomous.Commands.AutoCommands3;
 import frc.robot.Utilities.Sleep;
@@ -25,12 +26,17 @@ public class AutoMissions {
     }
     public static void test(){
         if(!AutoCommands3.ran){
-            
+            /*
             AutoCommands3.turnToAngle(90);
             Sleep.delay(1000);
             AutoCommands3.turnToAngle(0);
 
             AutoCommands3.endAuto();
+            */
+            AutoCommands3.turnToAngle(90, 1);
+            AutoCommands3.endAuto();
+            
+            
         }
     }
     public static void trenchRun2(){
@@ -39,7 +45,7 @@ public class AutoMissions {
             AutoCommands3.Turret.goTo(80.73);
             AutoCommands3.Turret.init();
             AutoCommands3.Turret.launch(3);
-            AutoCommands3.goDistance(7.3,0.5); // goes up to first ball
+            AutoCommands3.goDistance(8.3,1); // goes up to first ball
             AutoCommands3.wait(AutoCommands3.Turret.hasLaunched, true);
             AutoCommands3.Piston.on();
             //Launches all three balls, one at a time
