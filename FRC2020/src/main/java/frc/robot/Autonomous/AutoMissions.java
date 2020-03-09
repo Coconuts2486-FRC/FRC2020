@@ -26,13 +26,11 @@ public class AutoMissions {
     }
     public static void test(){
         if(!AutoCommands3.ran){
-            /*
             AutoCommands3.turnToAngle(90);
             Sleep.delay(1000);
             AutoCommands3.turnToAngle(0);
 
             AutoCommands3.endAuto();
-            */
             AutoCommands3.turnToAngle(90, 1);
             AutoCommands3.endAuto();
             
