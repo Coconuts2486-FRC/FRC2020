@@ -1,8 +1,10 @@
 package frc.robot.Autonomous.Commands;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Map;
+import frc.robot.Autonomous.PID;
 import frc.robot.Cartridge.FullSensor;
 import frc.robot.Turret.Targeting;
 import frc.robot.Turret.TurretMotion;
@@ -14,52 +16,82 @@ import frc.robot.Utilities.Sleep;
  */
 public class AutoCommands3 {
     public static boolean ran = false;
+    public static double range = 0.0;
     public static void endAuto(){
         ran = true;
         Turret.stop();
         stop();
-        Map.Cartridge.RightPiston.set(false);
+        Map.Cartridge.piston.set(false);
         Loading.load();
         Loading.load = false;
-        AutoCommands3.Turret.goTo(0);
+        //AutoCommands3.Turret.goTo(90);
     }
     public static void wait(boolean value, boolean toBe){
         while(!(value=toBe)){
 
         }
     }
-    public static void goDistance(double feet,double speed){
+    public static void goDistance(double feet,double speedModifier){//works, but be careful about slight drift, lower power won't matter. when it starts, it drifts a bit, but starightens out. Solved through aligning center of balls with roughly the middle of the front right wheel
         Distance.setEncoders(0);
+        Map.driveTrain.gyro.setYaw(0);
         Sleep.delay(100);
         feet = Math.abs(feet);
+        double turnError = PID.turnPID.ypr_deg[0]/90;
         double distanceTravelled = Distance.distanceTravelled();
+        double driveError = feet - distanceTravelled;
+        double speed = PID.drivePID.kP * driveError;
         while(distanceTravelled<feet&&(!ran)){
+            SmartDashboard.putNumber("turnError", turnError);
+            SmartDashboard.putNumber("gyro angle", PID.turnPID.ypr_deg[0]);
+            SmartDashboard.putNumber("distance", distanceTravelled);
+            Map.driveTrain.gyro.getYawPitchRoll(PID.turnPID.ypr_deg);
+            turnError = PID.turnPID.ypr_deg[0]/90;
             distanceTravelled = Distance.distanceTravelled();
-            Distance.drive(speed);
+            driveError = feet - distanceTravelled;
+            speed = PID.drivePID.kP * driveError;
+            Distance.drive(speed * speedModifier, turnError);
         }
         stop();
     }
-    public static void turnToAngle(double angle){
-        angle = 0-angle;
-        double[] ypr = new double[3];
-        Map.driveTrain.gyro.getYawPitchRoll(ypr);
-        double currentAngle = ypr[0];
-        while(!Gyro.isAtAngle(currentAngle,angle)&&(!ran)){
-            Map.driveTrain.gyro.getYawPitchRoll(ypr);
-            currentAngle = ypr[0];
-            SmartDashboard.putNumber("Angle", currentAngle);
-            if(Math.abs(currentAngle-angle)>Gyro.slopePoint){
-                if(currentAngle>angle){
-                   turn(-Gyro.maxSpeed);
-                }else{
-                    turn(Gyro.maxSpeed);
+    public static void turnToAngle(double angle, int direction){//could make a turn left and turn right function, this should keep it to one
+        //angle = 0-angle;
+        Map.driveTrain.gyro.setYaw(0);
+        Sleep.delay(100);
+        Map.driveTrain.gyro.getYawPitchRoll(PID.turnPID.ypr_deg);
+        double currentAngle = PID.turnPID.ypr_deg[0];
+        double spinError = angle - currentAngle;
+        double speed = PID.turnPID.kP * spinError;
+        if(direction == 1){
+            int errorCount = 100;
+            int currentErrorCount = 0;
+            while (currentErrorCount<errorCount && (!ran)){
+                Map.driveTrain.gyro.getYawPitchRoll(PID.turnPID.ypr_deg);// LOGAN!!! READ!!!! THIS!!!!once currentAngle > angle, pid can't correct back. Need to tell it to not exit until its at set angle for a couple seconds
+                currentAngle = PID.turnPID.ypr_deg[0];
+                spinError = angle - currentAngle;
+                speed = PID.turnPID.kP * spinError;
+                if(Math.abs(spinError)<1){
+                    currentErrorCount++;
                 }
-            }else{
-                turn(-((currentAngle-angle)/(Gyro.slopePoint+angle)));
+                turn(speed);
+            }
+        }else if(direction == -1){
+            int errorCount = 100;
+            int currentErrorCount = 0;
+            while (currentErrorCount<errorCount && (!ran)){
+                Map.driveTrain.gyro.getYawPitchRoll(PID.turnPID.ypr_deg);
+                currentAngle = PID.turnPID.ypr_deg[0];
+                spinError = angle - currentAngle;
+                speed = PID.turnPID.kP * spinError;
+                if(Math.abs(spinError)<1){
+                    currentErrorCount++;
+                }
+                turn(speed);
             }
         }
         stop();
     }
+
+    
     private static void turn(double pwr){
         Map.driveTrain.lf.set(pwr);
         Map.driveTrain.rf.set(-pwr);
@@ -117,9 +149,9 @@ public class AutoCommands3 {
                 public void run(){
                     piston = true;
                     while(piston&&(!ran)){
-                        Map.Cartridge.RightPiston.set(true);
+                        Map.Cartridge.piston.set(true);
                     }
-                    Map.Cartridge.RightPiston.set(false);
+                    Map.Cartridge.piston.set(false);
                 }
             };
             thread.start();
@@ -160,11 +192,13 @@ public class AutoCommands3 {
         }
     }
     private static class Distance{
-        private static void drive(double pwr){
-            Map.driveTrain.lf.set(-pwr);
-            Map.driveTrain.rf.set(-pwr);
-            Map.driveTrain.lr.set(-pwr);
-            Map.driveTrain.rr.set(-pwr);
+        private static void drive(double pwr, double turnError){
+            
+
+            Map.driveTrain.lf.set(-pwr - turnError);
+            Map.driveTrain.rf.set(-pwr + turnError);
+            Map.driveTrain.lr.set(-pwr - turnError);
+            Map.driveTrain.rr.set(-pwr + turnError);
         }
         private static double ticksToFeet(double ticks){
             double ticksToFeet = (6 * Math.PI) / 84;
@@ -183,10 +217,11 @@ public class AutoCommands3 {
             
         }
     }
+    /*
     private static class Gyro{
-        private static double slopePoint = 90; //degrees
-        private static double maxSpeed = 1; // 0-1.00 percent
-        private static double error = 3; //angle error
+        private static double slopePoint = 18; //degrees
+        private static double maxSpeed = 0.5; // 0-1.00 percent
+        private static double error = 0.5; //angle error
         private static boolean isAtAngle(double currentAngle, double targetAngle){
             double absError = Math.abs(currentAngle-targetAngle);
             if(absError>error){
@@ -196,6 +231,7 @@ public class AutoCommands3 {
             }
         }
     }
+    */
     private static void stop(){
         Map.driveTrain.lf.set(0);
         Map.driveTrain.rf.set(0);

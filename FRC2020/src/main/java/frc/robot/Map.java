@@ -41,7 +41,7 @@ public class Map {
         // Controllers
         public static Joystick driverLeft = new Joystick(0);
         public static Joystick driverRight = new Joystick(1);
-        public static XboxController xbox = new XboxController(2); // this is experimental
+        public static XboxController xbox = new XboxController(2);
     }
 
     public static class Turret {
@@ -72,20 +72,13 @@ public class Map {
     }
 
     public static class Cartridge {
-        // Cartridge / Loading-Arm motors (and pneumatics)
-        public static Solenoid RightPiston = new Solenoid(1, 4);
-        // private static Solenoid test = new Solenoid(4);
-        // public static Solenoid LeftPiston = new Solenoid (2,2);
+        public static Solenoid piston = new Solenoid(1, 4);
         public static TalonSRX ArmRoller = new TalonSRX(2);
         public static TalonSRX Conveyor1 = new TalonSRX(4);
         public static TalonSRX Conveyor2 = new TalonSRX(3);
         public static TalonSRX Conveyor3 = new TalonSRX(8);
-
-
         public static class Sensors {
-
             public static DigitalInput fullSensor = new DigitalInput(0);
-
         }
 
         public static class controllers {
@@ -98,15 +91,23 @@ public class Map {
         
     }
 		public static class ColorWheel{
-
-
-            public static Solenoid SensorLift1 = new Solenoid(1,5);
-            public static TalonSRX ColorSpinner = new TalonSRX(11);
+            public static Solenoid piston = new Solenoid(1,5);
+            public static TalonSRX ColorSpinner = new TalonSRX(6);
             public final static I2C.Port i2cPort = I2C.Port.kOnboard;
             public static ColorSensorV3 sensor = new ColorSensorV3(i2cPort);
+            public static class controllers{
+                public static int piston = 3;
+                public static int leftTurn = 4;
+                public static int rightTurn = 5;
+            }
+        }
 
-
-
+        public static class climber{
+            public static TalonSRX leftClimb = new TalonSRX(10);
+            public static TalonSRX rightClimb = new TalonSRX(11);
+            public static Solenoid lock = new Solenoid(1,6);
+            public static int lift = 3;
+            public static int unlock = 9;
         }
 		
 

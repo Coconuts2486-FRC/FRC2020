@@ -1,6 +1,8 @@
 package frc.robot.Autonomous;
 
 import frc.robot.Map;
+import frc.robot.Autonomous.Commands.AutoCommands3;
+import frc.robot.Utilities.Sleep;
 
 public class AutoMissions {
 
@@ -20,6 +22,49 @@ public class AutoMissions {
         Map.driveTrain.rrEncoder.setPosition(0);
         Map.driveTrain.gyro.setYaw(0);
 
+    }
+    public static void test(){
+        if(!AutoCommands3.ran){
+            AutoCommands3.turnToAngle(90,1);
+            Sleep.delay(1000);
+            AutoCommands3.turnToAngle(0,-1);
+            /*
+            AutoCommands3.endAuto();
+            AutoCommands3.turnToAngle(90, 1);
+            */
+            AutoCommands3.endAuto();
+        }
+    }
+    public static void trenchRun2(){
+        if(!AutoCommands3.ran){
+            //Launch first set and get ready for second set
+            AutoCommands3.Turret.goTo(80.73);
+            AutoCommands3.Turret.init();
+            AutoCommands3.Turret.launch(3);
+            AutoCommands3.goDistance(8.3,1); // goes up to first ball
+            AutoCommands3.wait(AutoCommands3.Turret.hasLaunched, true);
+            AutoCommands3.Piston.on();
+            //Launches all three balls, one at a time
+            AutoCommands3.Loading.load();
+            AutoCommands3.goDistance(3,0.2);
+            AutoCommands3.Loading.stop();
+            AutoCommands3.Turret.launch(1);
+            AutoCommands3.wait(AutoCommands3.Turret.hasLaunched, true);
+
+            AutoCommands3.Loading.load();
+            AutoCommands3.goDistance(3,0.2);
+            AutoCommands3.Loading.stop();
+            AutoCommands3.Turret.launch(1);
+            AutoCommands3.wait(AutoCommands3.Turret.hasLaunched, true);
+
+            AutoCommands3.Loading.load();
+            AutoCommands3.goDistance(3,0.2);
+            AutoCommands3.Loading.stop();
+            AutoCommands3.Turret.launch(1);
+            AutoCommands3.wait(AutoCommands3.Turret.hasLaunched, true);
+            // Ends auto
+            AutoCommands3.endAuto();
+          }
     }
 
     public static void NoAutoSelected() {

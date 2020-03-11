@@ -9,10 +9,10 @@ public class pistonlift {
     public static void run() {
         if (Map.Controllers.driverLeft.getRawButtonPressed(1)) {
             if (!pistonactive) {
-                Map.Cartridge.RightPiston.set(true);
+                Map.Cartridge.piston.set(true);
                 pistonactive = true;
             } else {
-                Map.Cartridge.RightPiston.set(false);
+                Map.Cartridge.piston.set(false);
                 Map.Cartridge.ArmRoller.set(ControlMode.PercentOutput, 0);
                 Map.Cartridge.Conveyor1.set(ControlMode.PercentOutput, 0);
                 pistonactive = false;

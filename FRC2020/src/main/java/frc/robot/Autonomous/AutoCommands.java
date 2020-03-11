@@ -205,34 +205,6 @@ public class AutoCommands{
 
     }
 
-    public static void driveStraight(double degreeSetpoint){
-        double pl = 0;
-        double pr = 0;
-
-        Map.driveTrain.gyro.getYawPitchRoll(PID.turnPID.ypr_deg);
-
-        double error = PID.turnPID.ypr_deg[0]/90;
-
-        Map.driveTrain.lf.set(-.3 - error);
-        Map.driveTrain.lr.set(-.3 - error);
-        Map.driveTrain.rf.set(-.3 + error);
-        Map.driveTrain.rr.set(-.3 + error);
-        
-        /*
-        while (PID.turnPID.ypr_deg[0] < degreeSetpoint ){
-            pl -=.1;
-        }
-
-        while (PID.turnPID.ypr_deg[0] > degreeSetpoint){
-            pr -=.1;
-        }
-        */
-        
-        
-
-
-    }
-
     public static void stop(){
         Map.driveTrain.lf.set(0);
         Map.driveTrain.lr.set(0);
