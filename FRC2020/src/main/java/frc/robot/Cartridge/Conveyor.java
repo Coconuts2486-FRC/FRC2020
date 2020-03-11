@@ -26,7 +26,7 @@ public class Conveyor {
                 Map.Cartridge.Conveyor2.set(ControlMode.PercentOutput, 0);
                 Map.Cartridge.Conveyor3.set(ControlMode.PercentOutput, 0);
             }
-        }else if((Map.Controllers.driverLeft.getRawButton(Map.Cartridge.controllers.outtake)||Map.Controllers.driverRight.getRawButton(Map.Cartridge.controllers.outtake))&&(!TurretSettings.turretUsingConveyors)){
+        }else if((Map.Controllers.driverRight.getRawButton(Map.Cartridge.controllers.outtake))&&(!TurretSettings.turretUsingConveyors)){
             outtake();
         }else if(!TurretSettings.turretUsingConveyors){
             stop();

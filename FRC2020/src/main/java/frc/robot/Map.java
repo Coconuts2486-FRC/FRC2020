@@ -105,9 +105,9 @@ public class Map {
         public static class climber{
             public static TalonSRX leftClimb = new TalonSRX(10);
             public static TalonSRX rightClimb = new TalonSRX(11);
-            public static int piston = 11;
+            public static Solenoid lock = new Solenoid(1,6);
             public static int lift = 3;
-            public static int lower = 9;
+            public static int unlock = 9;
         }
 		
 
